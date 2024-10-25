@@ -10,6 +10,11 @@
  * - Optionally closes the popup window after receiving the message.
  * - Provides a cleanup function to remove the event listener.
  */
+function getDomain(url: string) {
+  const parsedUrl = new URL(url);
+  return parsedUrl.hostname;
+}
+
 
 export const handleMessageForPopup = (
   expectedOrigin: string,
@@ -18,7 +23,7 @@ export const handleMessageForPopup = (
   windowToClose?: Window | null
 ) => {
   const popupListener = (event: MessageEvent) => {
-    if (event.origin !== expectedOrigin) {
+    if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
       console.warn("Received message from an unknown origin:", event.origin);
       return;
     }
@@ -53,7 +58,7 @@ export const handleMessageForEmbed = (
   onError: (error: Error) => void
 ) => {
   const embedListener = (event: MessageEvent) => {
-    if (event.origin !== expectedOrigin) {
+    if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
       console.warn("Received message from an unknown origin:", event.origin);
       return;
     }
