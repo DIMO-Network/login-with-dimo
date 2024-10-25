@@ -25,7 +25,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
-        popupAuth(onSuccess, onError);
+        popupAuth(onSuccess, onError, clientId, redirectUri, apiKey);
         break;
       case "redirect":
         redirectAuth(onSuccess, onError);
