@@ -20,7 +20,10 @@ export const handleMessageForPopup = (
   expectedOrigin: string,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
-  windowToClose?: Window | null
+  popup?: Window | null,
+  clientId?: string,
+  apiKey?: string,
+  redirectUri?: string  
 ) => {
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -28,20 +31,32 @@ export const handleMessageForPopup = (
       return;
     }
 
-    const { token, authType } = event.data;
+    const { eventType, token, authType } = event.data;
+
+    // Handle the "READY" message
+    if (eventType === "READY") {
+      // Once the "READY" message is received, send the credentials
+      if (popup) {
+        popup.postMessage(
+          { clientId, apiKey, redirectUri, eventType: "AUTH_INIT" },
+          expectedOrigin
+        );
+      } else {
+        onError(new Error("Popup window not available to send credentials"));
+      }
+    }
+
 
     if (authType === 'popup' && token) {
       onSuccess({ token });
       
       // Close the popup after success
-      if (windowToClose && !windowToClose.closed) {
-        windowToClose.close();
+      if (popup && !popup.closed) {
+        popup.close();
         console.log("Popup closed successfully.");
       }
 
       window.removeEventListener("message", popupListener);
-    } else {
-      onError(new Error("No valid token received in the popup auth message."));
     }
   };
 
