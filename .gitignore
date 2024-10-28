@@ -5,6 +5,7 @@
 
 sdk/node_modules
 example-dimo-auth/node_modules
+example-dimo-auth/.env
 sdk/dist
 
 /.pnp

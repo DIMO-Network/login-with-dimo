@@ -27,8 +27,8 @@ export const popupAuth = (
       onError,
       popup,
       clientId,
-      apiKey,
-      redirectUri
+      redirectUri,
+      apiKey
     );
   } catch (error: unknown) {
     if (error instanceof Error) {

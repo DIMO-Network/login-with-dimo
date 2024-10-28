@@ -22,8 +22,8 @@ export const handleMessageForPopup = (
   onError: (error: Error) => void,
   popup?: Window | null,
   clientId?: string,
-  apiKey?: string,
-  redirectUri?: string  
+  redirectUri?: string,
+  apiKey?: string
 ) => {
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -38,7 +38,7 @@ export const handleMessageForPopup = (
       // Once the "READY" message is received, send the credentials
       if (popup) {
         popup.postMessage(
-          { clientId, apiKey, redirectUri, eventType: "AUTH_INIT" },
+          { clientId, redirectUri, apiKey, eventType: "AUTH_INIT" },
           expectedOrigin
         );
       } else {
@@ -70,7 +70,10 @@ export const handleMessageForPopup = (
 export const handleMessageForEmbed = (
   expectedOrigin: string,
   onSuccess: (authData: { token: string }) => void,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
+  clientId?: string,
+  redirectUri?: string,    
+  apiKey?: string
 ) => {
   const embedListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -78,7 +81,26 @@ export const handleMessageForEmbed = (
       return;
     }
 
-    const { token, authType } = event.data;
+    const { eventType, token, authType } = event.data;
+
+    if (eventType === "READY") {
+      // Once the "READY" message is received, send the credentials
+      console.log("Ready Message received");
+      const iframe = document.getElementById("dimo-iframe");
+
+      // Define the message data
+      const message = {
+        clientId,
+        apiKey,
+        redirectUri,
+        eventType: "AUTH_INIT",
+      };
+
+      // Send the message to the iframe
+      // Replace "https://example-iframe.com" with the actual origin of the iframe's URL
+      //@ts-ignore
+      iframe.contentWindow.postMessage(message, expectedOrigin);
+    }    
 
     if (authType === 'embed' && token) {
       onSuccess({ token });
