@@ -22,7 +22,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   redirectUri,
   apiKey,
 }) => {
-  const dimoLogin = "https://ab1a735dff55.ngrok.app/";
+  const dimoLogin = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":

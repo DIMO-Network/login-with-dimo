@@ -8,7 +8,7 @@ export const popupAuth = (
   apiKey?: string
 ) => {
   try {
-    const authServerUrl = "https://ab1a735dff55.ngrok.app/"; //TODO: Pull from ENV
+    const authServerUrl = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
 
     const popup = window.open(
       authServerUrl,

@@ -8,7 +8,7 @@ export const embedAuth = (
   apiKey?: string
 ) => {
   // Embed logic TBD
-  const authServerUrl = "https://ab1a735dff55.ngrok.app/"; //TODO: Pull from ENV
+  const authServerUrl = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
 
   const cleanup = handleMessageForEmbed(
     authServerUrl,
