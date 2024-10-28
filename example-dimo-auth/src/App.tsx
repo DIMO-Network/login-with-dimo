@@ -41,6 +41,9 @@ function App() {
             mode="redirect"
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
+            clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
+            redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
+            apiKey={process.env.REACT_APP_DIMO_API_KEY}            
           />
         </div>
       </header>

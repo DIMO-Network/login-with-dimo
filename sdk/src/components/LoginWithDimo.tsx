@@ -22,13 +22,14 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   redirectUri,
   apiKey,
 }) => {
+  const dimoLogin = "https://ab1a735dff55.ngrok.app/";
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
         popupAuth(onSuccess, onError, clientId, redirectUri, apiKey);
         break;
       case "redirect":
-        redirectAuth(onSuccess, onError);
+        redirectAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey);
         break;
       default:
         console.error("Unsupported mode for button click");
@@ -46,7 +47,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   const renderEmbedIframe = () => (
     <iframe
       id="dimo-iframe"
-      src="https://ab1a735dff55.ngrok.app/" // Pull Dimo Login URL from ENV
+      src={dimoLogin} // Pull Dimo Login URL from ENV
       allow="publickey-credentials-create; publickey-credentials-get" //Note: This is used to allow passkey creation and retrieval
       width="100%"
       height="250px" //Allow this to be customized by developer
