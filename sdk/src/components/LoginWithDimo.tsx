@@ -9,9 +9,10 @@ interface LoginWithDimoProps {
   mode: "popup" | "embed" | "redirect"; // The mode of login
   onSuccess: (authData: { token: string }) => void; // Success callback
   onError: (error: Error) => void; // Error callback
-  clientId?: string; // Placeholder for future auth support
-  redirectUri?: string; // Placeholder for future redirect support
-  apiKey?: string; // Placeholder for future API key support
+  clientId?: string;
+  redirectUri?: string;
+  apiKey?: string;
+  permissionTemplateId?: string;
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -21,15 +22,16 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   clientId,
   redirectUri,
   apiKey,
+  permissionTemplateId,
 }) => {
   const dimoLogin = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
-        popupAuth(onSuccess, onError, clientId, redirectUri, apiKey);
+        popupAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
         break;
       case "redirect":
-        redirectAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey);
+        redirectAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
         break;
       default:
         console.error("Unsupported mode for button click");
@@ -39,7 +41,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   // Trigger embedAuth only once the iframe has fully loaded
   const handleIframeLoad = () => {
     if (mode === "embed") {
-      embedAuth(onSuccess, onError, clientId, redirectUri, apiKey);
+      embedAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
     }
   };
 

@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import { LoginWithDimo } from "dimo-login-button-sdk";
 import "./App.css";
 
 function App() {
+  const [permissionsEnabled, setPermissionsEnabled] = useState(false);
+
+  // Toggle handler
+  const handleToggle = () => {
+    setPermissionsEnabled(!permissionsEnabled);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <div>
           <h1>Testing Dimo Login Button</h1>
+        </div>
+
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={permissionsEnabled}
+              onChange={handleToggle}
+            />
+            Enable Permissions
+          </label>
         </div>
 
         <div>
@@ -20,6 +38,7 @@ function App() {
             clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined}
           />
         </div>
 
@@ -32,6 +51,7 @@ function App() {
             clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
           />
         </div>
 
@@ -43,7 +63,8 @@ function App() {
             onError={(error) => console.error("Error:", error)}
             clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
-            apiKey={process.env.REACT_APP_DIMO_API_KEY}            
+            apiKey={process.env.REACT_APP_DIMO_API_KEY}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined}
           />
         </div>
       </header>

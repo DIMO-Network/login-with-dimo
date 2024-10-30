@@ -3,15 +3,15 @@ import { handleMessageForPopup } from "../utils/eventHandler";
 export const popupAuth = (
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
+  dimoLogin: string,
   clientId?: string,
   redirectUri?: string,
-  apiKey?: string
+  apiKey?: string,
+  permissionTemplateId?: string
 ) => {
   try {
-    const authServerUrl = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
-
     const popup = window.open(
-      authServerUrl,
+      dimoLogin,
       "_blank",
       "width=500,height=600" //Allow popup to be customized by the developer
     );
@@ -22,13 +22,14 @@ export const popupAuth = (
 
     // Set up message handler for popup auth
     const cleanup = handleMessageForPopup(
-      authServerUrl,
+      dimoLogin,
       onSuccess,
       onError,
       popup,
       clientId,
       redirectUri,
-      apiKey
+      apiKey,
+      permissionTemplateId
     );
   } catch (error: unknown) {
     if (error instanceof Error) {

@@ -3,19 +3,21 @@ import { handleMessageForEmbed } from "../utils/eventHandler";
 export const embedAuth = (
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
+  dimoLogin: string,
   clientId?: string,
   redirectUri?: string,
-  apiKey?: string
+  apiKey?: string,
+  permissionTemplateId?: string
 ) => {
   // Embed logic TBD
-  const authServerUrl = "https://dimo-login.vercel.app/"; //TODO: Pull from ENV
 
   const cleanup = handleMessageForEmbed(
-    authServerUrl,
+    dimoLogin,
     onSuccess,
     onError,
     clientId,
     redirectUri,
-    apiKey
+    apiKey,
+    permissionTemplateId
   );
 };

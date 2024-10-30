@@ -4,9 +4,17 @@ export const redirectAuth = (
   dimoLogin: string,
   clientId?: string,
   redirectUri?: string,
-  apiKey?: string
+  apiKey?: string, //We don't want to send an API key in the url
+  permissionTemplateId?: string
 ) => {
-  console.log("Redirect mode not implemented yet.");
-  // Implement redirect login flow here
-  window.location.href = `${dimoLogin}?clientId=${clientId}&redirectUri=${redirectUri}`;
+
+  // Create URLSearchParams instance
+  const params = new URLSearchParams();
+
+  if (clientId) params.append("clientId", clientId);
+  if (redirectUri) params.append("redirectUri", redirectUri);
+  if (permissionTemplateId) params.append("permissionTemplateId", permissionTemplateId);
+
+  // Construct the full URL
+  window.location.href = `${dimoLogin}?${params.toString()}`;
 };
