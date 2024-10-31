@@ -24,7 +24,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   apiKey,
   permissionTemplateId,
 }) => {
-  const dimoLogin = "https://login.dimo.org/"; //TODO: Pull from ENV
+  const dimoLogin = "https://login.dev.dimo.org/"; //TODO: Pull from ENV
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
