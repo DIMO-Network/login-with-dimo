@@ -24,7 +24,8 @@ export const handleMessageForPopup = (
   clientId?: string,
   redirectUri?: string,
   apiKey?: string,
-  permissionTemplateId?: string
+  permissionTemplateId?: string,
+  vehicles?: string[]
 ) => {
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -39,7 +40,7 @@ export const handleMessageForPopup = (
       // Once the "READY" message is received, send the credentials
       if (popup) {
         popup.postMessage(
-          { clientId, redirectUri, apiKey, permissionTemplateId, eventType: "AUTH_INIT" },
+          { clientId, redirectUri, apiKey, permissionTemplateId, vehicles, eventType: "AUTH_INIT" },
           expectedOrigin
         );
       } else {
@@ -75,7 +76,8 @@ export const handleMessageForEmbed = (
   clientId?: string,
   redirectUri?: string,    
   apiKey?: string,
-  permissionTemplateId?: string
+  permissionTemplateId?: string,
+  vehicles?: string[]
 ) => {
   const embedListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -96,6 +98,7 @@ export const handleMessageForEmbed = (
         apiKey,
         redirectUri,
         permissionTemplateId,
+        vehicles,
         eventType: "AUTH_INIT",
       };
 
