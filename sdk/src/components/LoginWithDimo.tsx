@@ -13,6 +13,7 @@ interface LoginWithDimoProps {
   redirectUri?: string;
   apiKey?: string;
   permissionTemplateId?: string;
+  vehicles?: string[]
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -23,15 +24,16 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   redirectUri,
   apiKey,
   permissionTemplateId,
+  vehicles
 }) => {
   const dimoLogin = "https://login.dev.dimo.org/"; //TODO: Pull from ENV
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
-        popupAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
+        popupAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId, vehicles);
         break;
       case "redirect":
-        redirectAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
+        redirectAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId, vehicles);
         break;
       default:
         console.error("Unsupported mode for button click");
@@ -41,7 +43,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   // Trigger embedAuth only once the iframe has fully loaded
   const handleIframeLoad = () => {
     if (mode === "embed") {
-      embedAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId);
+      embedAuth(onSuccess, onError, dimoLogin, clientId, redirectUri, apiKey, permissionTemplateId, vehicles);
     }
   };
 

@@ -7,7 +7,8 @@ export const embedAuth = (
   clientId?: string,
   redirectUri?: string,
   apiKey?: string,
-  permissionTemplateId?: string
+  permissionTemplateId?: string,
+  vehicles?: string[]
 ) => {
   // Embed logic TBD
 
@@ -18,6 +19,7 @@ export const embedAuth = (
     clientId,
     redirectUri,
     apiKey,
-    permissionTemplateId
+    permissionTemplateId,
+    vehicles
   );
 };
