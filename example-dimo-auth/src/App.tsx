@@ -67,7 +67,7 @@ function App() {
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
-            vehicles={["585","586"]}
+            // vehicles={["585","586"]}
           />
         </div>
       </header>
