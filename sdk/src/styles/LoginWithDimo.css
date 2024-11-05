@@ -1,0 +1,43 @@
+
+
+.custom-button {
+  width: 375px;
+  height: 40px;
+  border-radius: 24px;
+  padding: 6px 16px;
+  border: 1px solid #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  background-color: #ffffff;
+  font-family: 'Universal Sans Display', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+}
+
+.custom-button:hover {
+  background-color: #f7f7f7; /* Adjusted for a lighter, subtle hover effect */
+  transform: scale(1.02); /* Slightly enlarges the button for a modern feel */
+}
+
+.custom-button:active {
+  background-color: #e5e5e5; /* Darker shade for the active state */
+  transform: scale(0.98); /* Gives a slight pressed effect */
+}
+
+  
+  .button-icon {
+    width: 20px; /* Adjust as needed */
+    height: 20px;
+  }
+  
+  .button-text {
+    color: #000;
+    font-weight: 500;
+    font-size: 16px; /* Adjust if necessary */
+  }
+  
