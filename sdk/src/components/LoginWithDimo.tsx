@@ -15,6 +15,7 @@ interface LoginWithDimoProps {
   apiKey?: string;
   permissionTemplateId?: string;
   vehicles?: string[];
+  environment?: string;
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -26,8 +27,9 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   apiKey,
   permissionTemplateId,
   vehicles,
+  environment,
 }) => {
-  const dimoLogin = "https://ddc7c4f59158.ngrok.app/"; //TODO: Pull from ENV
+  const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org"; //TODO: Pull from ENV
   const [name, setName] = useState(false);
   const handleButtonClick = () => {
     switch (mode) {
