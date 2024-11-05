@@ -29,8 +29,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   vehicles,
   environment,
 }) => {
+
   const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org"; //TODO: Pull from ENV
-  // const [name, setName] = useState(false);
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
