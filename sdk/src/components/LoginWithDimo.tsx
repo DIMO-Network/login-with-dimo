@@ -1,5 +1,5 @@
 // src/components/LoginWithDimo.tsx
-import React, { useState } from "react";
+import React from "react";
 
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
@@ -30,7 +30,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   environment,
 }) => {
   const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org"; //TODO: Pull from ENV
-  const [name, setName] = useState(false);
+  // const [name, setName] = useState(false);
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":
