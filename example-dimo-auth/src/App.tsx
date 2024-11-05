@@ -39,6 +39,7 @@ function App() {
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
           />
         </div>
@@ -53,6 +54,7 @@ function App() {
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
+            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
           />
         </div>
@@ -67,6 +69,7 @@ function App() {
             redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
             apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
           />
         </div>
