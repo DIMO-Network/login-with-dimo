@@ -10,8 +10,8 @@ interface LoginWithDimoProps {
   mode: "popup" | "embed" | "redirect"; // The mode of login
   onSuccess: (authData: { token: string }) => void; // Success callback
   onError: (error: Error) => void; // Error callback
-  clientId?: string;
-  redirectUri?: string;
+  clientId: string;
+  redirectUri: string;
   apiKey?: string;
   permissionTemplateId?: string;
   vehicles?: string[];
@@ -30,7 +30,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   environment,
 }) => {
 
-  const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org"; //TODO: Pull from ENV
+  const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org";
   const handleButtonClick = () => {
     switch (mode) {
       case "popup":

@@ -4,8 +4,8 @@ export const popupAuth = (
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   dimoLogin: string,
-  clientId?: string,
-  redirectUri?: string,
+  clientId: string,
+  redirectUri: string,
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[]

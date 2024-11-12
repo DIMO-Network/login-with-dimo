@@ -2,8 +2,8 @@ export const redirectAuth = (
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   dimoLogin: string,
-  clientId?: string,
-  redirectUri?: string,
+  clientId: string,
+  redirectUri: string,
   apiKey?: string, //We don't want to send an API key in the url
   permissionTemplateId?: string,
   vehicles?: string[]

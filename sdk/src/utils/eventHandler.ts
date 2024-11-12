@@ -20,9 +20,9 @@ export const handleMessageForPopup = (
   expectedOrigin: string,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
-  popup?: Window | null,
-  clientId?: string,
-  redirectUri?: string,
+  popup: Window | null,
+  clientId: string,
+  redirectUri: string,
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[]
