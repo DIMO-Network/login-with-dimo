@@ -1,0 +1,44 @@
+name: Publish Package to npm
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - run: npm ci --legacy-peer-deps
+        working-directory: ./sdk  # Replace with the relative path to your SDK directory
+      - name: Run build
+        run: npm run build
+        working-directory: ./sdk
+      - name: Check dist directory
+        run: ls dist/
+        working-directory: ./sdk
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci --legacy-peer-deps
+        working-directory: ./sdk
+      - name: Run build
+        run: npm run build
+        working-directory: ./sdk
+      - name: Check dist directory
+        run: ls dist/
+        working-directory: ./sdk        
+      - run: npm publish --access public --verbose
+        working-directory: ./sdk                 
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
