@@ -38,6 +38,16 @@ jobs:
       - name: Check dist directory
         run: ls dist/
         working-directory: ./sdk
+      - name: Verify npm token
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "NPM token is not set."
+            exit 1
+          else
+            echo "NPM token is set."
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}        
       - run: npm publish --access public
         working-directory: ./sdk      
         env:
