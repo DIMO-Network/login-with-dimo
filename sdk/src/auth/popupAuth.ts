@@ -3,12 +3,13 @@ import { handleMessageForPopup } from "../utils/eventHandler";
 export const popupAuth = (
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   dimoLogin: string,
   clientId?: string,
   redirectUri?: string,
   apiKey?: string,
   permissionTemplateId?: string,
-  vehicles?: string[]
+  vehicles?: string[],
 ) => {
   try {
     const popup = window.open(
@@ -26,6 +27,7 @@ export const popupAuth = (
       dimoLogin,
       onSuccess,
       onError,
+      setAuthenticated,
       popup,
       clientId,
       redirectUri,

@@ -1,3 +1,5 @@
+import { storeJWTInCookies } from "../storage/storageManager";
+
 /**
  * @file eventHandler.ts
  * @description Handles message passing between the parent window and a child window (popup or iframe)
@@ -20,6 +22,7 @@ export const handleMessageForPopup = (
   expectedOrigin: string,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   popup?: Window | null,
   clientId?: string,
   redirectUri?: string,
@@ -50,6 +53,8 @@ export const handleMessageForPopup = (
 
 
     if (authType === 'popup' && token) {
+      storeJWTInCookies(token);
+      setAuthenticated(true);
       onSuccess({ token });
       
       // Close the popup after success
@@ -73,6 +78,7 @@ export const handleMessageForEmbed = (
   expectedOrigin: string,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
+  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   clientId?: string,
   redirectUri?: string,    
   apiKey?: string,
@@ -109,6 +115,8 @@ export const handleMessageForEmbed = (
     }    
 
     if (authType === 'embed' && token) {
+      storeJWTInCookies(token);
+      setAuthenticated(true);
       onSuccess({ token });
     }
   };

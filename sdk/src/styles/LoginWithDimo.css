@@ -19,7 +19,11 @@
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
 }
 
-.custom-button:hover {
+.custom-button:disabled {
+  cursor: not-allowed;
+}
+
+.custom-button:not(:disabled):hover {
   background-color: #f7f7f7; /* Adjusted for a lighter, subtle hover effect */
   transform: scale(1.02); /* Slightly enlarges the button for a modern feel */
 }
