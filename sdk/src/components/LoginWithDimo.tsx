@@ -31,7 +31,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   vehicles,
   environment,
 }) => {
-  const dimoLogin = environment == "development" ? "https://1046a5a061f4.ngrok.app" : "https://login.dimo.org";
+  const dimoLogin = environment == "development" ? "https://login.dev.dimo.org" : "https://login.dimo.org";
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(()=>{
