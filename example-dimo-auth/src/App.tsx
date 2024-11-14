@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
-import { LoginWithDimo } from "dimo-login-button-sdk";
 import "./App.css";
+import { LoginWithDimo } from "@dimo-network/login-with-dimo";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
