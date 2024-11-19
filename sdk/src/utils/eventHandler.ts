@@ -1,3 +1,4 @@
+import { EntryState } from "../enums/globalEnums";
 import { storeJWTInCookies } from "../storage/storageManager";
 
 /**
@@ -17,9 +18,9 @@ function getDomain(url: string) {
   return parsedUrl.hostname;
 }
 
-
 export const handleMessageForPopup = (
   expectedOrigin: string,
+  entryState: EntryState,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
@@ -43,7 +44,15 @@ export const handleMessageForPopup = (
       // Once the "READY" message is received, send the credentials
       if (popup) {
         popup.postMessage(
-          { clientId, redirectUri, apiKey, permissionTemplateId, vehicles, eventType: "AUTH_INIT" },
+          {
+            clientId,
+            redirectUri,
+            apiKey,
+            permissionTemplateId,
+            vehicles,
+            entryState,
+            eventType: "AUTH_INIT",
+          },
           expectedOrigin
         );
       } else {
@@ -51,12 +60,11 @@ export const handleMessageForPopup = (
       }
     }
 
-
-    if (authType === 'popup' && token) {
+    if (authType === "popup" && token) {
       storeJWTInCookies(token);
       setAuthenticated(true);
       onSuccess({ token });
-      
+
       // Close the popup after success
       if (popup && !popup.closed) {
         popup.close();
@@ -76,11 +84,12 @@ export const handleMessageForPopup = (
 
 export const handleMessageForEmbed = (
   expectedOrigin: string,
+  entryState: EntryState,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   clientId?: string,
-  redirectUri?: string,    
+  redirectUri?: string,
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[]
@@ -105,6 +114,7 @@ export const handleMessageForEmbed = (
         redirectUri,
         permissionTemplateId,
         vehicles,
+        entryState,
         eventType: "AUTH_INIT",
       };
 
@@ -112,9 +122,9 @@ export const handleMessageForEmbed = (
       // Replace "https://example-iframe.com" with the actual origin of the iframe's URL
       //@ts-ignore
       iframe.contentWindow.postMessage(message, expectedOrigin);
-    }    
+    }
 
-    if (authType === 'embed' && token) {
+    if (authType === "embed" && token) {
       storeJWTInCookies(token);
       setAuthenticated(true);
       onSuccess({ token });

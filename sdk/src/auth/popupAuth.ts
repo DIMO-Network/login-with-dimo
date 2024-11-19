@@ -1,6 +1,8 @@
+import { EntryState } from "../enums/globalEnums";
 import { handleMessageForPopup } from "../utils/eventHandler";
 
 export const popupAuth = (
+  entryState: EntryState,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
@@ -25,6 +27,7 @@ export const popupAuth = (
     // Set up message handler for popup auth
     const cleanup = handleMessageForPopup(
       dimoLogin,
+      entryState,
       onSuccess,
       onError,
       setAuthenticated,
