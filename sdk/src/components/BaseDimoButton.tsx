@@ -33,7 +33,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   const [authenticated, setAuthenticated] = useState(false);
   const dimoLogin =
     environment === "development"
-      ? "https://71d2182d7262.ngrok.app"
+      ? "https://login.dev.dimo.org"
       : "https://login.dimo.org";
 
   useEffect(() => {
