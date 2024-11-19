@@ -1,4 +1,7 @@
+import { EntryState } from "../enums/globalEnums";
+
 export const redirectAuth = (
+  entryState: EntryState,
   onSuccess: (authData: { token: string }) => void,
   onError: (error: Error) => void,
   dimoLogin: string,
@@ -15,6 +18,7 @@ export const redirectAuth = (
   if (clientId) params.append("clientId", clientId);
   if (redirectUri) params.append("redirectUri", redirectUri);
   if (permissionTemplateId) params.append("permissionTemplateId", permissionTemplateId);
+  if (entryState) params.append("entryState", entryState);
   if (vehicles && vehicles.length > 0) {
     vehicles.forEach(vehicle => params.append("vehicles", vehicle));
   }  

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { LoginWithDimo } from "@dimo-network/login-with-dimo";
+import {
+  LoginWithDimo,
+  ShareVehiclesWithDimo,
+  initializeDimoSDK,
+} from "@dimo-network/login-with-dimo";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
@@ -10,6 +14,15 @@ function App() {
   const handleToggle = () => {
     setPermissionsEnabled(!permissionsEnabled);
   };
+
+  initializeDimoSDK({
+    clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
+    redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
+    apiKey: process.env.REACT_APP_DIMO_API_KEY!,
+    environment: process.env.REACT_APP_DIMO_ENV! as
+      | "production"
+      | "development",
+  });
 
   return (
     <div className="App">
@@ -35,12 +48,15 @@ function App() {
             mode="popup"
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
-            clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
-            redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
-            apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
-            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
+          />
+
+          <ShareVehiclesWithDimo
+            mode="popup"
+            onSuccess={(authData) => console.log("Success:", authData)}
+            onError={(error) => console.error("Error:", error)}
+            permissionTemplateId={"1"}
           />
         </div>
 
@@ -50,11 +66,7 @@ function App() {
             mode="embed"
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
-            clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
-            redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
-            apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
-            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
           />
         </div>
@@ -65,12 +77,15 @@ function App() {
             mode="redirect"
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
-            clientId={process.env.REACT_APP_DIMO_CLIENT_ID}
-            redirectUri={process.env.REACT_APP_DIMO_REDIRECT_URI}
-            apiKey={process.env.REACT_APP_DIMO_API_KEY}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
-            environment={process.env.REACT_APP_DIMO_ENV}
             // vehicles={["585","586"]}
+          />
+
+          <ShareVehiclesWithDimo
+            mode="redirect"
+            onSuccess={(authData) => console.log("Success:", authData)}
+            onError={(error) => console.error("Error:", error)}
+            permissionTemplateId={"1"}
           />
         </div>
       </header>
