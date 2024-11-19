@@ -16,7 +16,7 @@ export const initializeDimoSDK = ({
 }: {
   clientId: string;
   redirectUri: string;
-  apiKey: string;
+  apiKey?: string;
   environment?: "development" | "production";
 }) => {
   sdkConfig = { clientId, redirectUri, apiKey, environment };

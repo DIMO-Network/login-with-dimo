@@ -18,7 +18,6 @@ function App() {
   initializeDimoSDK({
     clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
     redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
-    apiKey: process.env.REACT_APP_DIMO_API_KEY!,
     environment: process.env.REACT_APP_DIMO_ENV! as
       | "production"
       | "development",
