@@ -61,13 +61,13 @@ function App() {
 
         <div>
           <h3>Embed Example</h3>
-          <LoginWithDimo
+          {/* <LoginWithDimo
             mode="embed"
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
             // vehicles={["585","586"]}
-          />
+          /> */}
         </div>
 
         <div>
