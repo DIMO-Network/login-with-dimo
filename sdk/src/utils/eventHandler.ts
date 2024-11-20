@@ -43,18 +43,22 @@ export const handleMessageForPopup = (
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
       if (popup) {
-        popup.postMessage(
-          {
-            clientId,
-            redirectUri,
-            apiKey,
-            permissionTemplateId,
-            vehicles,
-            entryState,
-            eventType: "AUTH_INIT",
-          },
-          expectedOrigin
-        );
+        //Seems like on Mobile, and on Safari - even after the "READY" message, the popup still may not be ready
+        setTimeout(() => {
+          // Send the "AUTH_INIT" message to the popup
+          popup.postMessage(
+            {
+              clientId,
+              redirectUri,
+              apiKey,
+              permissionTemplateId,
+              vehicles,
+              entryState,
+              eventType: "AUTH_INIT",
+            },
+            expectedOrigin
+          );
+        }, 0);
       } else {
         onError(new Error("Popup window not available to send credentials"));
       }
@@ -104,7 +108,6 @@ export const handleMessageForEmbed = (
 
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
-      console.log("Ready Message received");
       const iframe = document.getElementById("dimo-iframe");
 
       // Define the message data
@@ -119,7 +122,7 @@ export const handleMessageForEmbed = (
       };
 
       // Send the message to the iframe
-      // Replace "https://example-iframe.com" with the actual origin of the iframe's URL
+
       //@ts-ignore
       iframe.contentWindow.postMessage(message, expectedOrigin);
     }
