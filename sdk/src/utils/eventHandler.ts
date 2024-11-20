@@ -43,18 +43,24 @@ export const handleMessageForPopup = (
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
       if (popup) {
-        popup.postMessage(
-          {
-            clientId,
-            redirectUri,
-            apiKey,
-            permissionTemplateId,
-            vehicles,
-            entryState,
-            eventType: "AUTH_INIT",
-          },
-          expectedOrigin
-        );
+
+        //Temporary Fix
+        //Seems like on Safari, and Mobile Browsers - the popup is not ready to receive messages, even after sending a "READY" message
+        //The set timeout acts as a solution, by modifying the callback loop
+        setTimeout(() => {
+          popup.postMessage(
+            {
+              clientId,
+              redirectUri,
+              apiKey,
+              permissionTemplateId,
+              vehicles,
+              entryState,
+              eventType: "AUTH_INIT",
+            },
+            expectedOrigin
+          );
+        }, 0);
       } else {
         onError(new Error("Popup window not available to send credentials"));
       }
