@@ -8,6 +8,7 @@ interface ShareVehiclesWithDimoProps {
   onError: (error: Error) => void; // Error callback
   permissionTemplateId: string; // Permissions template required for sharing
   vehicles?: string[]; // List of vehicles to share
+  vehicleMakes?: string[];
 }
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
@@ -16,6 +17,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   onError,
   permissionTemplateId,
   vehicles,
+  vehicleMakes
 }) => {
   return (
     <BaseDimoButton
@@ -26,6 +28,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       buttonLabel={() => "Share Vehicles with DIMO"}
       permissionTemplateId={permissionTemplateId} // Pass permissions template
       vehicles={vehicles} // Pass vehicle IDs
+      vehicleMakes={vehicleMakes}
     />
   );
 };

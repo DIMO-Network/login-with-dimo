@@ -8,6 +8,7 @@ interface LoginWithDimoProps {
   onError: (error: Error) => void; // Error callback
   permissionTemplateId?: string; // Optional: Permissions template
   vehicles?: string[]; // Optional: List of vehicles  
+  vehicleMakes?: string[];
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -16,6 +17,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   onError,
   permissionTemplateId,
   vehicles,  
+  vehicleMakes,
 }) => {
   return (
     <BaseDimoButton
@@ -29,6 +31,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       disableIfAuthenticated={true} // Disable button when authenticated
       permissionTemplateId={permissionTemplateId} // Pass permissionTemplateId if provided
       vehicles={vehicles} // Pass vehicles if provided      
+      vehicleMakes={vehicleMakes}
     />
   );
 };

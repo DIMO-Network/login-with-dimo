@@ -11,7 +11,8 @@ export const embedAuth = (
   redirectUri?: string,
   apiKey?: string,
   permissionTemplateId?: string,
-  vehicles?: string[]
+  vehicles?: string[],
+  vehicleMakes?: string[]
 ) => {
   const cleanup = handleMessageForEmbed(
     dimoLogin,
@@ -23,6 +24,7 @@ export const embedAuth = (
     redirectUri,
     apiKey,
     permissionTemplateId,
-    vehicles
+    vehicles,
+    vehicleMakes
   );
 };

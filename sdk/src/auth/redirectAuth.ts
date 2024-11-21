@@ -9,7 +9,8 @@ export const redirectAuth = (
   redirectUri?: string,
   apiKey?: string, //We don't want to send an API key in the url
   permissionTemplateId?: string,
-  vehicles?: string[]
+  vehicles?: string[],
+  vehicleMakes?: string[],
 ) => {
 
   // Create URLSearchParams instance
@@ -22,6 +23,10 @@ export const redirectAuth = (
   if (vehicles && vehicles.length > 0) {
     vehicles.forEach(vehicle => params.append("vehicles", vehicle));
   }  
+
+  if (vehicleMakes && vehicleMakes.length > 0) {
+    vehicleMakes.forEach(vehicleMake => params.append("vehicleMakes", vehicleMake));
+  }    
 
   // Construct the full URL
   window.location.href = `${dimoLogin}?${params.toString()}`;
