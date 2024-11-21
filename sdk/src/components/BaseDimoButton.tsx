@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
 import { redirectAuth } from "../auth/redirectAuth";
-import { getJWTFromCookies } from "../storage/storageManager";
-import { isTokenExpired } from "../token/tokenManager";
 import { getDimoConfig } from "../config/sdkConfig";
 import { EntryState } from "../enums/globalEnums";
 import "../styles/BaseDimoButton.css";
+import { DimoAuthProvider, useDimoAuthState, useDimoAuthUpdater } from "../auth/context/DimoAuthContext";
 
 interface BaseDimoButtonProps {
   mode: "popup" | "embed" | "redirect";
@@ -30,18 +29,16 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   vehicles,
 }) => {
   const { clientId, redirectUri, apiKey, environment } = getDimoConfig();
-  const [authenticated, setAuthenticated] = useState(false);
+
+  //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
+  const { isAuthenticated } = useDimoAuthState(); 
+  const { setAuthenticated } = useDimoAuthUpdater();
+
+
   const dimoLogin =
     environment === "development"
       ? "https://login.dev.dimo.org"
       : "https://login.dimo.org";
-
-  useEffect(() => {
-    const jwt = getJWTFromCookies();
-    if (jwt && !isTokenExpired(jwt)) {
-      setAuthenticated(true);
-    }
-  }, []);
 
   const handleButtonClick = () => {
     switch (mode) {
@@ -111,31 +108,33 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   );
 
   return (
-    <div>
-      {mode === "embed" ? (
-        renderEmbedIframe()
-      ) : (
-        <button
-          className="custom-button"
-          disabled={authenticated && disableIfAuthenticated} // Disable only if authenticated and explicitly requested
-          onClick={handleButtonClick}
-        >
-          <svg
-            width="20"
-            height="18"
-            viewBox="0 0 20 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+    <DimoAuthProvider>
+      <div>
+        {mode === "embed" ? (
+          renderEmbedIframe()
+        ) : (
+          <button
+            className="custom-button"
+            disabled={isAuthenticated && disableIfAuthenticated} // Disable only if authenticated and explicitly requested
+            onClick={handleButtonClick}
           >
-            <path
-              d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
-              fill="black"
-            />
-          </svg>
-          <span className="button-label">{buttonLabel(authenticated)}</span>
-        </button>
-      )}
-    </div>
+            <svg
+              width="20"
+              height="18"
+              viewBox="0 0 20 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
+                fill="black"
+              />
+            </svg>
+            <span className="button-label">{buttonLabel(isAuthenticated)}</span>
+          </button>
+        )}
+      </div>
+    </DimoAuthProvider>
   );
 };
 
