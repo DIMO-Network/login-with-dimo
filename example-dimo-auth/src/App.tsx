@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import {
@@ -10,7 +10,7 @@ import {
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
-  const { isAuthenticated } = useDimoAuthState();
+  const { isAuthenticated, getValidJWT } = useDimoAuthState();
 
   // Toggle handler
   const handleToggle = () => {
@@ -49,15 +49,15 @@ function App() {
           {isAuthenticated ? (
             <ShareVehiclesWithDimo
               mode="popup"
-              onSuccess={(authData) => console.log("Success:", authData)}
-              onError={(error) => console.error("Error:", error)}
+              onSuccess={(authData: any) => console.log("Success:", authData)}
+              onError={(error: any) => console.error("Error:", error)}
               permissionTemplateId={"1"}
             />
           ) : (
             <LoginWithDimo
               mode="popup"
-              onSuccess={(authData) => console.log("Success:", authData)}
-              onError={(error) => console.error("Error:", error)}
+              onSuccess={(authData: any) => console.log("Success:", authData)}
+              onError={(error: any) => console.error("Error:", error)}
               permissionTemplateId={permissionsEnabled ? "1" : undefined}
               // vehicles={["585","586"]}
             />
@@ -68,8 +68,8 @@ function App() {
           <h3>Embed Example</h3>
           <LoginWithDimo
             mode="embed"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
+            onSuccess={(authData: any) => console.log("Success:", authData)}
+            onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
             // vehicles={["585","586"]}
           />
@@ -79,16 +79,16 @@ function App() {
           <h3>Redirect Example</h3>
           <LoginWithDimo
             mode="redirect"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
+            onSuccess={(authData: any) => console.log("Success:", authData)}
+            onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
             // vehicles={["585","586"]}
           />
 
           <ShareVehiclesWithDimo
             mode="redirect"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
+            onSuccess={(authData: any) => console.log("Success:", authData)}
+            onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={"1"}
           />
         </div>

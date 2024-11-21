@@ -29,7 +29,8 @@ export const handleMessageForPopup = (
   redirectUri?: string,
   apiKey?: string,
   permissionTemplateId?: string,
-  vehicles?: string[]
+  vehicles?: string[],
+  vehicleMakes?: string[],
 ) => {
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -55,6 +56,7 @@ export const handleMessageForPopup = (
               apiKey,
               permissionTemplateId,
               vehicles,
+              vehicleMakes,
               entryState,
               eventType: "AUTH_INIT",
             },
@@ -67,6 +69,7 @@ export const handleMessageForPopup = (
     }
 
     if (authType === "popup" && token) {
+      //TBD: Can store user object in DIMO State here, but then would need to handle clearing it out
       storeJWTInCookies(token);
       setAuthenticated(true);
       onSuccess({ token });
@@ -98,7 +101,8 @@ export const handleMessageForEmbed = (
   redirectUri?: string,
   apiKey?: string,
   permissionTemplateId?: string,
-  vehicles?: string[]
+  vehicles?: string[],
+  vehicleMakes?: string[],
 ) => {
   const embedListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -120,6 +124,7 @@ export const handleMessageForEmbed = (
         redirectUri,
         permissionTemplateId,
         vehicles,
+        vehicleMakes,
         entryState,
         eventType: "AUTH_INIT",
       };

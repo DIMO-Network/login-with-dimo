@@ -16,6 +16,7 @@ interface BaseDimoButtonProps {
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
   permissionTemplateId?: string;
   vehicles?: string[];
+  vehicleMakes?: string[];
 }
 
 const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
@@ -27,6 +28,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   disableIfAuthenticated = false,
   permissionTemplateId,
   vehicles,
+  vehicleMakes,
 }) => {
   const { clientId, redirectUri, apiKey, environment } = getDimoConfig();
 
@@ -53,7 +55,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
           redirectUri,
           apiKey,
           permissionTemplateId,
-          vehicles
+          vehicles,
+          vehicleMakes
         );
         break;
       case "redirect":
@@ -66,7 +69,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
           redirectUri,
           apiKey,
           permissionTemplateId,
-          vehicles
+          vehicles,
+          vehicleMakes
         );
         break;
       default:
@@ -87,7 +91,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
         redirectUri,
         apiKey,
         permissionTemplateId,
-        vehicles
+        vehicles,
+        vehicleMakes
       );
     }
   };
