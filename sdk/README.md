@@ -35,7 +35,7 @@ import {
 
 ### The Dimo Auth Provider
 
-The Dimo Auth Provider is used to get the auth state value from the SDK
+The Dimo Auth Provider is used to get the auth state value from the SDK, as well as to keep track of the JWT
 
 Any components that require this value should be wrapped in the DimoAuthProvider, as follows
 
@@ -52,7 +52,7 @@ import {,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
 
-const { isAuthenticated } = useDimoAuthState();
+const { isAuthenticated, getValidJWT() } = useDimoAuthState();
 ```
 
 Based on this authenticated state, you can render the necessary Dimo components
@@ -103,7 +103,13 @@ import {
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
 
-const { isAuthenticated } = useDimoAuthState();
+const { isAuthenticated, getValidJWT() } = useDimoAuthState();
+
+useEffect(()=>{
+  if ( isAuthenticated ) {
+    //makeAuthenticatedRequest(getValidJWT())
+  }
+},[isAuthenticated])
 
 initializeDimoSDK({
   clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,

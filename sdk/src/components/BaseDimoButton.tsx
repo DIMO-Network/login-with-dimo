@@ -39,7 +39,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
 
   const dimoLogin =
     environment === "development"
-      ? "https://712f31e3d323.ngrok.app"
+      ? "https://login.dev.dimo.org"
       : "https://login.dimo.org";
 
   const handleButtonClick = () => {
