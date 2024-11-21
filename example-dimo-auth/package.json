@@ -10,7 +10,7 @@
     "@types/node": "^16.18.114",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.1",
-    "@dimo-network/login-with-dimo": "file:./dimo-network-login-with-dimo-0.0.5.tgz",
+    "@dimo-network/login-with-dimo": "file:./dimo-network-login-with-dimo-0.0.6.tgz",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "5.0.1",
