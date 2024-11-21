@@ -12,6 +12,7 @@ export const popupAuth = (
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[],
+  vehicleMakes?: string[]
 ) => {
   try {
     const popup = window.open(
@@ -36,7 +37,8 @@ export const popupAuth = (
       redirectUri,
       apiKey,
       permissionTemplateId,
-      vehicles
+      vehicles,
+      vehicleMakes
     );
   } catch (error: unknown) {
     if (error instanceof Error) {

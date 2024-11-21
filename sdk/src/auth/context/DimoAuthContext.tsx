@@ -6,6 +6,7 @@ import { isTokenExpired } from "../../token/tokenManager";
 // Define the type of the context
 type DimoAuthContextType = {
   isAuthenticated: boolean; // Read-only for app developers
+  getValidJWT: () => string | null;
 };
 
 // Create the context
@@ -28,16 +29,25 @@ export const DimoAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
+  
 
-  useEffect(() => {
+  const getValidJWT = () => {
     const jwt = getJWTFromCookies();
     if (jwt && !isTokenExpired(jwt)) {
+      return jwt;
+    }
+    console.warn("Invalid or expired JWT.");
+    return null;
+  }
+
+  useEffect(() => {
+    if (getValidJWT()) {
       setAuthenticated(true);
     }
   }, []);
 
   return (
-    <DimoAuthContext.Provider value={{ isAuthenticated }}>
+    <DimoAuthContext.Provider value={{ isAuthenticated, getValidJWT }}>
       <DimoAuthUpdaterContext.Provider value={{ setAuthenticated }}>
         {children}
       </DimoAuthUpdaterContext.Provider>
