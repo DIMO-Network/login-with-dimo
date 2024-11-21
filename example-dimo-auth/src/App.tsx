@@ -5,10 +5,12 @@ import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
   initializeDimoSDK,
+  useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
+  const { isAuthenticated } = useDimoAuthState();
 
   // Toggle handler
   const handleToggle = () => {
@@ -43,20 +45,23 @@ function App() {
 
         <div>
           <h3>Popup Example</h3>
-          <LoginWithDimo
-            mode="popup"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined}
-            // vehicles={["585","586"]}
-          />
 
-          <ShareVehiclesWithDimo
-            mode="popup"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
-            permissionTemplateId={"1"}
-          />
+          {isAuthenticated ? (
+            <ShareVehiclesWithDimo
+              mode="popup"
+              onSuccess={(authData) => console.log("Success:", authData)}
+              onError={(error) => console.error("Error:", error)}
+              permissionTemplateId={"1"}
+            />
+          ) : (
+            <LoginWithDimo
+              mode="popup"
+              onSuccess={(authData) => console.log("Success:", authData)}
+              onError={(error) => console.error("Error:", error)}
+              permissionTemplateId={permissionsEnabled ? "1" : undefined}
+              // vehicles={["585","586"]}
+            />
+          )}
         </div>
 
         <div>

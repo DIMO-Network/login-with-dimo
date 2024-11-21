@@ -33,8 +33,33 @@ import {
   });
 ```
 
+### The Dimo Auth Provider
+
+The Dimo Auth Provider is used to get the auth state value from the SDK
+
+Any components that require this value should be wrapped in the DimoAuthProvider, as follows
+
+```
+<DimoAuthProvider>
+    <SomeComponentThatNeedsDimoState/>
+</DimoAuthProvider/>
+```
+
+Now, in the component the auth state can be fetched as follows
+
+```
+import {,
+  useDimoAuthState,
+} from "@dimo-network/login-with-dimo";
+
+const { isAuthenticated } = useDimoAuthState();
+```
+
+Based on this authenticated state, you can render the necessary Dimo components
+
 ### Using the Button Components
 
+The following example shows both buttons being rendered, with no auth state checking
 ```
 import {
   LoginWithDimo,
@@ -58,4 +83,50 @@ import {
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered   
           />          
+```
+
+### Putting it all together
+
+In many cases - developers may want to couple/decouple usage of these components
+
+A common flow is
+1. Show the login button, when in authenticated
+2. Show the Share Vehicles button, when authenticed
+
+This can be achieved by simply wrapping those buttons in a conditional as follows, to create a full example as follows
+
+```
+import {
+  LoginWithDimo,
+  ShareVehiclesWithDimo,
+  initializeDimoSDK,
+  useDimoAuthState,
+} from "@dimo-network/login-with-dimo";
+
+const { isAuthenticated } = useDimoAuthState();
+
+initializeDimoSDK({
+  clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
+  redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
+});
+
+...
+
+
+{isAuthenticated ? (
+  <ShareVehiclesWithDimo
+    mode="popup"
+    onSuccess={(authData) => console.log("Success:", authData)}
+    onError={(error) => console.error("Error:", error)}
+    permissionTemplateId={"1"}
+  />
+) : (
+  <LoginWithDimo
+    mode="popup"
+    onSuccess={(authData) => console.log("Success:", authData)}
+    onError={(error) => console.error("Error:", error)}
+    permissionTemplateId={permissionsEnabled ? "1" : undefined}
+    // vehicles={["585","586"]}
+  />
+)}
 ```
