@@ -8,13 +8,12 @@ import {
   initializeDimoSDK,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
-import { Abi } from "viem";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
   const { isAuthenticated, getValidJWT } = useDimoAuthState();
 
-  const sampleAbi: Abi = [
+  const sampleAbi = [
     {
       anonymous: false,
       inputs: [

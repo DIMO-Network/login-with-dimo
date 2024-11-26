@@ -2,7 +2,6 @@ import React from "react";
 import BaseDimoButton from "./BaseDimoButton";
 import { EntryState } from "../enums/globalEnums";
 import { TransactionData } from "../types/TransactionData";
-import { Abi } from "viem"; // Assuming `Abi` is imported from viem types
 
 interface ExecuteAdvancedTransactionProps {
   mode: "popup" | "embed" | "redirect";
@@ -14,7 +13,7 @@ interface ExecuteAdvancedTransactionProps {
   onError: (error: Error) => void; // Error callback
   address: string;
   value: string;
-  abi: Abi;
+  abi: any;
   functionName: string;
   args: string[];
 }
