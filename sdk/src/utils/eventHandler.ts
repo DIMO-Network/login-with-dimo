@@ -44,8 +44,7 @@ export const handleMessageForPopup = (
       return;
     }
 
-    const { eventType, token, authType, transactionHash, message } =
-      event.data;
+    const { eventType, token, authType, transactionHash, message } = event.data;
 
     // Handle the "READY" message
     if (eventType === "READY") {
@@ -94,14 +93,9 @@ export const handleMessageForPopup = (
       if (transactionHash) {
         onSuccess({ token: "", transactionHash });
       }
-
-      if (popup && !popup.closed) {
-        popup.close();
-        console.log("Popup closed successfully.");
-      }
     }
 
-    if ( eventType === "DIMO_ERROR" ) {
+    if (eventType === "DIMO_ERROR") {
       onError(message);
     }
   };
