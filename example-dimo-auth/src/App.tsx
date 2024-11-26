@@ -4,13 +4,28 @@ import "./App.css";
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
+  ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
+import { Abi } from "viem";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
   const { isAuthenticated, getValidJWT } = useDimoAuthState();
+
+  const sampleAbi: Abi = [
+    {
+      type: "function",
+      name: "transfer",
+      stateMutability: "nonpayable",
+      inputs: [
+        { name: "to", type: "address" },
+        { name: "amount", type: "uint256" },
+      ],
+      outputs: [],
+    },
+  ];
 
   // Toggle handler
   const handleToggle = () => {
@@ -47,12 +62,25 @@ function App() {
           <h3>Popup Example</h3>
 
           {isAuthenticated ? (
-            <ShareVehiclesWithDimo
-              mode="popup"
-              onSuccess={(authData: any) => console.log("Success:", authData)}
-              onError={(error: any) => console.error("Error:", error)}
-              permissionTemplateId={"1"}
-            />
+            <>
+              <ShareVehiclesWithDimo
+                mode="popup"
+                onSuccess={(authData: any) => console.log("Success:", authData)}
+                onError={(error: any) => console.error("Error:", error)}
+                permissionTemplateId={"1"}
+              />
+
+              <ExecuteAdvancedTransactionWithDimo
+                mode="popup"
+                onSuccess={(transactionHash: any) => console.log("Success:", transactionHash)}
+                onError={(error: any) => console.error("Error:", error)}
+                address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
+                value="0"
+                abi={sampleAbi}
+                functionName="balanceOf"
+                args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
+              />
+            </>
           ) : (
             <LoginWithDimo
               mode="popup"
@@ -90,6 +118,17 @@ function App() {
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={"1"}
+          />
+
+          <ExecuteAdvancedTransactionWithDimo
+            mode="redirect"
+            onSuccess={(authData: any) => console.log("Success:", authData)}
+            onError={(error: any) => console.error("Error:", error)}
+            address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
+            value="0"
+            abi={sampleAbi}
+            functionName="transfer"
+            args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
           />
         </div>
       </header>

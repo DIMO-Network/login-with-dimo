@@ -1,5 +1,6 @@
 import { EntryState } from "../enums/globalEnums";
 import { storeJWTInCookies } from "../storage/storageManager";
+import { TransactionData } from "../types/TransactionData";
 
 /**
  * @file eventHandler.ts
@@ -21,7 +22,11 @@ function getDomain(url: string) {
 export const handleMessageForPopup = (
   expectedOrigin: string,
   entryState: EntryState,
-  onSuccess: (authData: { token: string }) => void,
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   popup?: Window | null,
@@ -31,6 +36,7 @@ export const handleMessageForPopup = (
   permissionTemplateId?: string,
   vehicles?: string[],
   vehicleMakes?: string[],
+  transactionData?: TransactionData
 ) => {
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -38,13 +44,13 @@ export const handleMessageForPopup = (
       return;
     }
 
-    const { eventType, token, authType } = event.data;
+    const { eventType, token, authType, transactionHash, message } =
+      event.data;
 
     // Handle the "READY" message
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
       if (popup) {
-
         //Temporary Fix
         //Seems like on Safari, and Mobile Browsers - the popup is not ready to receive messages, even after sending a "READY" message
         //The set timeout acts as a solution, by modifying the callback loop
@@ -57,6 +63,7 @@ export const handleMessageForPopup = (
               permissionTemplateId,
               vehicles,
               vehicleMakes,
+              transactionData,
               entryState,
               eventType: "AUTH_INIT",
             },
@@ -82,6 +89,21 @@ export const handleMessageForPopup = (
 
       window.removeEventListener("message", popupListener);
     }
+
+    if (eventType === "transactionResponse") {
+      if (transactionHash) {
+        onSuccess({ token: "", transactionHash });
+      }
+
+      if (popup && !popup.closed) {
+        popup.close();
+        console.log("Popup closed successfully.");
+      }
+    }
+
+    if ( eventType === "DIMO_ERROR" ) {
+      onError(message);
+    }
   };
 
   // Add event listener specifically for popup auth
@@ -94,7 +116,11 @@ export const handleMessageForPopup = (
 export const handleMessageForEmbed = (
   expectedOrigin: string,
   entryState: EntryState,
-  onSuccess: (authData: { token: string }) => void,
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   clientId?: string,
@@ -103,6 +129,7 @@ export const handleMessageForEmbed = (
   permissionTemplateId?: string,
   vehicles?: string[],
   vehicleMakes?: string[],
+  transactionData?: TransactionData
 ) => {
   const embedListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
@@ -110,7 +137,8 @@ export const handleMessageForEmbed = (
       return;
     }
 
-    const { eventType, token, authType } = event.data;
+    const { eventType, token, authType, transactionHash, transactionReceipt } =
+      event.data;
 
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
@@ -126,6 +154,7 @@ export const handleMessageForEmbed = (
         vehicles,
         vehicleMakes,
         entryState,
+        transactionData,
         eventType: "AUTH_INIT",
       };
 
@@ -139,6 +168,14 @@ export const handleMessageForEmbed = (
       storeJWTInCookies(token);
       setAuthenticated(true);
       onSuccess({ token });
+    }
+
+    if (eventType === "transactionResponse") {
+      if (transactionHash || transactionReceipt) {
+        onSuccess({ token: "", transactionHash, transactionReceipt });
+      } else {
+        onError(Error("Could not execute transaction"));
+      }
     }
   };
 
