@@ -1,9 +1,14 @@
 import { EntryState } from "../enums/globalEnums";
+import { TransactionData } from "../types/TransactionData";
 import { handleMessageForPopup } from "../utils/eventHandler";
 
 export const popupAuth = (
   entryState: EntryState,
-  onSuccess: (authData: { token: string }) => void,
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   dimoLogin: string,
@@ -12,7 +17,8 @@ export const popupAuth = (
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[],
-  vehicleMakes?: string[]
+  vehicleMakes?: string[],
+  transactionData?: TransactionData
 ) => {
   try {
     const popup = window.open(
@@ -38,7 +44,8 @@ export const popupAuth = (
       apiKey,
       permissionTemplateId,
       vehicles,
-      vehicleMakes
+      vehicleMakes,
+      transactionData
     );
   } catch (error: unknown) {
     if (error instanceof Error) {

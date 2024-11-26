@@ -1,9 +1,14 @@
 import { EntryState } from "../enums/globalEnums";
+import { TransactionData } from "../types/TransactionData";
 import { handleMessageForEmbed } from "../utils/eventHandler";
 
 export const embedAuth = (
   entryState: EntryState,
-  onSuccess: (authData: { token: string }) => void,
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void,
   onError: (error: Error) => void,
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
   dimoLogin: string,
@@ -12,7 +17,8 @@ export const embedAuth = (
   apiKey?: string,
   permissionTemplateId?: string,
   vehicles?: string[],
-  vehicleMakes?: string[]
+  vehicleMakes?: string[],
+  transactionData?: TransactionData
 ) => {
   const cleanup = handleMessageForEmbed(
     dimoLogin,
@@ -25,6 +31,7 @@ export const embedAuth = (
     apiKey,
     permissionTemplateId,
     vehicles,
-    vehicleMakes
+    vehicleMakes,
+    transactionData
   );
 };
