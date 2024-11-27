@@ -10,7 +10,6 @@ import {
   useDimoAuthState,
   useDimoAuthUpdater,
 } from "../auth/context/DimoAuthContext";
-import { TransactionData } from "../types/TransactionData";
 
 interface BaseDimoButtonProps {
   mode: "popup" | "embed" | "redirect";
@@ -23,10 +22,7 @@ interface BaseDimoButtonProps {
   onError: (error: Error) => void; // Error callback
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
-  permissionTemplateId?: string;
-  vehicles?: string[];
-  vehicleMakes?: string[];
-  transactionData?: TransactionData;
+  payload: Record<string, any>; // Dynamic payload object
 }
 
 const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
@@ -36,10 +32,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   onError,
   buttonLabel,
   disableIfAuthenticated = false,
-  permissionTemplateId,
-  vehicles,
-  vehicleMakes,
-  transactionData,
+  payload,
 }) => {
   const { clientId, redirectUri, apiKey, environment } = getDimoConfig();
 
@@ -53,37 +46,23 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
       : "https://login.dimo.org";
 
   const handleButtonClick = () => {
+    const basePayload = {
+      entryState,
+      onSuccess,
+      onError,
+      setAuthenticated,
+      dimoLogin,
+      clientId,
+      redirectUri,
+      apiKey,
+    };
+
     switch (mode) {
       case "popup":
-        popupAuth(
-          entryState,
-          onSuccess,
-          onError,
-          setAuthenticated,
-          dimoLogin,
-          clientId,
-          redirectUri,
-          apiKey,
-          permissionTemplateId,
-          vehicles,
-          vehicleMakes,
-          transactionData
-        );
+        popupAuth(basePayload, payload);
         break;
       case "redirect":
-        redirectAuth(
-          entryState,
-          onSuccess,
-          onError,
-          dimoLogin,
-          clientId,
-          redirectUri,
-          apiKey,
-          permissionTemplateId,
-          vehicles,
-          vehicleMakes,
-          transactionData
-        );
+        redirectAuth(basePayload, payload);
         break;
       default:
         console.error("Unsupported mode for button click");
@@ -93,7 +72,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   // Trigger embedAuth only once the iframe has fully loaded
   const handleIframeLoad = () => {
     if (mode === "embed") {
-      embedAuth(
+      embedAuth({
         entryState,
         onSuccess,
         onError,
@@ -102,11 +81,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
         clientId,
         redirectUri,
         apiKey,
-        permissionTemplateId,
-        vehicles,
-        vehicleMakes,
-        transactionData
-      );
+        ...payload, // Include dynamic payload data
+      });
     }
   };
 

@@ -1,26 +1,14 @@
 import { EntryState } from "../enums/globalEnums";
+import { BasePayload } from "../types/BasePayload";
 import { TransactionData } from "../types/TransactionData";
 import { handleMessageForPopup } from "../utils/eventHandler";
 
 export const popupAuth = (
-  entryState: EntryState,
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void,
-  onError: (error: Error) => void,
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
-  dimoLogin: string,
-  clientId?: string,
-  redirectUri?: string,
-  apiKey?: string,
-  permissionTemplateId?: string,
-  vehicles?: string[],
-  vehicleMakes?: string[],
-  transactionData?: TransactionData
+  basePayload: BasePayload,
+  data?: Record<string, any> // Component-specific data
 ) => {
   try {
+    const { entryState, onSuccess, onError, setAuthenticated, dimoLogin } = basePayload;
     const popup = window.open(
       dimoLogin,
       "_blank",
@@ -32,26 +20,12 @@ export const popupAuth = (
     }
 
     // Set up message handler for popup auth
-    const cleanup = handleMessageForPopup(
-      dimoLogin,
-      entryState,
-      onSuccess,
-      onError,
-      setAuthenticated,
-      popup,
-      clientId,
-      redirectUri,
-      apiKey,
-      permissionTemplateId,
-      vehicles,
-      vehicleMakes,
-      transactionData
-    );
+    const cleanup = handleMessageForPopup(basePayload, data, dimoLogin, popup);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      onError(error);
+      basePayload.onError(error);
     } else {
-      onError(new Error("An unknown error occurred"));
+      basePayload.onError(new Error("An unknown error occurred"));
     }
   }
 };

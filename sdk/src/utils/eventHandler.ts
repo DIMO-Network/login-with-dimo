@@ -1,5 +1,6 @@
 import { EntryState } from "../enums/globalEnums";
 import { storeJWTInCookies } from "../storage/storageManager";
+import { BasePayload } from "../types/BasePayload";
 import { TransactionData } from "../types/TransactionData";
 
 /**
@@ -20,24 +21,21 @@ function getDomain(url: string) {
 }
 
 export const handleMessageForPopup = (
+  basePayload: BasePayload, // Accept dynamic payload,
+  data: any,
   expectedOrigin: string,
-  entryState: EntryState,
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void,
-  onError: (error: Error) => void,
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
-  popup?: Window | null,
-  clientId?: string,
-  redirectUri?: string,
-  apiKey?: string,
-  permissionTemplateId?: string,
-  vehicles?: string[],
-  vehicleMakes?: string[],
-  transactionData?: TransactionData
+  popup: Window | null
 ) => {
+  const {
+    entryState,
+    onSuccess,
+    onError,
+    setAuthenticated,
+    clientId,
+    redirectUri,
+    apiKey,
+  } = basePayload;
+
   const popupListener = (event: MessageEvent) => {
     if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
       console.warn("Received message from an unknown origin:", event.origin);
@@ -46,44 +44,46 @@ export const handleMessageForPopup = (
 
     const { eventType, token, authType, transactionHash, message } = event.data;
 
-    // Handle the "READY" message
     if (eventType === "READY") {
-      // Once the "READY" message is received, send the credentials
-      if (popup) {
-        //Temporary Fix
-        //Seems like on Safari, and Mobile Browsers - the popup is not ready to receive messages, even after sending a "READY" message
-        //The set timeout acts as a solution, by modifying the callback loop
-        setTimeout(() => {
-          popup.postMessage(
-            {
-              clientId,
-              redirectUri,
-              apiKey,
-              permissionTemplateId,
-              vehicles,
-              vehicleMakes,
-              transactionData,
-              entryState,
-              eventType: "AUTH_INIT",
-            },
-            expectedOrigin
-          );
-        }, 0);
-      } else {
-        onError(new Error("Popup window not available to send credentials"));
-      }
+      // Send only the relevant data based on the payload
+      const initialMessage = {
+        clientId,
+        redirectUri,
+        apiKey,
+        entryState,
+        eventType: "AUTH_INIT",
+      };
+
+      setTimeout(() => {
+        if (popup) {
+          popup.postMessage(initialMessage, expectedOrigin);
+        } else {
+          onError(new Error("Popup window not available to send credentials"));
+        }
+      }, 0);
+
+    }
+
+    if (eventType === data.eventType) {
+      //SEND DATA MESSAGE, WITH PAYLOAD AND EVENT TYPE
+      const dataMessage = { ...data, eventType: data.eventType };
+
+      setTimeout(() => {
+        if (popup) {
+          popup.postMessage(dataMessage, expectedOrigin);
+        } else {
+          onError(new Error("Popup window not available to send credentials"));
+        }
+      }, 0);      
     }
 
     if (authType === "popup" && token) {
-      //TBD: Can store user object in DIMO State here, but then would need to handle clearing it out
       storeJWTInCookies(token);
       setAuthenticated(true);
       onSuccess({ token });
 
-      // Close the popup after success
       if (popup && !popup.closed) {
         popup.close();
-        console.log("Popup closed successfully.");
       }
 
       window.removeEventListener("message", popupListener);
@@ -96,37 +96,29 @@ export const handleMessageForPopup = (
     }
 
     if (eventType === "DIMO_ERROR") {
-      onError(message);
+      onError(new Error(message));
     }
   };
 
-  // Add event listener specifically for popup auth
   window.addEventListener("message", popupListener);
 
-  // Return a cleanup function to remove this listener
   return () => window.removeEventListener("message", popupListener);
 };
 
-export const handleMessageForEmbed = (
-  expectedOrigin: string,
-  entryState: EntryState,
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void,
-  onError: (error: Error) => void,
-  setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>,
-  clientId?: string,
-  redirectUri?: string,
-  apiKey?: string,
-  permissionTemplateId?: string,
-  vehicles?: string[],
-  vehicleMakes?: string[],
-  transactionData?: TransactionData
-) => {
+export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
   const embedListener = (event: MessageEvent) => {
-    if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
+    const {
+      entryState,
+      onSuccess,
+      onError,
+      setAuthenticated,
+      clientId,
+      redirectUri,
+      apiKey,
+      dimoLogin,
+    } = basePayload;
+
+    if (getDomain(event.origin) !== getDomain(dimoLogin)) {
       console.warn("Received message from an unknown origin:", event.origin);
       return;
     }
@@ -140,23 +132,26 @@ export const handleMessageForEmbed = (
       const iframe = document.getElementById("dimo-iframe");
 
       // Define the message data
-      const message = {
+      const initialMessage = {
         clientId,
-        apiKey,
         redirectUri,
-        permissionTemplateId,
-        vehicles,
-        vehicleMakes,
+        apiKey,
         entryState,
-        transactionData,
         eventType: "AUTH_INIT",
       };
 
       // Send the message to the iframe
-      // Replace "https://example-iframe.com" with the actual origin of the iframe's URL
       //@ts-ignore
-      iframe.contentWindow.postMessage(message, expectedOrigin);
+      iframe.contentWindow.postMessage(initialMessage, dimoLogin);
     }
+
+    if (eventType === data.eventType) {
+      //SEND DATA MESSAGE, WITH PAYLOAD AND EVENT TYPE
+      const dataMessage = { ...data, eventType: data.eventType };
+
+      //@ts-ignore
+      iframe.contentWindow.postMessage(dataMessage, dimoLogin);      
+    }    
 
     if (authType === "embed" && token) {
       storeJWTInCookies(token);
