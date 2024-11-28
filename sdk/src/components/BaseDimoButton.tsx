@@ -5,18 +5,28 @@ import { redirectAuth } from "../auth/redirectAuth";
 import { getDimoConfig } from "../config/sdkConfig";
 import { EntryState } from "../enums/globalEnums";
 import "../styles/BaseDimoButton.css";
-import { DimoAuthProvider, useDimoAuthState, useDimoAuthUpdater } from "../auth/context/DimoAuthContext";
+import {
+  DimoAuthProvider,
+  useDimoAuthState,
+  useDimoAuthUpdater,
+} from "../auth/context/DimoAuthContext";
+import { TransactionData } from "../types/TransactionData";
 
 interface BaseDimoButtonProps {
   mode: "popup" | "embed" | "redirect";
   entryState: EntryState;
-  onSuccess: (authData: { token: string }) => void; // Success callback
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void; // Success callback
   onError: (error: Error) => void; // Error callback
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
   permissionTemplateId?: string;
   vehicles?: string[];
   vehicleMakes?: string[];
+  transactionData?: TransactionData;
 }
 
 const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
@@ -29,13 +39,13 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   permissionTemplateId,
   vehicles,
   vehicleMakes,
+  transactionData,
 }) => {
   const { clientId, redirectUri, apiKey, environment } = getDimoConfig();
 
   //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
-  const { isAuthenticated } = useDimoAuthState(); 
+  const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
-
 
   const dimoLogin =
     environment === "development"
@@ -56,7 +66,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
           apiKey,
           permissionTemplateId,
           vehicles,
-          vehicleMakes
+          vehicleMakes,
+          transactionData
         );
         break;
       case "redirect":
@@ -70,7 +81,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
           apiKey,
           permissionTemplateId,
           vehicles,
-          vehicleMakes
+          vehicleMakes,
+          transactionData
         );
         break;
       default:
@@ -92,7 +104,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
         apiKey,
         permissionTemplateId,
         vehicles,
-        vehicleMakes
+        vehicleMakes,
+        transactionData
       );
     }
   };
