@@ -1,12 +1,15 @@
 // DimoAuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getJWTFromCookies } from "../../storage/storageManager";
+import { getEmailFromLocalStorage, getJWTFromCookies, getWalletAddressFromLocalStorage } from "../../storage/storageManager";
 import { isTokenExpired } from "../../token/tokenManager";
 
 // Define the type of the context
 type DimoAuthContextType = {
   isAuthenticated: boolean; // Read-only for app developers
+  walletAddress: string | null;
+  email: string | null;
   getValidJWT: () => string | null;
+  getEmail: () => string | null;
 };
 
 // Create the context
@@ -29,6 +32,18 @@ export const DimoAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
+
+  const hasEmailPermission = !!getEmailFromLocalStorage();
+  const email = hasEmailPermission ? getEmailFromLocalStorage() : "";
+  const walletAddress = getWalletAddressFromLocalStorage();
+
+  const getEmail = () => {
+    if (hasEmailPermission) {
+      return email;
+    } else {
+      throw new Error("No permission to access email");
+    }
+  };    
   
 
   const getValidJWT = () => {
@@ -47,7 +62,7 @@ export const DimoAuthProvider = ({
   }, []);
 
   return (
-    <DimoAuthContext.Provider value={{ isAuthenticated, getValidJWT }}>
+    <DimoAuthContext.Provider value={{ isAuthenticated, getValidJWT, email, getEmail, walletAddress }}>
       <DimoAuthUpdaterContext.Provider value={{ setAuthenticated }}>
         {children}
       </DimoAuthUpdaterContext.Provider>
