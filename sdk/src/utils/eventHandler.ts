@@ -24,8 +24,50 @@ function getDomain(url: string) {
   return parsedUrl.hostname;
 }
 
+const validateOrigin = (origin: string, expectedDomain: string): boolean => {
+  if (getDomain(origin) !== getDomain(expectedDomain)) {
+    console.warn("Received message from an unknown origin:", origin);
+    return false;
+  }
+  return true;
+};
+
+const sendMessageToTarget = (
+  target: Window | null | undefined,
+  message: object,
+  origin: string,
+  onError: (error: Error) => void
+) => {
+  if (target) {
+    setTimeout(() => {
+      target.postMessage(message, origin);
+    }, 0);
+  } else {
+    onError(new Error("Target window not available to send credentials"));
+  }
+};
+
+const processAuthResponse = (
+  { token, walletAddress, email }: any,
+  setAuthenticated: (status: boolean) => void,
+  onSuccess: (data: {
+    token: string;
+    transactionHash?: string;
+    transactionReceipt?: any;
+  }) => void
+) => {
+  if (walletAddress) storeWalletAddressInLocalStorage(walletAddress);
+  if (email) storeEmailInLocalStorage(email);
+  if (token) {
+    storeJWTInCookies(token);
+    setAuthenticated(true);
+    onSuccess({ token });
+  }
+};
+
+// Popup Handler
 export const handleMessageForPopup = (
-  basePayload: BasePayload, // Accept dynamic payload,
+  basePayload: BasePayload,
   data: any,
   expectedOrigin: string,
   popup: Window | null
@@ -41,91 +83,59 @@ export const handleMessageForPopup = (
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
-    if (getDomain(event.origin) !== getDomain(expectedOrigin)) {
-      console.warn("Received message from an unknown origin:", event.origin);
-      return;
-    }
+    if (!validateOrigin(event.origin, expectedOrigin)) return;
 
     const {
       eventType,
       token,
       walletAddress,
       email,
-      authType,
+      mode,
       transactionHash,
       message,
     } = event.data;
 
-    if (eventType === "READY") {
-      // Send only the relevant data based on the payload
-      const initialMessage = {
-        clientId,
-        redirectUri,
-        apiKey,
-        entryState,
-        eventType: "AUTH_INIT",
-      };
-
-      setTimeout(() => {
-        if (popup) {
-          popup.postMessage(initialMessage, expectedOrigin);
-        } else {
-          onError(new Error("Popup window not available to send credentials"));
-        }
-      }, 0);
-    }
-
-    if (eventType === data.eventType) {
-      //SEND DATA MESSAGE, WITH PAYLOAD AND EVENT TYPE
-      const dataMessage = { ...data, eventType: data.eventType };
-
-      setTimeout(() => {
-        if (popup) {
-          popup.postMessage(dataMessage, expectedOrigin);
-        } else {
-          onError(new Error("Popup window not available to send credentials"));
-        }
-      }, 0);
-    }
-
-    if (authType === "popup") {
-      if (walletAddress) {
-        storeWalletAddressInLocalStorage(walletAddress);
+    if (mode === "popup") {
+      if (eventType === "READY") {
+        const initialMessage = {
+          clientId,
+          redirectUri,
+          apiKey,
+          entryState,
+          eventType: "AUTH_INIT",
+        };
+        sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
 
-      if (email) {
-        storeEmailInLocalStorage(email);
+      if (eventType === data.eventType) {
+        const dataMessage = { ...data, eventType: data.eventType };
+        sendMessageToTarget(popup, dataMessage, expectedOrigin, onError);
       }
 
-      if (token) {
-        storeJWTInCookies(token);
-        setAuthenticated(true);
-        onSuccess({ token });
+      if (eventType === "authResponse") {
+        processAuthResponse(
+          { token, walletAddress, email },
+          setAuthenticated,
+          onSuccess
+        );
+        if (popup && !popup.closed) popup.close();
       }
 
-      if (popup && !popup.closed) {
-        popup.close();
-      }
-
-      window.removeEventListener("message", popupListener);
-    }
-
-    if (eventType === "transactionResponse") {
-      if (transactionHash) {
+      if (eventType === "transactionResponse" && transactionHash) {
         onSuccess({ token: "", transactionHash });
       }
-    }
 
-    if (eventType === "DIMO_ERROR") {
-      onError(new Error(message));
+      if (eventType === "DIMO_ERROR") {
+        onError(new Error(message));
+      }
     }
   };
 
   window.addEventListener("message", popupListener);
-
   return () => window.removeEventListener("message", popupListener);
 };
 
+// Embed Handler
 export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
   const {
     entryState,
@@ -137,77 +147,62 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     apiKey,
     dimoLogin,
   } = basePayload;
+
   const embedListener = (event: MessageEvent) => {
-    if (getDomain(event.origin) !== getDomain(dimoLogin)) {
-      console.warn("Received message from an unknown origin:", event.origin);
-      return;
-    }
+    if (!validateOrigin(event.origin, dimoLogin)) return;
+
+    const iframe = document.getElementById("dimo-iframe");
 
     const {
       eventType,
       token,
       walletAddress,
       email,
-      authType,
+      mode,
       transactionHash,
       transactionReceipt,
+      message,
     } = event.data;
 
-    if (eventType === "READY") {
-      // Once the "READY" message is received, send the credentials
-      console.log("Ready Message received");
-      const iframe = document.getElementById("dimo-iframe");
-
-      // Define the message data
-      const initialMessage = {
-        clientId,
-        redirectUri,
-        apiKey,
-        entryState,
-        eventType: "AUTH_INIT",
-      };
-
-      // Send the message to the iframe
-      //@ts-ignore
-      iframe.contentWindow.postMessage(initialMessage, dimoLogin);
-    }
-
-    if (eventType === data.eventType) {
-      //SEND DATA MESSAGE, WITH PAYLOAD AND EVENT TYPE
-      const dataMessage = { ...data, eventType: data.eventType };
-
-      //@ts-ignore
-      iframe.contentWindow.postMessage(dataMessage, dimoLogin);
-    }
-
-    if (authType === "embed") {
-      if (walletAddress) {
-        storeWalletAddressInLocalStorage(walletAddress);
+    if (mode === "embed") {
+      if (eventType === "READY") {
+        const initialMessage = {
+          clientId,
+          redirectUri,
+          apiKey,
+          entryState,
+          eventType: "AUTH_INIT",
+        };
+        //@ts-ignore
+        sendMessageToTarget(iframe?.contentWindow, initialMessage, dimoLogin, onError);
       }
 
-      if (email) {
-        storeEmailInLocalStorage(email);
+      if (eventType === data.eventType) {
+        const dataMessage = { ...data, eventType: data.eventType };
+        //@ts-ignore
+        sendMessageToTarget(iframe?.contentWindow, dataMessage, dimoLogin, onError);
       }
 
-      if (token) {
-        storeJWTInCookies(token);
-        setAuthenticated(true);
-        onSuccess({ token });
-      }
-    }
+      processAuthResponse(
+        { token, walletAddress, email },
+        setAuthenticated,
+        onSuccess
+      );
 
-    if (eventType === "transactionResponse") {
-      if (transactionHash || transactionReceipt) {
-        onSuccess({ token: "", transactionHash, transactionReceipt });
-      } else {
-        onError(Error("Could not execute transaction"));
+      if (eventType === "transactionResponse") {
+        if (transactionHash || transactionReceipt) {
+          onSuccess({ token: "", transactionHash, transactionReceipt });
+        } else {
+          onError(new Error("Could not execute transaction"));
+        }
+      }
+
+      if (eventType === "DIMO_ERROR") {
+        onError(new Error(message));
       }
     }
   };
 
-  // Add event listener specifically for embed auth
   window.addEventListener("message", embedListener);
-
-  // Return a cleanup function to remove this listener
   return () => window.removeEventListener("message", embedListener);
 };
