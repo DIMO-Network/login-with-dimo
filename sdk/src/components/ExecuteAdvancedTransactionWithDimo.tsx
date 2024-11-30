@@ -39,7 +39,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={() => "Execute Advanced Transaction with Dimo"}
-      transactionData={transactionData}
+      payload={{ transactionData, eventType:"EXECUTE_ADVANCED_TRANSACTION"}}
     />
   );
 };
