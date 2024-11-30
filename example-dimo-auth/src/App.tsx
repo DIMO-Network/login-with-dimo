@@ -11,7 +11,8 @@ import {
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
-  const { isAuthenticated, getValidJWT } = useDimoAuthState();
+  const { isAuthenticated, getValidJWT, email, getEmail, walletAddress } =
+    useDimoAuthState();
 
   const sampleAbi = [
     {
@@ -1119,6 +1120,14 @@ function App() {
             Enable Permissions
           </label>
         </div>
+
+        {isAuthenticated && (
+          <div>
+            <p>Connected User</p>
+            <p>Wallet Address:{walletAddress}</p>
+            {email && <p>{email}</p>}
+          </div>
+        )}
 
         <div>
           <h3>Popup Example</h3>
