@@ -1,5 +1,9 @@
 import { EntryState } from "../enums/globalEnums";
-import { storeJWTInCookies } from "../storage/storageManager";
+import {
+  storeEmailInLocalStorage,
+  storeJWTInCookies,
+  storeWalletAddressInLocalStorage,
+} from "../storage/storageManager";
 import { BasePayload } from "../types/BasePayload";
 import { TransactionData } from "../types/TransactionData";
 
@@ -42,7 +46,15 @@ export const handleMessageForPopup = (
       return;
     }
 
-    const { eventType, token, authType, transactionHash, message } = event.data;
+    const {
+      eventType,
+      token,
+      walletAddress,
+      email,
+      authType,
+      transactionHash,
+      message,
+    } = event.data;
 
     if (eventType === "READY") {
       // Send only the relevant data based on the payload
@@ -61,7 +73,6 @@ export const handleMessageForPopup = (
           onError(new Error("Popup window not available to send credentials"));
         }
       }, 0);
-
     }
 
     if (eventType === data.eventType) {
@@ -74,13 +85,23 @@ export const handleMessageForPopup = (
         } else {
           onError(new Error("Popup window not available to send credentials"));
         }
-      }, 0);      
+      }, 0);
     }
 
-    if (authType === "popup" && token) {
-      storeJWTInCookies(token);
-      setAuthenticated(true);
-      onSuccess({ token });
+    if (authType === "popup") {
+      if (walletAddress) {
+        storeWalletAddressInLocalStorage(walletAddress);
+      }
+
+      if (email) {
+        storeEmailInLocalStorage(email);
+      }
+
+      if (token) {
+        storeJWTInCookies(token);
+        setAuthenticated(true);
+        onSuccess({ token });
+      }
 
       if (popup && !popup.closed) {
         popup.close();
@@ -106,25 +127,31 @@ export const handleMessageForPopup = (
 };
 
 export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
+  const {
+    entryState,
+    onSuccess,
+    onError,
+    setAuthenticated,
+    clientId,
+    redirectUri,
+    apiKey,
+    dimoLogin,
+  } = basePayload;
   const embedListener = (event: MessageEvent) => {
-    const {
-      entryState,
-      onSuccess,
-      onError,
-      setAuthenticated,
-      clientId,
-      redirectUri,
-      apiKey,
-      dimoLogin,
-    } = basePayload;
-
     if (getDomain(event.origin) !== getDomain(dimoLogin)) {
       console.warn("Received message from an unknown origin:", event.origin);
       return;
     }
 
-    const { eventType, token, authType, transactionHash, transactionReceipt } =
-      event.data;
+    const {
+      eventType,
+      token,
+      walletAddress,
+      email,
+      authType,
+      transactionHash,
+      transactionReceipt,
+    } = event.data;
 
     if (eventType === "READY") {
       // Once the "READY" message is received, send the credentials
@@ -150,13 +177,23 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
       const dataMessage = { ...data, eventType: data.eventType };
 
       //@ts-ignore
-      iframe.contentWindow.postMessage(dataMessage, dimoLogin);      
-    }    
+      iframe.contentWindow.postMessage(dataMessage, dimoLogin);
+    }
 
-    if (authType === "embed" && token) {
-      storeJWTInCookies(token);
-      setAuthenticated(true);
-      onSuccess({ token });
+    if (authType === "embed") {
+      if (walletAddress) {
+        storeWalletAddressInLocalStorage(walletAddress);
+      }
+
+      if (email) {
+        storeEmailInLocalStorage(email);
+      }
+
+      if (token) {
+        storeJWTInCookies(token);
+        setAuthenticated(true);
+        onSuccess({ token });
+      }
     }
 
     if (eventType === "transactionResponse") {
