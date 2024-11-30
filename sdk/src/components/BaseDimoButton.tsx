@@ -45,18 +45,18 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
       ? "https://login.dev.dimo.org"
       : "https://login.dimo.org";
 
-  const handleButtonClick = () => {
-    const basePayload = {
-      entryState,
-      onSuccess,
-      onError,
-      setAuthenticated,
-      dimoLogin,
-      clientId,
-      redirectUri,
-      apiKey,
-    };
+  const basePayload = {
+    entryState,
+    onSuccess,
+    onError,
+    setAuthenticated,
+    dimoLogin,
+    clientId,
+    redirectUri,
+    apiKey,
+  };
 
+  const handleButtonClick = () => {
     switch (mode) {
       case "popup":
         popupAuth(basePayload, payload);
@@ -72,17 +72,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   // Trigger embedAuth only once the iframe has fully loaded
   const handleIframeLoad = () => {
     if (mode === "embed") {
-      embedAuth({
-        entryState,
-        onSuccess,
-        onError,
-        setAuthenticated,
-        dimoLogin,
-        clientId,
-        redirectUri,
-        apiKey,
-        ...payload, // Include dynamic payload data
-      });
+      embedAuth(basePayload, payload);
     }
   };
 
