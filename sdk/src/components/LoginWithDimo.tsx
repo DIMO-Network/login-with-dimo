@@ -29,9 +29,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         authenticated ? "Connected with DIMO" : "Continue with DIMO"
       } // Dynamic label based on auth state
       disableIfAuthenticated={true} // Disable button when authenticated
-      permissionTemplateId={permissionTemplateId} // Pass permissionTemplateId if provided
-      vehicles={vehicles} // Pass vehicles if provided      
-      vehicleMakes={vehicleMakes}
+      payload={{ permissionTemplateId, vehicles, vehicleMakes, eventType: "SHARE_VEHICLES_DATA" }}
     />
   );
 };

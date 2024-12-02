@@ -17,7 +17,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   onError,
   permissionTemplateId,
   vehicles,
-  vehicleMakes
+  vehicleMakes,
 }) => {
   return (
     <BaseDimoButton
@@ -26,9 +26,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={() => "Share Vehicles with DIMO"}
-      permissionTemplateId={permissionTemplateId} // Pass permissions template
-      vehicles={vehicles} // Pass vehicle IDs
-      vehicleMakes={vehicleMakes}
+      payload={{ permissionTemplateId, vehicles, vehicleMakes, eventType: "SHARE_VEHICLES_DATA" }}
     />
   );
 };
