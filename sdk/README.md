@@ -123,6 +123,8 @@ const { isAuthenticated, getValidJWT, email, walletAddress, getEmail } = useDimo
 useEffect(()=>{
   if ( isAuthenticated ) {
     //makeAuthenticatedRequest(getValidJWT())
+    console.log(email); 
+    console.log(walletAddress);
   }
 },[isAuthenticated])
 
