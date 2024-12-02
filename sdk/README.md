@@ -35,7 +35,7 @@ import {
 
 ### The Dimo Auth Provider
 
-The Dimo Auth Provider is used to get the auth state value from the SDK, as well as to keep track of the JWT
+The Dimo Auth Provider is used to get values of an authenticated state from the SDK. This includes, a boolean "authenticated" property, a method to get the currently valid JWT, an email property, a method to get email, and the wallet address
 
 Any components that require this value should be wrapped in the DimoAuthProvider, as follows
 
@@ -52,18 +52,19 @@ import {,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
 
-const { isAuthenticated, getValidJWT() } = useDimoAuthState();
+const { isAuthenticated, getValidJWT, getEmail, email, walletAddress } = useDimoAuthState();
 ```
 
 Based on this authenticated state, you can render the necessary Dimo components
 
 ### Using the Button Components
 
-The following example shows both buttons being rendered, with no auth state checking
+The following example shows all buttons being rendered, with no auth state checking
 ```
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
+  ExecuteAdvancedTransactionWithDimo,
 } from "@dimo-network/login-with-dimo";
 
           <LoginWithDimo
@@ -82,7 +83,20 @@ import {
             permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered   
-          />          
+          />         
+
+        <ExecuteAdvancedTransactionWithDimo
+          mode="popup"
+          onSuccess={(transactionHash: any) =>
+            console.log("Success:", transactionHash)
+          }
+          onError={(error: any) => console.error("Error:", error)}
+          address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
+          value="0"
+          abi={sampleAbi} //Some sample ABI required
+          functionName="transfer"
+          args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
+        />           
 ```
 
 ### Putting it all together
@@ -91,7 +105,7 @@ In many cases - developers may want to couple/decouple usage of these components
 
 A common flow is
 1. Show the login button, when in authenticated
-2. Show the Share Vehicles button, when authenticed
+2. Show the Share Vehicles and Execute Advanced Transaction button, when authenticed
 
 This can be achieved by simply wrapping those buttons in a conditional as follows, to create a full example as follows
 
@@ -99,11 +113,12 @@ This can be achieved by simply wrapping those buttons in a conditional as follow
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
+  ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
 
-const { isAuthenticated, getValidJWT() } = useDimoAuthState();
+const { isAuthenticated, getValidJWT, email, walletAddress, getEmail } = useDimoAuthState();
 
 useEffect(()=>{
   if ( isAuthenticated ) {
@@ -125,6 +140,19 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={"1"}
+  />
+
+  <ExecuteAdvancedTransactionWithDimo
+    mode="popup"
+    onSuccess={(transactionHash: any) =>
+      console.log("Success:", transactionHash)
+    }
+    onError={(error: any) => console.error("Error:", error)}
+    address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
+    value="0"
+    abi={sampleAbi}
+    functionName="transfer"
+    args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
   />
 ) : (
   <LoginWithDimo
