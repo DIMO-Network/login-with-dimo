@@ -87,7 +87,7 @@ import {
 
         <ExecuteAdvancedTransactionWithDimo
           mode="popup"
-          onSuccess={(transactionHash: any) =>
+          onSuccess={(transactionData: any) =>
             console.log("Success:", transactionHash)
           }
           onError={(error: any) => console.error("Error:", error)}
@@ -146,8 +146,8 @@ initializeDimoSDK({
 
   <ExecuteAdvancedTransactionWithDimo
     mode="popup"
-    onSuccess={(transactionHash: any) =>
-      console.log("Success:", transactionHash)
+    onSuccess={(transactionData: any) =>
+      console.log("Transaction Hash:", transactionData.transactionHash)
     }
     onError={(error: any) => console.error("Error:", error)}
     address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
