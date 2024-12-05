@@ -1132,7 +1132,15 @@ function App() {
         <div>
           <h3>Popup Example</h3>
 
-          {isAuthenticated ? (
+          <LoginWithDimo
+            mode="popup"
+            onSuccess={(authData: any) => console.log("Success:", authData)}
+            onError={(error: any) => console.error("Error:", error)}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            // vehicles={["585","586"]}
+          />
+
+          {isAuthenticated && (
             <>
               <ShareVehiclesWithDimo
                 mode="popup"
@@ -1144,7 +1152,10 @@ function App() {
               <ExecuteAdvancedTransactionWithDimo
                 mode="popup"
                 onSuccess={(transactionData: any) =>
-                  console.log("Transaction Hash:", transactionData.transactionHash)
+                  console.log(
+                    "Transaction Hash:",
+                    transactionData.transactionHash
+                  )
                 }
                 onError={(error: any) => console.error("Error:", error)}
                 address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
@@ -1154,14 +1165,6 @@ function App() {
                 args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
               />
             </>
-          ) : (
-            <LoginWithDimo
-              mode="popup"
-              onSuccess={(authData: any) => console.log("Success:", authData)}
-              onError={(error: any) => console.error("Error:", error)}
-              permissionTemplateId={permissionsEnabled ? "1" : undefined}
-              // vehicles={["585","586"]}
-            />
           )}
         </div>
 
@@ -1195,7 +1198,9 @@ function App() {
 
           <ExecuteAdvancedTransactionWithDimo
             mode="redirect"
-            onSuccess={(transactionData: any) => console.log("Transaction Hash:", transactionData.transactionHash)}
+            onSuccess={(transactionData: any) =>
+              console.log("Transaction Hash:", transactionData.transactionHash)
+            }
             onError={(error: any) => console.error("Error:", error)}
             address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
             value="0"
