@@ -1,11 +1,6 @@
-import { EntryState } from "../enums/globalEnums";
-import {
-  storeEmailInLocalStorage,
-  storeJWTInCookies,
-  storeWalletAddressInLocalStorage,
-} from "../storage/storageManager";
+import { MessageEventType } from "../enums/globalEnums";
 import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
+import { logout, processAuthResponse } from "./authUtils";
 
 /**
  * @file eventHandler.ts
@@ -47,24 +42,6 @@ const sendMessageToTarget = (
   }
 };
 
-const processAuthResponse = (
-  { token, walletAddress, email }: any,
-  setAuthenticated: (status: boolean) => void,
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void
-) => {
-  if (walletAddress) storeWalletAddressInLocalStorage(walletAddress);
-  if (email) storeEmailInLocalStorage(email);
-  if (token) {
-    storeJWTInCookies(token);
-    setAuthenticated(true);
-    onSuccess({ token });
-  }
-};
-
 // Popup Handler
 export const handleMessageForPopup = (
   basePayload: BasePayload,
@@ -96,13 +73,13 @@ export const handleMessageForPopup = (
     } = event.data;
 
     if (mode === "popup") {
-      if (eventType === "READY") {
+      if (eventType === MessageEventType.READY) {
         const initialMessage = {
           clientId,
           redirectUri,
           apiKey,
           entryState,
-          eventType: "AUTH_INIT",
+          eventType: MessageEventType.AUTH_INIT,
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
@@ -121,8 +98,12 @@ export const handleMessageForPopup = (
         if (popup && !popup.closed) popup.close();
       }
 
-      if (eventType === "transactionResponse" && transactionHash) {
+      if (eventType === MessageEventType.TRANSACTION_RESPONSE && transactionHash) {
         onSuccess({ token: "", transactionHash });
+      }
+
+      if (eventType === MessageEventType.LOGOUT) {
+        logout(setAuthenticated);
       }
 
       if (eventType === "DIMO_ERROR") {
@@ -165,13 +146,13 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     } = event.data;
 
     if (mode === "embed") {
-      if (eventType === "READY") {
+      if (eventType === MessageEventType.READY) {
         const initialMessage = {
           clientId,
           redirectUri,
           apiKey,
           entryState,
-          eventType: "AUTH_INIT",
+          eventType: MessageEventType.AUTH_INIT,
         };
         //@ts-ignore
         sendMessageToTarget(iframe?.contentWindow, initialMessage, dimoLogin, onError);
@@ -189,13 +170,17 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
         onSuccess
       );
 
-      if (eventType === "transactionResponse") {
+      if (eventType === MessageEventType.TRANSACTION_RESPONSE) {
         if (transactionHash || transactionReceipt) {
           onSuccess({ token: "", transactionHash, transactionReceipt });
         } else {
           onError(new Error("Could not execute transaction"));
         }
       }
+
+      if (eventType === MessageEventType.LOGOUT) {
+        logout(setAuthenticated);
+      }      
 
       if (eventType === "DIMO_ERROR") {
         onError(new Error(message));
