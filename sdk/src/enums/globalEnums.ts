@@ -11,6 +11,8 @@ export enum EntryState {
 export enum MessageEventType {
     READY = "READY",
     AUTH_INIT = "AUTH_INIT",
+    TRANSACTION_RESPONSE = "transactionResponse",
+    LOGOUT = "logout"
 }
 
 export enum DimoSDKModes {

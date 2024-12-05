@@ -26,9 +26,9 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
-        authenticated ? "Connected with DIMO" : "Continue with DIMO"
+        authenticated ? "Manage DIMO Account" : "Continue with DIMO"
       } // Dynamic label based on auth state
-      disableIfAuthenticated={true} // Disable button when authenticated
+      disableIfAuthenticated={false} // Disable button when authenticated
       payload={{ permissionTemplateId, vehicles, vehicleMakes, eventType: "SHARE_VEHICLES_DATA" }}
     />
   );

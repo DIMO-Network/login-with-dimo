@@ -42,3 +42,9 @@ export const getEmailFromLocalStorage = (): string | null => {
   const email = localStorage.getItem("dimo_user_email");
   return email;
 };
+
+export const clearSessionData = (): void => {
+  document.cookie = `dimo_auth_token=; Max-Age=0`; // Expire JWT cookie immediately
+  localStorage.removeItem(`dimo_wallet_address`); // Remove user data from localStorage
+  localStorage.removeItem(`dimo_user_email`); // Remove user data from localStorage
+};
