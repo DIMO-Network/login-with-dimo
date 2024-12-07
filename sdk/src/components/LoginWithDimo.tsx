@@ -22,7 +22,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   return (
     <BaseDimoButton
       mode={mode}
-      entryState={EntryState.EMAIL_INPUT} // Default state for login
+      entryState={permissionTemplateId ? EntryState.VEHICLE_MANAGER : EntryState.EMAIL_INPUT} // Go to vehicle sharing if permissions are toggled, otherwise only login
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>

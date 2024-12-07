@@ -1136,7 +1136,7 @@ function App() {
             mode="popup"
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            permissionTemplateId={permissionsEnabled ? "2" : undefined}
             // vehicles={["585","586"]}
           />
 
@@ -1146,16 +1146,18 @@ function App() {
                 mode="popup"
                 onSuccess={(authData: any) => console.log("Success:", authData)}
                 onError={(error: any) => console.error("Error:", error)}
-                permissionTemplateId={"1"}
+                permissionTemplateId={"2"}
               />
 
               <ExecuteAdvancedTransactionWithDimo
                 mode="popup"
-                onSuccess={(transactionData: any) =>
+                onSuccess={(transactionData: any) => {
+                  console.log(transactionData);
                   console.log(
                     "Transaction Hash:",
                     transactionData.transactionHash
                   )
+                }
                 }
                 onError={(error: any) => console.error("Error:", error)}
                 address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
@@ -1193,7 +1195,7 @@ function App() {
             mode="redirect"
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={"1"}
+            permissionTemplateId={"2"}
           />
 
           <ExecuteAdvancedTransactionWithDimo
