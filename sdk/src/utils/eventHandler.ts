@@ -95,11 +95,10 @@ export const handleMessageForPopup = (
           setAuthenticated,
           onSuccess
         );
-        if (popup && !popup.closed) popup.close();
       }
 
       if (eventType === MessageEventType.TRANSACTION_RESPONSE && transactionHash) {
-        onSuccess({ token: "", transactionHash });
+        onSuccess({ token, transactionHash });
       }
 
       if (eventType === MessageEventType.LOGOUT) {
@@ -172,7 +171,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
 
       if (eventType === MessageEventType.TRANSACTION_RESPONSE) {
         if (transactionHash || transactionReceipt) {
-          onSuccess({ token: "", transactionHash, transactionReceipt });
+          onSuccess({ token, transactionHash, transactionReceipt });
         } else {
           onError(new Error("Could not execute transaction"));
         }
