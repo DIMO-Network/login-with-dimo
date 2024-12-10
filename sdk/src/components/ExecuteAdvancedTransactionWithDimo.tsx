@@ -12,7 +12,7 @@ interface ExecuteAdvancedTransactionProps {
   }) => void; // Success callback
   onError: (error: Error) => void; // Error callback
   address: string;
-  value: string;
+  value?: string;
   abi: any;
   functionName: string;
   args: string[];
@@ -21,12 +21,12 @@ interface ExecuteAdvancedTransactionProps {
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
 > = ({ mode, onSuccess, onError, address, value, abi, functionName, args }) => {
-  if (!address || !value || !abi || !functionName || !args) {
+  if (!address || !abi || !functionName || !args) {
     throw new Error("Missing required transaction parameters.");
   }
   const transactionData: TransactionData = {
     address,
-    value, // BigInt to string
+    value: value ? value : "", // BigInt to string
     abi,
     functionName,
     args,

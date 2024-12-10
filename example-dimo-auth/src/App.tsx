@@ -1161,7 +1161,6 @@ function App() {
                 }
                 onError={(error: any) => console.error("Error:", error)}
                 address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
-                value="0"
                 abi={sampleAbi}
                 functionName="transfer"
                 args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
