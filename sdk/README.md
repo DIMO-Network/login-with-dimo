@@ -81,6 +81,7 @@ import {
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
+            //expirationDate={} //OPTIONAL ISO STRING
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered   
           />         
@@ -142,6 +143,7 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={"1"}
+    //expirationDate={} //OPTIONAL ISO STRING
   />
 
   <ExecuteAdvancedTransactionWithDimo
@@ -162,6 +164,7 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={permissionsEnabled ? "1" : undefined}
+    //expirationDate={} //OPTIONAL ISO STRING
     // vehicles={["585","586"]}
   />
 )}
