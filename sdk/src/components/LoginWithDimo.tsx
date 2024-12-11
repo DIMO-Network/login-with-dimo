@@ -9,6 +9,7 @@ interface LoginWithDimoProps {
   permissionTemplateId?: string; // Optional: Permissions template
   vehicles?: string[]; // Optional: List of vehicles  
   vehicleMakes?: string[];
+  expirationDate?: string;
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -18,6 +19,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   permissionTemplateId,
   vehicles,  
   vehicleMakes,
+  expirationDate
 }) => {
   return (
     <BaseDimoButton
@@ -29,7 +31,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         authenticated ? "Manage DIMO Account" : "Continue with DIMO"
       } // Dynamic label based on auth state
       disableIfAuthenticated={false} // Disable button when authenticated
-      payload={{ permissionTemplateId, vehicles, vehicleMakes, eventType: "SHARE_VEHICLES_DATA" }}
+      payload={{ permissionTemplateId, vehicles, vehicleMakes, expirationDate, eventType: "SHARE_VEHICLES_DATA" }}
     />
   );
 };

@@ -9,6 +9,7 @@ interface ShareVehiclesWithDimoProps {
   permissionTemplateId: string; // Permissions template required for sharing
   vehicles?: string[]; // List of vehicles to share
   vehicleMakes?: string[];
+  expirationDate?: string;
 }
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
@@ -18,6 +19,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   permissionTemplateId,
   vehicles,
   vehicleMakes,
+  expirationDate,
 }) => {
   return (
     <BaseDimoButton
@@ -26,7 +28,13 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={() => "Share Vehicles with DIMO"}
-      payload={{ permissionTemplateId, vehicles, vehicleMakes, eventType: "SHARE_VEHICLES_DATA" }}
+      payload={{
+        permissionTemplateId,
+        vehicles,
+        vehicleMakes,
+        expirationDate,
+        eventType: "SHARE_VEHICLES_DATA",
+      }}
     />
   );
 };
