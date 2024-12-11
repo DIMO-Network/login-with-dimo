@@ -3,11 +3,11 @@ import { BasePayload } from "../types/BasePayload";
 import { TransactionData } from "../types/TransactionData";
 
 export const redirectAuth = (payload: BasePayload, data?: any) => {
-  // Create URLSearchParams instance
+  //TODO: Can probably be cleaned up to prevent having to manually parse out everything
 
   const { clientId, redirectUri,  entryState,  dimoLogin } = payload;
 
-  const { permissionTemplateId, vehicles, vehicleMakes, transactionData } = data;
+  const { permissionTemplateId, vehicles, vehicleMakes, expirationDate, transactionData } = data;
 
   const params = new URLSearchParams();
 
@@ -26,6 +26,10 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
     vehicleMakes.forEach((vehicleMake: string) =>
       params.append("vehicleMakes", vehicleMake)
     );
+  }
+
+  if ( expirationDate ) {
+    params.append("expirationDate", expirationDate);
   }
 
   // Serialize and encode transactionData
