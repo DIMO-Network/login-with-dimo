@@ -10,6 +10,8 @@ interface LoginWithDimoProps {
   vehicles?: string[]; // Optional: List of vehicles  
   vehicleMakes?: string[];
   expirationDate?: string;
+  authenticatedLabel?: string;
+  unAuthenticatedLabel?: string;
 }
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
@@ -19,7 +21,9 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   permissionTemplateId,
   vehicles,  
   vehicleMakes,
-  expirationDate
+  expirationDate,
+  authenticatedLabel = "Manage DIMO Account",
+  unAuthenticatedLabel = "Continue with DIMO"
 }) => {
   return (
     <BaseDimoButton
@@ -28,7 +32,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
-        authenticated ? "Manage DIMO Account" : "Continue with DIMO"
+        authenticated ? authenticatedLabel : unAuthenticatedLabel
       } // Dynamic label based on auth state
       disableIfAuthenticated={false} // Disable button when authenticated
       payload={{ permissionTemplateId, vehicles, vehicleMakes, expirationDate, eventType: "SHARE_VEHICLES_DATA" }}
