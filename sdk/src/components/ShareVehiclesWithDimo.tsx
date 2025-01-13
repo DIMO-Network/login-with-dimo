@@ -10,6 +10,8 @@ interface ShareVehiclesWithDimoProps {
   vehicles?: string[]; // List of vehicles to share
   vehicleMakes?: string[];
   expirationDate?: string;
+  authenticatedLabel?: string;
+  unAuthenticatedLabel?: string;
 }
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
@@ -20,6 +22,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   vehicles,
   vehicleMakes,
   expirationDate,
+  authenticatedLabel = "Share Vehicles with DIMO",
+  unAuthenticatedLabel = "Sign in to Share Vehicles with DIMO"
 }) => {
   return (
     <BaseDimoButton
@@ -27,7 +31,9 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       entryState={EntryState.VEHICLE_MANAGER} // Set entry state for permissions flow
       onSuccess={onSuccess}
       onError={onError}
-      buttonLabel={() => "Share Vehicles with DIMO"}
+      buttonLabel={(authenticated) =>
+        authenticated ? authenticatedLabel : unAuthenticatedLabel
+      }
       payload={{
         permissionTemplateId,
         vehicles,
