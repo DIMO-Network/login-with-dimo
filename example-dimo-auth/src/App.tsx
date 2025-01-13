@@ -64,6 +64,7 @@ function App() {
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "2" : undefined}
+            unAuthenticatedLabel="Sign In with DIMO"
             // vehicles={["585","586"]}
           />
 
@@ -74,6 +75,7 @@ function App() {
                 onSuccess={(authData: any) => console.log("Success:", authData)}
                 onError={(error: any) => console.error("Error:", error)}
                 permissionTemplateId={"2"}
+                vehicles={["752", "742", "738", "722"]}
               />
 
               <ExecuteAdvancedTransactionWithDimo
@@ -112,17 +114,18 @@ function App() {
             mode="redirect"
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined}
-            // vehicles={["585","586"]}
           />
 
-          <ShareVehiclesWithDimo
-            mode="redirect"
-            onSuccess={(authData: any) => console.log("Success:", authData)}
-            onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={"2"}
-            expirationDate={sampleExpirationDate.toISOString()}
-          />
+          {isAuthenticated && (
+            <ShareVehiclesWithDimo
+              mode="redirect"
+              onSuccess={(authData: any) => console.log("Success:", authData)}
+              onError={(error: any) => console.error("Error:", error)}
+              permissionTemplateId={"2"}
+              expirationDate={sampleExpirationDate.toISOString()}
+              vehicles={["752", "742"]}
+            />
+          )}
 
           <ExecuteAdvancedTransactionWithDimo
             mode="redirect"
@@ -135,6 +138,8 @@ function App() {
             abi={sampleAbi}
             functionName="transfer"
             args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
+            authenticatedLabel="Execute Transaction"
+            unAuthenticatedLabel="Sign In to Execute Transaction with DIMO"
           />
         </div>
       </header>
