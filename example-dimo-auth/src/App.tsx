@@ -12,6 +12,7 @@ import { sampleAbi } from "./abi/sample-abi";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
+  const [vehicleFilteringEnabled, setVehicleFilteringEnabled] = useState(false);
   const { isAuthenticated, getValidJWT, email, getEmail, walletAddress } =
     useDimoAuthState();
 
@@ -65,6 +66,7 @@ function App() {
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "2" : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
+            // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
           />
 
@@ -75,7 +77,6 @@ function App() {
                 onSuccess={(authData: any) => console.log("Success:", authData)}
                 onError={(error: any) => console.error("Error:", error)}
                 permissionTemplateId={"2"}
-                vehicles={["752", "742", "738", "722"]}
               />
 
               <ExecuteAdvancedTransactionWithDimo
@@ -114,6 +115,7 @@ function App() {
             mode="redirect"
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined}
           />
 
           {isAuthenticated && (
