@@ -65,6 +65,7 @@ function App() {
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "2" : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
+            vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
           />
 
