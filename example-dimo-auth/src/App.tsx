@@ -115,6 +115,7 @@ function App() {
             mode="redirect"
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
+            permissionTemplateId={permissionsEnabled ? "1" : undefined}
           />
 
           {isAuthenticated && (
