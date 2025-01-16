@@ -5,13 +5,17 @@ import { TransactionData } from "../types/TransactionData";
 export const redirectAuth = (payload: BasePayload, data?: any) => {
   //TODO: Can probably be cleaned up to prevent having to manually parse out everything
 
-  const { clientId, redirectUri,  entryState,  dimoLogin } = payload;
+  const { clientId, redirectUri, entryState, dimoLogin, forceEmail } = payload;
 
-  const { permissionTemplateId, vehicles, vehicleMakes, expirationDate, transactionData } = data;
+  const {
+    permissionTemplateId,
+    vehicles,
+    vehicleMakes,
+    expirationDate,
+    transactionData,
+  } = data;
 
   const params = new URLSearchParams();
-
-
 
   if (clientId) params.append("clientId", clientId);
   if (redirectUri) params.append("redirectUri", redirectUri);
@@ -28,7 +32,7 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
     );
   }
 
-  if ( expirationDate ) {
+  if (expirationDate) {
     params.append("expirationDate", expirationDate);
   }
 
@@ -45,6 +49,11 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
     } else {
       params.append("transactionData", serializedTransactionData);
     }
+  }
+
+  // Use forceEmail from payload
+  if (forceEmail) {
+    params.append("forceEmail", "true");
   }
 
   // Construct the full URL

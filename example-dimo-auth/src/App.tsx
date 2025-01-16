@@ -13,15 +13,12 @@ import { sampleAbi } from "./abi/sample-abi";
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
   const [vehicleFilteringEnabled, setVehicleFilteringEnabled] = useState(false);
+  const [forceEmail, setForceEmail] = useState(false);
   const { isAuthenticated, getValidJWT, email, getEmail, walletAddress } =
     useDimoAuthState();
 
   const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
 
-  // Toggle handler
-  const handleToggle = () => {
-    setPermissionsEnabled(!permissionsEnabled);
-  };
 
   initializeDimoSDK({
     clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
@@ -29,6 +26,9 @@ function App() {
     environment: process.env.REACT_APP_DIMO_ENV! as
       | "production"
       | "development",
+    options: {
+      forceEmail,
+    },
   });
 
   return (
@@ -43,11 +43,22 @@ function App() {
             <input
               type="checkbox"
               checked={permissionsEnabled}
-              onChange={handleToggle}
+              onChange={()=>setPermissionsEnabled(!permissionsEnabled)}
             />
             Enable Permissions
           </label>
         </div>
+
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={forceEmail}
+              onChange={()=>setForceEmail(!forceEmail)}
+            />
+            Force Email
+          </label>
+        </div>        
 
         {isAuthenticated && (
           <div>

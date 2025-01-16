@@ -3,9 +3,13 @@ let sdkConfig: {
   redirectUri: string;
   apiKey?: string;
   environment?: "development" | "production";
+  options?: {
+    forceEmail?: boolean;
+    // Add more options here in the future, for properties that need to be global
+  };
 } = {
   clientId: "",
-  redirectUri: ""
+  redirectUri: "",
 };
 
 export const initializeDimoSDK = ({
@@ -13,13 +17,17 @@ export const initializeDimoSDK = ({
   redirectUri,
   apiKey = "some_api_key",
   environment = "production",
+  options = {}, // ✅ Default to an empty object to prevent undefined issues
 }: {
   clientId: string;
   redirectUri: string;
   apiKey?: string;
   environment?: "development" | "production";
+  options?: {
+    forceEmail?: boolean;
+  };
 }) => {
-  sdkConfig = { clientId, redirectUri, apiKey, environment };
+  sdkConfig = { clientId, redirectUri, apiKey, environment, options };
 };
 
 export const getDimoConfig = () => {

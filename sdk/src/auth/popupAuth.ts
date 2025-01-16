@@ -8,7 +8,7 @@ export const popupAuth = (
   data?: Record<string, any> // Component-specific data
 ) => {
   try {
-    const { entryState, onSuccess, onError, setAuthenticated, dimoLogin } = basePayload;
+    const { dimoLogin } = basePayload;
     const popup = window.open(
       dimoLogin,
       "_blank",
