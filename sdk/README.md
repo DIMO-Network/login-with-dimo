@@ -33,6 +33,21 @@ import {
   });
 ```
 
+In addition to setting the dev credentials/environments, you can also set global options.
+
+We currently support the `forceEmail` option, which means - anytime a user will be on a register/login page, they will be forced to check the email box before registering
+
+  initializeDimoSDK({
+    clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
+    redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
+    environment: process.env.REACT_APP_DIMO_ENV! as
+      | "production"
+      | "development",
+    options: {
+      forceEmail: true, //BY DEFAULT, this is False - users won't have to share email
+    },
+  });
+
 ### The Dimo Auth Provider
 
 The Dimo Auth Provider is used to get values of an authenticated state from the SDK. This includes, a boolean "authenticated" property, a method to get the currently valid JWT, an email property, a method to get email, and the wallet address
@@ -56,6 +71,16 @@ const { isAuthenticated, getValidJWT, getEmail, email, walletAddress } = useDimo
 ```
 
 Based on this authenticated state, you can render the necessary Dimo components
+
+### The Separate DIMO Modes
+
+With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
+
+We offer three options
+- Popup Mode (best for allowing users to see both the app, as well as DIMO)
+- Embed Mode (best for keeping the dimo login within a developers app)
+  - NOTE: Apple SSO will not work in Embed Mode
+- Redirect Mode (best for developers that want to avoid popups, or embedding)
 
 ### Using the Button Components
 
