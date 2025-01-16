@@ -37,16 +37,14 @@ In addition to setting the dev credentials/environments, you can also set global
 
 We currently support the `forceEmail` option, which means - anytime a user will be on a register/login page, they will be forced to check the email box before registering
 
+```
   initializeDimoSDK({
-    clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
-    redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
-    environment: process.env.REACT_APP_DIMO_ENV! as
-      | "production"
-      | "development",
+    ...
     options: {
       forceEmail: true, //BY DEFAULT, this is False - users won't have to share email
     },
   });
+```
 
 ### The Dimo Auth Provider
 
