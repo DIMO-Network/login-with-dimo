@@ -57,6 +57,7 @@ export const handleMessageForPopup = (
     clientId,
     redirectUri,
     apiKey,
+    forceEmail
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -79,6 +80,7 @@ export const handleMessageForPopup = (
           redirectUri,
           apiKey,
           entryState,
+          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
@@ -126,6 +128,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     redirectUri,
     apiKey,
     dimoLogin,
+    forceEmail
   } = basePayload;
 
   const embedListener = (event: MessageEvent) => {
@@ -151,6 +154,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           redirectUri,
           apiKey,
           entryState,
+          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
         };
         //@ts-ignore
