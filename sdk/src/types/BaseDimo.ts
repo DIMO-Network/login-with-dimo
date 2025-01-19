@@ -1,5 +1,16 @@
 import { EntryState } from "../enums/globalEnums";
 
+export interface DynamicButtonLabels {
+  authenticatedLabel?: string;
+  unAuthenticatedLabel?: string;
+}
+
+export interface ShareBaseDimoButton {
+  mode: "popup" | "embed" | "redirect";
+  onSuccess: (authData: { token: string }) => void; // Success callback
+  onError: (error: Error) => void; // Error callback
+}
+
 export interface BasePayload extends BasePayloadParams {
   onSuccess: (data: {
     token: string;

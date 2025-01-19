@@ -11,18 +11,11 @@ import {
   useDimoAuthState,
   useDimoAuthUpdater,
 } from "../auth/context/DimoAuthContext";
-import { RedirectAuth } from "../types";
+import { ShareBaseDimoButton, RedirectAuth } from "../types";
 
-interface BaseDimoButtonProps {
-  mode: "popup" | "embed" | "redirect";
-  entryState: EntryState;
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
+interface BaseDimoButtonProps extends ShareBaseDimoButton {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
+  entryState: EntryState;
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
   payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
 }
