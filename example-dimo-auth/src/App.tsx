@@ -43,7 +43,7 @@ function App() {
             <input
               type="checkbox"
               checked={permissionsEnabled}
-              onChange={()=>setPermissionsEnabled(!permissionsEnabled)}
+              onChange={() => setPermissionsEnabled(!permissionsEnabled)}
             />
             Enable Permissions
           </label>
@@ -54,11 +54,11 @@ function App() {
             <input
               type="checkbox"
               checked={forceEmail}
-              onChange={()=>setForceEmail(!forceEmail)}
+              onChange={() => setForceEmail(!forceEmail)}
             />
             Force Email
           </label>
-        </div>        
+        </div>
 
         {isAuthenticated && (
           <div>
@@ -77,6 +77,7 @@ function App() {
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "2" : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
+            // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
           />
@@ -127,6 +128,8 @@ function App() {
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            // Optionally, specify the utm (uncomment the line below to use it)
+            // utm={"utm_source=example&utm_medium=example&utm_campaign=example&utm_content=example&utm_term=example"}
           />
 
           {isAuthenticated && (
