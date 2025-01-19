@@ -1,6 +1,7 @@
 import React from "react";
+
 import BaseDimoButton from "./BaseDimoButton";
-import { EntryState } from "../enums/globalEnums";
+import { EntryState, EventTypes } from "../enums";
 import { TransactionData } from "../types/TransactionData";
 
 interface ExecuteAdvancedTransactionProps {
@@ -22,7 +23,18 @@ interface ExecuteAdvancedTransactionProps {
 
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
-> = ({ mode, onSuccess, onError, address, value, abi, functionName, args, authenticatedLabel = "Execute Advanced Transaction with Dimo", unAuthenticatedLabel = "Sign in to Execute Transaction" }) => {
+> = ({
+  mode,
+  onSuccess,
+  onError,
+  address,
+  value,
+  abi,
+  functionName,
+  args,
+  authenticatedLabel = "Execute Advanced Transaction with Dimo",
+  unAuthenticatedLabel = "Sign in to Execute Transaction",
+}) => {
   if (!address || !abi || !functionName || !args) {
     throw new Error("Missing required transaction parameters.");
   }
@@ -43,7 +55,10 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
-      payload={{ transactionData, eventType:"EXECUTE_ADVANCED_TRANSACTION"}}
+      payload={{
+        transactionData,
+        eventType: EventTypes.EXECUTE_ADVANCED_TRANSACTION,
+      }}
     />
   );
 };

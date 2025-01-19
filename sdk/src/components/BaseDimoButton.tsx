@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
 import { redirectAuth } from "../auth/redirectAuth";
 import { getDimoConfig } from "../config/sdkConfig";
-import { EntryState } from "../enums/globalEnums";
+import { EntryState, EventTypes } from "../enums";
 import "../styles/BaseDimoButton.css";
 import {
   DimoAuthProvider,
   useDimoAuthState,
   useDimoAuthUpdater,
 } from "../auth/context/DimoAuthContext";
+import { ShareBaseDimoButton, RedirectAuth } from "../types";
 
-interface BaseDimoButtonProps {
-  mode: "popup" | "embed" | "redirect";
-  entryState: EntryState;
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
+interface BaseDimoButtonProps extends ShareBaseDimoButton {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
+  entryState: EntryState;
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
-  payload: Record<string, any>; // Dynamic payload object
+  payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
 }
 
 const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
@@ -34,7 +29,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   disableIfAuthenticated = false,
   payload,
 }) => {
-  const { clientId, redirectUri, apiKey, environment, options } = getDimoConfig();
+  const { clientId, redirectUri, apiKey, environment, options } =
+    getDimoConfig();
 
   //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
   const { isAuthenticated } = useDimoAuthState();
@@ -63,7 +59,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
         popupAuth(basePayload, payload);
         break;
       case "redirect":
-        redirectAuth(basePayload, payload);
+        redirectAuth(basePayload, payload as RedirectAuth);
         break;
       default:
         console.error("Unsupported mode for button click");

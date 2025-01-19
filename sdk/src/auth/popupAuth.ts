@@ -1,5 +1,5 @@
 import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
+import { BasePayload } from "../types";
 import { TransactionData } from "../types/TransactionData";
 import { handleMessageForPopup } from "../utils/eventHandler";
 

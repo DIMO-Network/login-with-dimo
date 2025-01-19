@@ -1,6 +1,4 @@
-import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
+import { BasePayload } from "../types";
 import { handleMessageForEmbed } from "../utils/eventHandler";
 
 export const embedAuth = (
