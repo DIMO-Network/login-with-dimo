@@ -1,7 +1,6 @@
 import { EntryState } from "../enums/globalEnums";
 
-export interface BasePayload {
-  entryState: EntryState;
+export interface BasePayload extends BasePayloadParams {
   onSuccess: (data: {
     token: string;
     transactionHash?: string;
@@ -9,6 +8,10 @@ export interface BasePayload {
   }) => void;
   onError: (error: Error) => void;
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface BasePayloadParams {
+  entryState: EntryState;
   dimoLogin: string;
   forceEmail: boolean;
   clientId?: string;
