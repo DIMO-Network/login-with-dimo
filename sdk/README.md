@@ -101,7 +101,7 @@ import {
 
           <ShareVehiclesWithDimo
             mode="popup"
-            onSuccess={(authData) => console.log("Success:", authData)}
+            onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
             //expirationDate={} //OPTIONAL ISO STRING

@@ -70,6 +70,7 @@ export const handleMessageForPopup = (
       email,
       mode,
       transactionHash,
+      sharedVehicles,
       message,
     } = event.data;
 
@@ -93,7 +94,7 @@ export const handleMessageForPopup = (
 
       if (eventType === "authResponse") {
         processAuthResponse(
-          { token, walletAddress, email },
+          { token, walletAddress, email, sharedVehicles },
           setAuthenticated,
           onSuccess
         );
