@@ -6,20 +6,22 @@ import {
 } from "../storage/storageManager";
 
 export const processAuthResponse = (
-  { token, walletAddress, email }: any,
+  { token, walletAddress, email, sharedVehicles }: any,
   setAuthenticated: (status: boolean) => void,
   onSuccess: (data: {
     token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
+    sharedVehicles: string[]
   }) => void
 ) => {
+  //This auth response may be triggered for a coupled or decoupled flow
+  //If decoupled, it will only return token
+  //If coupled, it will return token + updatedVehicles
   if (walletAddress) storeWalletAddressInLocalStorage(walletAddress);
   if (email) storeEmailInLocalStorage(email);
   if (token) {
     storeJWTInCookies(token);
     setAuthenticated(true);
-    onSuccess({ token });
+    onSuccess({ token, sharedVehicles });
   }
 };
 
