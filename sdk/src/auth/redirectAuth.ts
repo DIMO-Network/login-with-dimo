@@ -1,60 +1,77 @@
-import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
+import {
+  BasePayload,
+  BasePayloadParams,
+  TransactionData,
+  RedirectAuth,
+} from "../types";
 
-export const redirectAuth = (payload: BasePayload, data?: any) => {
-  //TODO: Can probably be cleaned up to prevent having to manually parse out everything
+type RedirectAuthData = BasePayloadParams & RedirectAuth;
 
-  const { clientId, redirectUri, entryState, dimoLogin, forceEmail } = payload;
+const appendParams = (
+  params: URLSearchParams,
+  key: string,
+  value: RedirectAuthData[keyof RedirectAuthData]
+) => {
+  if (value) {
+    if (Array.isArray(value)) {
+      value.forEach((item) => params.append(key, item));
+    } else {
+      params.append(key, String(value));
+    }
+  }
+};
 
-  const {
-    permissionTemplateId,
-    vehicles,
-    vehicleMakes,
-    expirationDate,
-    transactionData,
-  } = data;
+const addParams = (
+  data: RedirectAuthData,
+  params: URLSearchParams,
+  paramsToAdd: Array<keyof RedirectAuthData>
+) => {
+  paramsToAdd.forEach((param) => {
+    appendParams(params, param, data[param]);
+  });
+};
+
+const transformTransactionData = (
+  transactionData: TransactionData | undefined
+) => {
+  if (!transactionData) return undefined;
+
+  const serializedTransactionData = encodeURIComponent(
+    JSON.stringify(transactionData)
+  );
+
+  if (serializedTransactionData.length > 1000) {
+    console.warn(
+      "Serialized transactionData is too large for a URL parameter."
+    );
+    return undefined;
+  }
+
+  return serializedTransactionData;
+};
+
+export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
+  const { dimoLogin } = payload;
+
+  const baseData = {
+    ...payload,
+    ...data,
+    transactionData: transformTransactionData(data.transactionData),
+  } as RedirectAuthData;
 
   const params = new URLSearchParams();
 
-  if (clientId) params.append("clientId", clientId);
-  if (redirectUri) params.append("redirectUri", redirectUri);
-  if (permissionTemplateId)
-    params.append("permissionTemplateId", permissionTemplateId);
-  if (entryState) params.append("entryState", entryState);
-  if (vehicles && vehicles.length > 0) {
-    vehicles.forEach((vehicle: string) => params.append("vehicles", vehicle));
-  }
-
-  if (vehicleMakes && vehicleMakes.length > 0) {
-    vehicleMakes.forEach((vehicleMake: string) =>
-      params.append("vehicleMakes", vehicleMake)
-    );
-  }
-
-  if (expirationDate) {
-    params.append("expirationDate", expirationDate);
-  }
-
-  // Serialize and encode transactionData
-  if (transactionData) {
-    const serializedTransactionData = encodeURIComponent(
-      JSON.stringify(transactionData)
-    );
-
-    if (serializedTransactionData.length > 1000) {
-      console.warn(
-        "Serialized transactionData is too large for a URL parameter."
-      );
-    } else {
-      params.append("transactionData", serializedTransactionData);
-    }
-  }
-
-  // Use forceEmail from payload
-  if (forceEmail) {
-    params.append("forceEmail", "true");
-  }
+  addParams(baseData, params, [
+    "clientId",
+    "entryState",
+    "expirationDate",
+    "forceEmail",
+    "permissionTemplateId",
+    "redirectUri",
+    "transactionData",
+    "vehicleMakes",
+    "vehicles",
+  ]);
 
   // Construct the full URL
   window.location.href = `${dimoLogin}?${params.toString()}`;
