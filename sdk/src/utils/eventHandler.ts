@@ -1,5 +1,5 @@
 import { MessageEventType } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
+import { BasePayload } from "../types";
 import { logout, processAuthResponse } from "./authUtils";
 
 /**

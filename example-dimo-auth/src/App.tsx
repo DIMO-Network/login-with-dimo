@@ -43,7 +43,7 @@ function App() {
             <input
               type="checkbox"
               checked={permissionsEnabled}
-              onChange={()=>setPermissionsEnabled(!permissionsEnabled)}
+              onChange={() => setPermissionsEnabled(!permissionsEnabled)}
             />
             Enable Permissions
           </label>
@@ -54,11 +54,11 @@ function App() {
             <input
               type="checkbox"
               checked={forceEmail}
-              onChange={()=>setForceEmail(!forceEmail)}
+              onChange={() => setForceEmail(!forceEmail)}
             />
             Force Email
           </label>
-        </div>        
+        </div>
 
         {isAuthenticated && (
           <div>
