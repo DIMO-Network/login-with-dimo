@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import { useState } from "react";
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
@@ -8,7 +6,9 @@ import {
   initializeDimoSDK,
   useDimoAuthState,
 } from "@dimo-network/login-with-dimo";
+
 import { sampleAbi } from "./abi/sample-abi";
+import "./App.css";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
@@ -18,7 +18,6 @@ function App() {
     useDimoAuthState();
 
   const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
-
 
   initializeDimoSDK({
     clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
@@ -79,6 +78,8 @@ function App() {
             unAuthenticatedLabel="Sign In with DIMO"
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
 
           {isAuthenticated && (
@@ -88,6 +89,8 @@ function App() {
                 onSuccess={(authData: any) => console.log("Success:", authData)}
                 onError={(error: any) => console.error("Error:", error)}
                 permissionTemplateId={"2"}
+                // Optional: Change the sign in title to the alternative text
+                // altTitle={true}
               />
 
               <ExecuteAdvancedTransactionWithDimo
@@ -104,6 +107,8 @@ function App() {
                 abi={sampleAbi}
                 functionName="transfer"
                 args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
+                // Optional: Change the sign in title to the alternative text
+                // altTitle={true}
               />
             </>
           )}
@@ -117,6 +122,8 @@ function App() {
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
             // vehicles={["585","586"]}
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
         </div>
 
@@ -127,6 +134,8 @@ function App() {
             onSuccess={(authData: any) => console.log("Success:", authData)}
             onError={(error: any) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined}
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
 
           {isAuthenticated && (
@@ -137,6 +146,8 @@ function App() {
               permissionTemplateId={"2"}
               expirationDate={sampleExpirationDate.toISOString()}
               vehicles={["752", "742"]}
+              // Optional: Change the sign in title to the alternative text
+              // altTitle={true}
             />
           )}
 
@@ -153,6 +164,8 @@ function App() {
             args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
             authenticatedLabel="Execute Transaction"
             unAuthenticatedLabel="Sign In to Execute Transaction with DIMO"
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
         </div>
       </header>
