@@ -1,3 +1,3 @@
-export * from "./BaseDimo";
-export * from "./TransactionData";
-export * from "./RedirectAuth";
+export * from "./auth";
+export * from "./base";
+export * from "./transactionData";
