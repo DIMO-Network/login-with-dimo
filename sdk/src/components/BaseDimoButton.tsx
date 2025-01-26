@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
@@ -11,16 +11,25 @@ import {
   useDimoAuthState,
   useDimoAuthUpdater,
 } from "../auth/context/DimoAuthContext";
-import { ShareBaseDimoButton, RedirectAuth } from "../types";
+import {
+  BaseButtonProps,
+  BaseLoginButtonProps,
+  BasePayload,
+  RedirectAuth,
+} from "../types";
 
-interface BaseDimoButtonProps extends ShareBaseDimoButton {
+interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
   entryState: EntryState;
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
   payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
 }
 
-const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
+type BaseDimoButtonProps = BaseButtonProps &
+  BaseDimoButtonOptions &
+  (BaseLoginButtonProps | {});
+
+const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   mode,
   entryState,
   onSuccess,
@@ -41,7 +50,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
       ? "https://login.dev.dimo.org"
       : "https://login.dimo.org";
 
-  const basePayload = {
+  const basePayload: BasePayload = {
     entryState,
     onSuccess,
     onError,

@@ -2,24 +2,16 @@ import React from "react";
 
 import BaseDimoButton from "./BaseDimoButton";
 import { EntryState, EventTypes } from "../enums";
-import { TransactionData } from "../types/TransactionData";
+import {
+  TransactionData,
+  BaseButtonProps,
+  ExecuteAdvancedTransactionButtonProps,
+  DynamicButtonLabels,
+} from "../types";
 
-interface ExecuteAdvancedTransactionProps {
-  mode: "popup" | "embed" | "redirect";
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
-  address: string;
-  value?: string;
-  abi: any;
-  functionName: string;
-  args: string[];
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
+type ExecuteAdvancedTransactionProps = BaseButtonProps &
+  ExecuteAdvancedTransactionButtonProps &
+  DynamicButtonLabels;
 
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
