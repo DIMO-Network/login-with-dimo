@@ -50,14 +50,15 @@ export const handleMessageForPopup = (
   popup: Window | null
 ) => {
   const {
-    entryState,
-    onSuccess,
-    onError,
-    setAuthenticated,
-    clientId,
-    redirectUri,
+    altTitle,
     apiKey,
-    forceEmail
+    clientId,
+    entryState,
+    forceEmail,
+    onError,
+    onSuccess,
+    redirectUri,
+    setAuthenticated,
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -77,12 +78,13 @@ export const handleMessageForPopup = (
     if (mode === "popup") {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
-          clientId,
-          redirectUri,
+          altTitle,
           apiKey,
+          clientId,
           entryState,
-          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
+          forceEmail,
+          redirectUri,
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
@@ -100,7 +102,10 @@ export const handleMessageForPopup = (
         );
       }
 
-      if (eventType === MessageEventType.TRANSACTION_RESPONSE && transactionHash) {
+      if (
+        eventType === MessageEventType.TRANSACTION_RESPONSE &&
+        transactionHash
+      ) {
         onSuccess({ token, transactionHash });
       }
 
@@ -121,21 +126,22 @@ export const handleMessageForPopup = (
 // Embed Handler
 export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
   const {
-    entryState,
-    onSuccess,
-    onError,
-    setAuthenticated,
-    clientId,
-    redirectUri,
+    altTitle,
     apiKey,
+    clientId,
     dimoLogin,
-    forceEmail
+    entryState,
+    forceEmail,
+    onError,
+    onSuccess,
+    redirectUri,
+    setAuthenticated,
   } = basePayload;
 
   const embedListener = (event: MessageEvent) => {
     if (!validateOrigin(event.origin, dimoLogin)) return;
 
-    const iframe = document.getElementById("dimo-iframe");
+    const iframe = document.getElementById("dimo-iframe") as HTMLIFrameElement;
 
     const {
       eventType,
@@ -151,21 +157,32 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     if (mode === "embed") {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
-          clientId,
-          redirectUri,
+          altTitle,
           apiKey,
+          clientId,
           entryState,
-          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
+          forceEmail,
+          redirectUri,
         };
         //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, initialMessage, dimoLogin, onError);
+        sendMessageToTarget(
+          iframe?.contentWindow,
+          initialMessage,
+          dimoLogin,
+          onError
+        );
       }
 
       if (eventType === data.eventType) {
         const dataMessage = { ...data, eventType: data.eventType };
         //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, dataMessage, dimoLogin, onError);
+        sendMessageToTarget(
+          iframe?.contentWindow,
+          dataMessage,
+          dimoLogin,
+          onError
+        );
       }
 
       processAuthResponse(
@@ -184,7 +201,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
 
       if (eventType === MessageEventType.LOGOUT) {
         logout(setAuthenticated);
-      }      
+      }
 
       if (eventType === "DIMO_ERROR") {
         onError(new Error(message));

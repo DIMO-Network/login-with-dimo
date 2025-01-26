@@ -36,6 +36,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   onError,
   buttonLabel,
   disableIfAuthenticated = false,
+  altTitle = false,
   payload,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
@@ -51,15 +52,16 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
       : "https://login.dimo.org";
 
   const basePayload: BasePayload = {
-    entryState,
     onSuccess,
     onError,
     setAuthenticated,
-    dimoLogin,
-    clientId,
-    redirectUri,
+    altTitle,
     apiKey,
+    clientId,
+    dimoLogin,
+    entryState,
     forceEmail: options?.forceEmail ?? false, // Ensure it's always present
+    redirectUri,
   };
 
   const handleButtonClick = () => {
