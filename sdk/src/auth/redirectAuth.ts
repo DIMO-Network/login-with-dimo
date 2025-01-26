@@ -62,6 +62,7 @@ export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
   const params = new URLSearchParams();
 
   addParams(baseData, params, [
+    "altTitle",
     "clientId",
     "entryState",
     "expirationDate",
