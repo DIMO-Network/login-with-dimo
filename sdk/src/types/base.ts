@@ -1,9 +1,10 @@
 import { AuthData } from "./";
 
 export interface BaseButtonProps {
+  altTitle?: boolean;
   mode: "popup" | "embed" | "redirect";
-  onSuccess: (authData: AuthData) => void; // Success callback
   onError: (error: Error) => void; // Error callback
+  onSuccess: (authData: AuthData) => void; // Success callback
 }
 
 export interface DynamicButtonLabels {
