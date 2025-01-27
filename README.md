@@ -33,10 +33,16 @@ npm run build
 We want to create a .tgz file that our app can use
 
 ```bash
-npm pack
+npm run pack
 ```
 
-This will create a .tgz file with the version of the SDK mentioned in package.json
+This will update the package version (patch) and will create a .tgz file with the version of the SDK mentioned in package.json
+
+Want a different version type? Specify it by adding `--new_version=[<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]`
+
+```bash
+npm run pack --new_version=0.0.19-test
+```
 
 ### Step 3: Verifying import
 

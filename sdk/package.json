@@ -7,7 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "watch": "webpack --config webpack.config.js --watch"
+    "watch": "webpack --config webpack.config.js --watch",
+    "pres:pack": "npm run build",
+    "pack": "npm version ${npm_config_new_version:-patch} && npm pack --pack-destination ../example-dimo-auth/dist && npm run update-example-app ",
+    "update-example-app": "sed -i '' \"s|file:.*-\\(.*\\)\\.tgz|file:./dist/dimo-network-login-with-dimo-${npm_package_version}.tgz|\" ../example-dimo-auth/package.json"
   },
   "keywords": [],
   "author": "",
