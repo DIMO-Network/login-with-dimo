@@ -4,14 +4,13 @@ import BaseDimoButton from "./BaseDimoButton";
 import { EntryState, EventTypes } from "../enums";
 import {
   DynamicButtonLabels,
-  ShareBaseDimoButton,
-  RedirectAuth,
+  BaseButtonProps,
+  BaseLoginButtonProps,
 } from "../types";
 
-interface ShareVehiclesWithDimoProps
-  extends ShareBaseDimoButton,
-    DynamicButtonLabels,
-    RedirectAuth {}
+type ShareVehiclesWithDimoProps = BaseButtonProps &
+  BaseLoginButtonProps &
+  DynamicButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   mode,
