@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
 import { redirectAuth } from "../auth/redirectAuth";

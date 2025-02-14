@@ -1,6 +1,4 @@
-import { EntryState } from "../enums/globalEnums";
 import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
 
 export const redirectAuth = (payload: BasePayload, data?: any) => {
   //TODO: Can probably be cleaned up to prevent having to manually parse out everything
