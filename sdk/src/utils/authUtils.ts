@@ -5,13 +5,15 @@ import {
   storeWalletAddressInLocalStorage,
 } from "../storage/storageManager";
 
+interface OnSuccessArgs {
+  token: string;
+  sharedVehicles: string[]
+}
+
 export const processAuthResponse = (
   { token, walletAddress, email, sharedVehicles }: any,
   setAuthenticated: (status: boolean) => void,
-  onSuccess: (data: {
-    token: string;
-    sharedVehicles: string[]
-  }) => void
+  onSuccess: (data: OnSuccessArgs) => void
 ) => {
   //This auth response may be triggered for a coupled or decoupled flow
   //If decoupled, it will only return token
