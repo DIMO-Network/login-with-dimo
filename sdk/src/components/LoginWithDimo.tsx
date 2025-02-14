@@ -24,19 +24,29 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   vehicleMakes,
   expirationDate,
   authenticatedLabel = "Manage DIMO Account",
-  unAuthenticatedLabel = "Continue with DIMO"
+  unAuthenticatedLabel = "Continue with DIMO",
 }) => {
   return (
     <BaseDimoButton
       mode={mode}
-      entryState={permissionTemplateId ? EntryState.VEHICLE_MANAGER : EntryState.EMAIL_INPUT} // Go to vehicle sharing if permissions are toggled, otherwise only login
+      entryState={
+        permissionTemplateId
+          ? EntryState.VEHICLE_MANAGER
+          : EntryState.EMAIL_INPUT
+      } // Go to vehicle sharing if permissions are toggled, otherwise only login
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       } // Dynamic label based on auth state
       disableIfAuthenticated={false} // Disable button when authenticated
-      payload={{ permissionTemplateId, vehicles, vehicleMakes, expirationDate, eventType: "SHARE_VEHICLES_DATA" }}
+      payload={{
+        permissionTemplateId,
+        vehicles,
+        vehicleMakes,
+        expirationDate,
+        eventType: "SHARE_VEHICLES_DATA",
+      }}
     />
   );
 };

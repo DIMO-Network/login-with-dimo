@@ -31,7 +31,7 @@ const sendMessageToTarget = (
   target: Window | null | undefined,
   message: object,
   origin: string,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
 ) => {
   if (target) {
     setTimeout(() => {
@@ -47,7 +47,7 @@ export const handleMessageForPopup = (
   basePayload: BasePayload,
   data: any,
   expectedOrigin: string,
-  popup: Window | null
+  popup: Window | null,
 ) => {
   const {
     entryState,
@@ -57,7 +57,7 @@ export const handleMessageForPopup = (
     clientId,
     redirectUri,
     apiKey,
-    forceEmail
+    forceEmail,
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -96,11 +96,14 @@ export const handleMessageForPopup = (
         processAuthResponse(
           { token, walletAddress, email, sharedVehicles },
           setAuthenticated,
-          onSuccess
+          onSuccess,
         );
       }
 
-      if (eventType === MessageEventType.TRANSACTION_RESPONSE && transactionHash) {
+      if (
+        eventType === MessageEventType.TRANSACTION_RESPONSE &&
+        transactionHash
+      ) {
         onSuccess({ token, transactionHash });
       }
 
@@ -129,7 +132,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     redirectUri,
     apiKey,
     dimoLogin,
-    forceEmail
+    forceEmail,
   } = basePayload;
 
   const embedListener = (event: MessageEvent) => {
@@ -159,19 +162,29 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           eventType: MessageEventType.AUTH_INIT,
         };
         //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, initialMessage, dimoLogin, onError);
+        sendMessageToTarget(
+          iframe?.contentWindow,
+          initialMessage,
+          dimoLogin,
+          onError,
+        );
       }
 
       if (eventType === data.eventType) {
         const dataMessage = { ...data, eventType: data.eventType };
         //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, dataMessage, dimoLogin, onError);
+        sendMessageToTarget(
+          iframe?.contentWindow,
+          dataMessage,
+          dimoLogin,
+          onError,
+        );
       }
 
       processAuthResponse(
         { token, walletAddress, email },
         setAuthenticated,
-        onSuccess
+        onSuccess,
       );
 
       if (eventType === MessageEventType.TRANSACTION_RESPONSE) {
@@ -184,7 +197,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
 
       if (eventType === MessageEventType.LOGOUT) {
         logout(setAuthenticated);
-      }      
+      }
 
       if (eventType === "DIMO_ERROR") {
         onError(new Error(message));

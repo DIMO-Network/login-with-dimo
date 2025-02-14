@@ -1,6 +1,10 @@
 // DimoAuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getEmailFromLocalStorage, getJWTFromCookies, getWalletAddressFromLocalStorage } from "../../storage/storageManager";
+import {
+  getEmailFromLocalStorage,
+  getJWTFromCookies,
+  getWalletAddressFromLocalStorage,
+} from "../../storage/storageManager";
 import { isTokenExpired } from "../../token/tokenManager";
 
 // Define the type of the context
@@ -14,7 +18,7 @@ type DimoAuthContextType = {
 
 // Create the context
 const DimoAuthContext = createContext<DimoAuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 // Internal updater function type (hidden from the app)
@@ -43,8 +47,7 @@ export const DimoAuthProvider = ({
     } else {
       throw new Error("No permission to access email");
     }
-  };    
-  
+  };
 
   const getValidJWT = () => {
     const jwt = getJWTFromCookies();
@@ -53,7 +56,7 @@ export const DimoAuthProvider = ({
     }
     console.warn("Invalid or expired JWT.");
     return null;
-  }
+  };
 
   useEffect(() => {
     if (getValidJWT()) {
@@ -62,7 +65,9 @@ export const DimoAuthProvider = ({
   }, []);
 
   return (
-    <DimoAuthContext.Provider value={{ isAuthenticated, getValidJWT, email, getEmail, walletAddress }}>
+    <DimoAuthContext.Provider
+      value={{ isAuthenticated, getValidJWT, email, getEmail, walletAddress }}
+    >
       <DimoAuthUpdaterContext.Provider value={{ setAuthenticated }}>
         {children}
       </DimoAuthUpdaterContext.Provider>
@@ -84,7 +89,7 @@ export const useDimoAuthUpdater = () => {
   const context = useContext(DimoAuthUpdaterContext);
   if (!context) {
     throw new Error(
-      "useDimoAuthUpdater must be used within a DimoAuthProvider"
+      "useDimoAuthUpdater must be used within a DimoAuthProvider",
     );
   }
   return context; // Exposes setAuthenticated only for SDK

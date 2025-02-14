@@ -23,7 +23,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   vehicleMakes,
   expirationDate,
   authenticatedLabel = "Share Vehicles with DIMO",
-  unAuthenticatedLabel = "Sign in to Share Vehicles with DIMO"
+  unAuthenticatedLabel = "Sign in to Share Vehicles with DIMO",
 }) => {
   return (
     <BaseDimoButton

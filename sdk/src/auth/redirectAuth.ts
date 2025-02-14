@@ -28,7 +28,7 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
 
   if (vehicleMakes && vehicleMakes.length > 0) {
     vehicleMakes.forEach((vehicleMake: string) =>
-      params.append("vehicleMakes", vehicleMake)
+      params.append("vehicleMakes", vehicleMake),
     );
   }
 
@@ -39,12 +39,12 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
   // Serialize and encode transactionData
   if (transactionData) {
     const serializedTransactionData = encodeURIComponent(
-      JSON.stringify(transactionData)
+      JSON.stringify(transactionData),
     );
 
     if (serializedTransactionData.length > 1000) {
       console.warn(
-        "Serialized transactionData is too large for a URL parameter."
+        "Serialized transactionData is too large for a URL parameter.",
       );
     } else {
       params.append("transactionData", serializedTransactionData);

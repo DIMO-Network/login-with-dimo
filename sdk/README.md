@@ -3,6 +3,7 @@
 Login with DIMO is a React component SDK, providing developers with a set of pre-built, customizable building blocks for applications that integrate with DIMO. These components simplify the process of integrating Accounts API and Transactions SDK in React applications.
 
 ## Installation
+
 To install the SDK, use npm or yarn to add the package to your project:
 
 ```
@@ -16,6 +17,7 @@ yarn add @dimo-network/login-with-dimo
 ```
 
 ## Usage
+
 You can integrate the LoginWithDimo component into your React application to allow users to authenticate with Dimo. The component handles the authentication process in a popup window and triggers the appropriate callback functions upon success or error.
 
 ### Initialize DIMO SDK
@@ -29,7 +31,7 @@ import {
     clientId: "YOUR CLIENT ID",
     redirectUri: "YOUR REDIRECT URI",
     apiKey: "YOUR API KEY",
-    environment: "development" | "production", 
+    environment: "development" | "production",
   });
 ```
 
@@ -75,6 +77,7 @@ Based on this authenticated state, you can render the necessary Dimo components
 With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
 
 We offer three options
+
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Embed Mode (best for keeping the dimo login within a developers app)
   - NOTE: Apple SSO will not work in Embed Mode
@@ -83,6 +86,7 @@ We offer three options
 ### Using the Button Components
 
 The following example shows all buttons being rendered, with no auth state checking
+
 ```
 import {
   LoginWithDimo,
@@ -96,7 +100,7 @@ import {
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
             // Optionally, specify vehicles (uncomment the line below to use it)
-            // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login            
+            // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
           />
 
           <ShareVehiclesWithDimo
@@ -106,8 +110,8 @@ import {
             permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
             //expirationDate={} //OPTIONAL ISO STRING
             // Optionally, specify vehicles (uncomment the line below to use it)
-            // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered   
-          />         
+            // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
+          />
 
         <ExecuteAdvancedTransactionWithDimo
           mode="popup"
@@ -120,7 +124,7 @@ import {
           abi={sampleAbi} //Some sample ABI required
           functionName="transfer"
           args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
-        />           
+        />
 ```
 
 ### Putting it all together
@@ -128,6 +132,7 @@ import {
 In many cases - developers may want to couple/decouple usage of these components
 
 A common flow is
+
 1. Show the login button, when in authenticated
 2. Show the Share Vehicles and Execute Advanced Transaction button, when authenticed
 
@@ -147,7 +152,7 @@ const { isAuthenticated, getValidJWT, email, walletAddress, getEmail } = useDimo
 useEffect(()=>{
   if ( isAuthenticated ) {
     //makeAuthenticatedRequest(getValidJWT())
-    console.log(email); 
+    console.log(email);
     console.log(walletAddress);
   }
 },[isAuthenticated])

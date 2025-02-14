@@ -35,7 +35,8 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   disableIfAuthenticated = false,
   payload,
 }) => {
-  const { clientId, redirectUri, apiKey, environment, options } = getDimoConfig();
+  const { clientId, redirectUri, apiKey, environment, options } =
+    getDimoConfig();
 
   //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
   const { isAuthenticated } = useDimoAuthState();

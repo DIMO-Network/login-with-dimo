@@ -1,23 +1,22 @@
 export enum EntryState {
-    EMAIL_INPUT = "EMAIL_INPUT",
-    OTP_INPUT = "OTP_INPUT",
-    SUCCESS = "SUCCESS",
-    VEHICLE_MANAGER = "VEHICLE_MANAGER",
-    ADVANCED_TRANSACTION = "ADVANCED_TRANSACTION",
-    ERROR = "ERROR",
-    LOADING = "LOADING",
+  EMAIL_INPUT = "EMAIL_INPUT",
+  OTP_INPUT = "OTP_INPUT",
+  SUCCESS = "SUCCESS",
+  VEHICLE_MANAGER = "VEHICLE_MANAGER",
+  ADVANCED_TRANSACTION = "ADVANCED_TRANSACTION",
+  ERROR = "ERROR",
+  LOADING = "LOADING",
 }
 
 export enum MessageEventType {
-    READY = "READY",
-    AUTH_INIT = "AUTH_INIT",
-    TRANSACTION_RESPONSE = "transactionResponse",
-    LOGOUT = "logout"
+  READY = "READY",
+  AUTH_INIT = "AUTH_INIT",
+  TRANSACTION_RESPONSE = "transactionResponse",
+  LOGOUT = "logout",
 }
 
 export enum DimoSDKModes {
-    POPUP = "popup",
-    EMBED = "embed",
-    REDIRECT = "redirect"
+  POPUP = "popup",
+  EMBED = "embed",
+  REDIRECT = "redirect",
 }
-  
