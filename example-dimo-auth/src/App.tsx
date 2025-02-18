@@ -108,17 +108,6 @@ function App() {
         </div>
 
         <div>
-          <h3>Embed Example</h3>
-          <LoginWithDimo
-            mode="embed"
-            onSuccess={(authData: any) => console.log("Success:", authData)}
-            onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
-            // vehicles={["585","586"]}
-          />
-        </div>
-
-        <div>
           <h3>Redirect Example</h3>
           <LoginWithDimo
             mode="redirect"
