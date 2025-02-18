@@ -1,7 +1,7 @@
-import React from "react";
-import BaseDimoButton from "./BaseDimoButton";
-import { EntryState } from "../enums/globalEnums";
-import { LoginMode } from "../types/LoginMode";
+import React from 'react';
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState } from '../enums/globalEnums';
+import { LoginMode } from '../types/LoginMode';
 
 interface LoginWithDimoProps {
   mode: LoginMode;
@@ -23,8 +23,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   vehicles,
   vehicleMakes,
   expirationDate,
-  authenticatedLabel = "Manage DIMO Account",
-  unAuthenticatedLabel = "Continue with DIMO",
+  authenticatedLabel = 'Manage DIMO Account',
+  unAuthenticatedLabel = 'Continue with DIMO',
 }) => {
   return (
     <BaseDimoButton
@@ -45,7 +45,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         vehicles,
         vehicleMakes,
         expirationDate,
-        eventType: "SHARE_VEHICLES_DATA",
+        eventType: 'SHARE_VEHICLES_DATA',
       }}
     />
   );

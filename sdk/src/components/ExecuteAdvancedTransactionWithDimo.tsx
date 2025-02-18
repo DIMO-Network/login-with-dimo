@@ -1,10 +1,10 @@
-import React from "react";
-import BaseDimoButton from "./BaseDimoButton";
-import { EntryState } from "../enums/globalEnums";
-import { TransactionData } from "../types/TransactionData";
+import React from 'react';
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState } from '../enums/globalEnums';
+import { TransactionData } from '../types/TransactionData';
 
 interface ExecuteAdvancedTransactionProps {
-  mode: "popup" | "embed" | "redirect";
+  mode: 'popup' | 'embed' | 'redirect';
   onSuccess: (data: {
     token: string;
     transactionHash?: string;
@@ -31,15 +31,15 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   abi,
   functionName,
   args,
-  authenticatedLabel = "Execute Advanced Transaction with Dimo",
-  unAuthenticatedLabel = "Sign in to Execute Transaction",
+  authenticatedLabel = 'Execute Advanced Transaction with Dimo',
+  unAuthenticatedLabel = 'Sign in to Execute Transaction',
 }) => {
   if (!address || !abi || !functionName || !args) {
-    throw new Error("Missing required transaction parameters.");
+    throw new Error('Missing required transaction parameters.');
   }
   const transactionData: TransactionData = {
     address,
-    value: value ? value : "", // BigInt to string
+    value: value ? value : '', // BigInt to string
     abi,
     functionName,
     args,
@@ -54,7 +54,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
-      payload={{ transactionData, eventType: "EXECUTE_ADVANCED_TRANSACTION" }}
+      payload={{ transactionData, eventType: 'EXECUTE_ADVANCED_TRANSACTION' }}
     />
   );
 };

@@ -1,6 +1,6 @@
-import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
+import { EntryState } from '../enums/globalEnums';
+import { BasePayload } from '../types/BasePayload';
+import { TransactionData } from '../types/TransactionData';
 
 export const redirectAuth = (payload: BasePayload, data?: any) => {
   //TODO: Can probably be cleaned up to prevent having to manually parse out everything
@@ -17,23 +17,23 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
 
   const params = new URLSearchParams();
 
-  if (clientId) params.append("clientId", clientId);
-  if (redirectUri) params.append("redirectUri", redirectUri);
+  if (clientId) params.append('clientId', clientId);
+  if (redirectUri) params.append('redirectUri', redirectUri);
   if (permissionTemplateId)
-    params.append("permissionTemplateId", permissionTemplateId);
-  if (entryState) params.append("entryState", entryState);
+    params.append('permissionTemplateId', permissionTemplateId);
+  if (entryState) params.append('entryState', entryState);
   if (vehicles && vehicles.length > 0) {
-    vehicles.forEach((vehicle: string) => params.append("vehicles", vehicle));
+    vehicles.forEach((vehicle: string) => params.append('vehicles', vehicle));
   }
 
   if (vehicleMakes && vehicleMakes.length > 0) {
     vehicleMakes.forEach((vehicleMake: string) =>
-      params.append("vehicleMakes", vehicleMake)
+      params.append('vehicleMakes', vehicleMake)
     );
   }
 
   if (expirationDate) {
-    params.append("expirationDate", expirationDate);
+    params.append('expirationDate', expirationDate);
   }
 
   // Serialize and encode transactionData
@@ -44,16 +44,16 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
 
     if (serializedTransactionData.length > 1000) {
       console.warn(
-        "Serialized transactionData is too large for a URL parameter."
+        'Serialized transactionData is too large for a URL parameter.'
       );
     } else {
-      params.append("transactionData", serializedTransactionData);
+      params.append('transactionData', serializedTransactionData);
     }
   }
 
   // Use forceEmail from payload
   if (forceEmail) {
-    params.append("forceEmail", "true");
+    params.append('forceEmail', 'true');
   }
 
   // Construct the full URL

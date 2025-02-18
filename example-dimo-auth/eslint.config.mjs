@@ -8,7 +8,6 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 export default [
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
   { languageOptions: { globals: globals.browser } },
-  { ignores: ['dist', '**/*.config.js'] },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,

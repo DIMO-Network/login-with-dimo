@@ -1,7 +1,7 @@
-import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
-import { handleMessageForPopup } from "../utils/eventHandler";
+import { EntryState } from '../enums/globalEnums';
+import { BasePayload } from '../types/BasePayload';
+import { TransactionData } from '../types/TransactionData';
+import { handleMessageForPopup } from '../utils/eventHandler';
 
 export const popupAuth = (
   basePayload: BasePayload,
@@ -11,12 +11,12 @@ export const popupAuth = (
     const { dimoLogin } = basePayload;
     const popup = window.open(
       dimoLogin,
-      "_blank",
-      "width=500,height=600" //Allow popup to be customized by the developer
+      '_blank',
+      'width=500,height=600' //Allow popup to be customized by the developer
     );
 
     if (!popup) {
-      throw new Error("Popup failed to open");
+      throw new Error('Popup failed to open');
     }
 
     // Set up message handler for popup auth
@@ -25,7 +25,7 @@ export const popupAuth = (
     if (error instanceof Error) {
       basePayload.onError(error);
     } else {
-      basePayload.onError(new Error("An unknown error occurred"));
+      basePayload.onError(new Error('An unknown error occurred'));
     }
   }
 };

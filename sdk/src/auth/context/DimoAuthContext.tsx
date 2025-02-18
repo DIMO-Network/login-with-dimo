@@ -1,11 +1,11 @@
 // DimoAuthContext.tsx
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import {
   getEmailFromLocalStorage,
   getJWTFromCookies,
   getWalletAddressFromLocalStorage,
-} from "../../storage/storageManager";
-import { isTokenExpired } from "../../token/tokenManager";
+} from '../../storage/storageManager';
+import { isTokenExpired } from '../../token/tokenManager';
 
 // Define the type of the context
 type DimoAuthContextType = {
@@ -38,14 +38,14 @@ export const DimoAuthProvider = ({
   const [isAuthenticated, setAuthenticated] = useState(false);
 
   const hasEmailPermission = !!getEmailFromLocalStorage();
-  const email = hasEmailPermission ? getEmailFromLocalStorage() : "";
+  const email = hasEmailPermission ? getEmailFromLocalStorage() : '';
   const walletAddress = getWalletAddressFromLocalStorage();
 
   const getEmail = () => {
     if (hasEmailPermission) {
       return email;
     } else {
-      throw new Error("No permission to access email");
+      throw new Error('No permission to access email');
     }
   };
 
@@ -54,7 +54,7 @@ export const DimoAuthProvider = ({
     if (jwt && !isTokenExpired(jwt)) {
       return jwt;
     }
-    console.warn("Invalid or expired JWT.");
+    console.warn('Invalid or expired JWT.');
     return null;
   };
 
@@ -79,7 +79,7 @@ export const DimoAuthProvider = ({
 export const useDimoAuthState = () => {
   const context = useContext(DimoAuthContext);
   if (!context) {
-    throw new Error("useDimoAuthState must be used within a DimoAuthProvider");
+    throw new Error('useDimoAuthState must be used within a DimoAuthProvider');
   }
   return context; // Only exposes isAuthenticated
 };
@@ -89,7 +89,7 @@ export const useDimoAuthUpdater = () => {
   const context = useContext(DimoAuthUpdaterContext);
   if (!context) {
     throw new Error(
-      "useDimoAuthUpdater must be used within a DimoAuthProvider"
+      'useDimoAuthUpdater must be used within a DimoAuthProvider'
     );
   }
   return context; // Exposes setAuthenticated only for SDK
