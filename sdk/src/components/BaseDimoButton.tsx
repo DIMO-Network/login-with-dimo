@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { popupAuth } from "../auth/popupAuth";
 import { embedAuth } from "../auth/embedAuth";
 import { redirectAuth } from "../auth/redirectAuth";
@@ -10,9 +10,10 @@ import {
   useDimoAuthState,
   useDimoAuthUpdater,
 } from "../auth/context/DimoAuthContext";
+import { LoginMode } from "../types/LoginMode";
 
 interface BaseDimoButtonProps {
-  mode: "popup" | "embed" | "redirect";
+  mode: LoginMode;
   entryState: EntryState;
   onSuccess: (data: {
     token: string;

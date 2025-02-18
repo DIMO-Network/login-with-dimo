@@ -1,13 +1,14 @@
 import React from "react";
 import BaseDimoButton from "./BaseDimoButton";
 import { EntryState } from "../enums/globalEnums";
+import { LoginMode } from "../types/LoginMode";
 
 interface LoginWithDimoProps {
-  mode: "popup" | "embed" | "redirect";
+  mode: LoginMode;
   onSuccess: (authData: { token: string }) => void; // Success callback
   onError: (error: Error) => void; // Error callback
   permissionTemplateId?: string; // Optional: Permissions template
-  vehicles?: string[]; // Optional: List of vehicles  
+  vehicles?: string[]; // Optional: List of vehicles
   vehicleMakes?: string[];
   expirationDate?: string;
   authenticatedLabel?: string;
@@ -19,7 +20,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   onSuccess,
   onError,
   permissionTemplateId,
-  vehicles,  
+  vehicles,
   vehicleMakes,
   expirationDate,
   authenticatedLabel = "Manage DIMO Account",
