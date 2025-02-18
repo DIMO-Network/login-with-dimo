@@ -28,7 +28,7 @@ export const redirectAuth = (payload: BasePayload, data?: any) => {
 
   if (vehicleMakes && vehicleMakes.length > 0) {
     vehicleMakes.forEach((vehicleMake: string) =>
-      params.append("vehicleMakes", vehicleMake),
+      params.append("vehicleMakes", vehicleMake)
     );
   }
 
