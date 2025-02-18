@@ -33,7 +33,7 @@ npm run build
 We want to create a .tgz file that our app can use
 
 ```bash
-npm run pack
+npm pack
 ```
 
 This will create a .tgz file with the version of the SDK mentioned in package.json
