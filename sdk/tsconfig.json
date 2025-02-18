@@ -115,8 +115,7 @@
       "@dimo-types/*": ["types/*"],
       "@utils/*": ["utils/*"],
       "@storage/*":["storage/*"],
-      "@token/*":["token/*"],
-      "@styles": ["styles/*"]
+      "@token/*":["token/*"]
     }
   },
   "include": [
