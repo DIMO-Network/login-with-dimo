@@ -33,7 +33,7 @@ export const initializeDimoSDK = ({
 export const getDimoConfig = () => {
   if (!sdkConfig.clientId || !sdkConfig.redirectUri) {
     throw new Error(
-      "Dimo SDK has not been initialized. Call `initializeDimoSDK` first.",
+      "Dimo SDK has not been initialized. Call `initializeDimoSDK` first."
     );
   }
   return sdkConfig;

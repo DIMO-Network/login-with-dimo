@@ -5,14 +5,14 @@ import { handleMessageForPopup } from "../utils/eventHandler";
 
 export const popupAuth = (
   basePayload: BasePayload,
-  data?: Record<string, any>, // Component-specific data
+  data?: Record<string, any> // Component-specific data
 ) => {
   try {
     const { dimoLogin } = basePayload;
     const popup = window.open(
       dimoLogin,
       "_blank",
-      "width=500,height=600", //Allow popup to be customized by the developer
+      "width=500,height=600" //Allow popup to be customized by the developer
     );
 
     if (!popup) {

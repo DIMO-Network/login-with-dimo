@@ -31,7 +31,7 @@ const sendMessageToTarget = (
   target: Window | null | undefined,
   message: object,
   origin: string,
-  onError: (error: Error) => void,
+  onError: (error: Error) => void
 ) => {
   if (target) {
     setTimeout(() => {
@@ -47,7 +47,7 @@ export const handleMessageForPopup = (
   basePayload: BasePayload,
   data: any,
   expectedOrigin: string,
-  popup: Window | null,
+  popup: Window | null
 ) => {
   const {
     entryState,
@@ -96,7 +96,7 @@ export const handleMessageForPopup = (
         processAuthResponse(
           { token, walletAddress, email, sharedVehicles },
           setAuthenticated,
-          onSuccess,
+          onSuccess
         );
       }
 
@@ -166,7 +166,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           iframe?.contentWindow,
           initialMessage,
           dimoLogin,
-          onError,
+          onError
         );
       }
 
@@ -177,14 +177,14 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           iframe?.contentWindow,
           dataMessage,
           dimoLogin,
-          onError,
+          onError
         );
       }
 
       processAuthResponse(
         { token, walletAddress, email },
         setAuthenticated,
-        onSuccess,
+        onSuccess
       );
 
       if (eventType === MessageEventType.TRANSACTION_RESPONSE) {

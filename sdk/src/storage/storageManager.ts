@@ -17,7 +17,7 @@ export const storeJWTInCookies = (jwt: string): void => {
 
 // Utility function to store user properties in localStorage for a given clientId
 export const storeWalletAddressInLocalStorage = (
-  walletAddress: string,
+  walletAddress: string
 ): void => {
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
 };

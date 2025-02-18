@@ -18,7 +18,7 @@ type DimoAuthContextType = {
 
 // Create the context
 const DimoAuthContext = createContext<DimoAuthContextType | undefined>(
-  undefined,
+  undefined
 );
 
 // Internal updater function type (hidden from the app)
@@ -89,7 +89,7 @@ export const useDimoAuthUpdater = () => {
   const context = useContext(DimoAuthUpdaterContext);
   if (!context) {
     throw new Error(
-      "useDimoAuthUpdater must be used within a DimoAuthProvider",
+      "useDimoAuthUpdater must be used within a DimoAuthProvider"
     );
   }
   return context; // Exposes setAuthenticated only for SDK
