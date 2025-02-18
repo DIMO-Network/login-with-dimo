@@ -162,8 +162,8 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           eventType: MessageEventType.AUTH_INIT,
         };
 
-        //@ts-ignore
         sendMessageToTarget(
+          // @ts-ignore
           iframe?.contentWindow,
           initialMessage,
           dimoLogin,
@@ -173,8 +173,8 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
 
       if (eventType === data.eventType) {
         const dataMessage = { ...data, eventType: data.eventType };
-        //@ts-ignore
         sendMessageToTarget(
+          // @ts-ignore
           iframe?.contentWindow,
           dataMessage,
           dimoLogin,
