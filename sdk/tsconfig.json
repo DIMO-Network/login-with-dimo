@@ -106,7 +106,18 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "baseUrl": "src",
+    "paths": {
+      "@auth/*": ["auth/*"],
+      "@components/*": ["components/*"],
+      "@enums/*": ["enums/*"],
+      "@dimo-types/*": ["types/*"],
+      "@utils/*": ["utils/*"],
+      "@storage/*":["storage/*"],
+      "@token/*":["token/*"],
+      "@styles": ["styles/*"]
+    }
   },
   "include": [
     "src/**/*" /* Include all TypeScript files in the src directory */

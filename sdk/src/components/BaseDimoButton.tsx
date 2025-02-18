@@ -1,15 +1,15 @@
 import React from 'react';
-import { popupAuth } from '../auth/popupAuth';
-import { embedAuth } from '../auth/embedAuth';
-import { redirectAuth } from '../auth/redirectAuth';
+import { popupAuth } from '@auth/popupAuth';
+import { embedAuth } from '@auth/embedAuth';
+import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
-import { EntryState } from '../enums/globalEnums';
+import { EntryState } from '@enums/globalEnums';
 import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
   useDimoAuthState,
   useDimoAuthUpdater,
-} from '../auth/context/DimoAuthContext';
+} from '@auth/context/DimoAuthContext';
 import { LoginMode } from '../types/LoginMode';
 
 interface BaseDimoButtonProps {

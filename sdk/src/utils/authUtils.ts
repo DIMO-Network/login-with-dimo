@@ -3,7 +3,7 @@ import {
   storeEmailInLocalStorage,
   storeJWTInCookies,
   storeWalletAddressInLocalStorage,
-} from '../storage/storageManager';
+} from '@storage/storageManager';
 
 export const processAuthResponse = (
   { token, walletAddress, email, sharedVehicles }: any,

@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
-import { EntryState } from '../enums/globalEnums';
-import { TransactionData } from '../types/TransactionData';
+import { EntryState } from '@enums/globalEnums';
+import { TransactionData } from '@dimo-types/TransactionData';
 
 interface ExecuteAdvancedTransactionProps {
   mode: 'popup' | 'embed' | 'redirect';

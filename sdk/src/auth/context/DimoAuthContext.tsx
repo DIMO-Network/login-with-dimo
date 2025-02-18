@@ -4,8 +4,8 @@ import {
   getEmailFromLocalStorage,
   getJWTFromCookies,
   getWalletAddressFromLocalStorage,
-} from '../../storage/storageManager';
-import { isTokenExpired } from '../../token/tokenManager';
+} from '@storage/storageManager';
+import { isTokenExpired } from '@token/tokenManager';
 
 // Define the type of the context
 type DimoAuthContextType = {

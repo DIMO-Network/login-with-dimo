@@ -1,5 +1,5 @@
-import { MessageEventType } from '../enums/globalEnums';
-import { BasePayload } from '../types/BasePayload';
+import { MessageEventType } from '@enums/globalEnums';
+import { BasePayload } from '@dimo-types/BasePayload';
 import { logout, processAuthResponse } from './authUtils';
 
 /**
@@ -161,6 +161,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           forceEmail,
           eventType: MessageEventType.AUTH_INIT,
         };
+
         //@ts-ignore
         sendMessageToTarget(
           iframe?.contentWindow,

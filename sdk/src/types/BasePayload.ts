@@ -1,4 +1,4 @@
-import { EntryState } from '../enums/globalEnums';
+import { EntryState } from '@enums/globalEnums';
 
 export interface BasePayload {
   entryState: EntryState;
