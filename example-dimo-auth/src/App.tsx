@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
+import React, { useState } from "react";
 import "./App.css";
 import {
   LoginWithDimo,
@@ -12,13 +11,11 @@ import { sampleAbi } from "./abi/sample-abi";
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
-  const [vehicleFilteringEnabled, setVehicleFilteringEnabled] = useState(false);
   const [forceEmail, setForceEmail] = useState(false);
-  const { isAuthenticated, getValidJWT, email, getEmail, walletAddress } =
+  const { isAuthenticated, email, walletAddress } =
     useDimoAuthState();
 
   const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
-
 
   initializeDimoSDK({
     clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
@@ -26,6 +23,7 @@ function App() {
     environment: process.env.REACT_APP_DIMO_ENV! as
       | "production"
       | "development",
+    apiKey: process.env.REACT_APP_DIMO_API_KEY!,
     options: {
       forceEmail,
     },
@@ -58,7 +56,7 @@ function App() {
             />
             Force Email
           </label>
-        </div>        
+        </div>
 
         {isAuthenticated && (
           <div>
@@ -107,17 +105,6 @@ function App() {
               />
             </>
           )}
-        </div>
-
-        <div>
-          <h3>Embed Example</h3>
-          <LoginWithDimo
-            mode="embed"
-            onSuccess={(authData: any) => console.log("Success:", authData)}
-            onError={(error: any) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined} // Note, not triggering re-render
-            // vehicles={["585","586"]}
-          />
         </div>
 
         <div>
