@@ -28,18 +28,18 @@ export const storeEmailInLocalStorage = (email: string): void => {
 
 export const getJWTFromCookies = (): string | null => {
   const cookie = document.cookie
-    .split("; ")
+    .split('; ')
     .find((row) => row.startsWith(`dimo_auth_token=`));
-  return cookie ? cookie.split("=")[1] : null;
+  return cookie ? cookie.split('=')[1] : null;
 };
 
 export const getWalletAddressFromLocalStorage = (): string | null => {
-  const walletAddress = localStorage.getItem("dimo_wallet_address");
+  const walletAddress = localStorage.getItem('dimo_wallet_address');
   return walletAddress;
 };
 
 export const getEmailFromLocalStorage = (): string | null => {
-  const email = localStorage.getItem("dimo_user_email");
+  const email = localStorage.getItem('dimo_user_email');
   return email;
 };
 
