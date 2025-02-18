@@ -6,7 +6,10 @@ export { default as ExecuteAdvancedTransactionWithDimo } from './components/Exec
 // Export config initialization
 export { initializeDimoSDK, getDimoConfig } from './config/sdkConfig';
 
-export { useDimoAuthState, DimoAuthProvider } from './auth/context/DimoAuthContext';
+export {
+  useDimoAuthState,
+  DimoAuthProvider,
+} from './auth/context/DimoAuthContext';
 
 // Export enums
 export { EntryState } from './enums/globalEnums';

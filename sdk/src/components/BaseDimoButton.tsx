@@ -1,16 +1,16 @@
-import React from "react";
-import { popupAuth } from "../auth/popupAuth";
-import { embedAuth } from "../auth/embedAuth";
-import { redirectAuth } from "../auth/redirectAuth";
-import { getDimoConfig } from "../config/sdkConfig";
-import { EntryState } from "../enums/globalEnums";
-import "../styles/BaseDimoButton.css";
+import React from 'react';
+import { popupAuth } from '@auth/popupAuth';
+import { embedAuth } from '@auth/embedAuth';
+import { redirectAuth } from '@auth/redirectAuth';
+import { getDimoConfig } from '../config/sdkConfig';
+import { EntryState } from '@enums/globalEnums';
+import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
   useDimoAuthState,
   useDimoAuthUpdater,
-} from "../auth/context/DimoAuthContext";
-import { LoginMode } from "../types/LoginMode";
+} from '@auth/context/DimoAuthContext';
+import { LoginMode } from '@dimo-types/LoginMode';
 
 interface BaseDimoButtonProps {
   mode: LoginMode;
@@ -35,16 +35,17 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   disableIfAuthenticated = false,
   payload,
 }) => {
-  const { clientId, redirectUri, apiKey, environment, options } = getDimoConfig();
+  const { clientId, redirectUri, apiKey, environment, options } =
+    getDimoConfig();
 
   //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
   const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
 
   const dimoLogin =
-    environment === "development"
-      ? "https://login.dev.dimo.org"
-      : "https://login.dimo.org";
+    environment === 'development'
+      ? 'https://login.dev.dimo.org'
+      : 'https://login.dimo.org';
 
   const basePayload = {
     entryState,
@@ -60,20 +61,20 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
 
   const handleButtonClick = () => {
     switch (mode) {
-      case "popup":
+      case 'popup':
         popupAuth(basePayload, payload);
         break;
-      case "redirect":
+      case 'redirect':
         redirectAuth(basePayload, payload);
         break;
       default:
-        console.error("Unsupported mode for button click");
+        console.error('Unsupported mode for button click');
     }
   };
 
   // Trigger embedAuth only once the iframe has fully loaded
   const handleIframeLoad = () => {
-    if (mode === "embed") {
+    if (mode === 'embed') {
       embedAuth(basePayload, payload);
     }
   };
@@ -87,7 +88,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
       width="600px"
       height="300px" //Allow this to be customized by developer
       title="Dimo Login"
-      style={{ border: "4px solid white" }}
+      style={{ border: '4px solid white' }}
       frameBorder="0"
       onLoad={handleIframeLoad} // Trigger embedAuth when the iframe loads
     />
@@ -96,7 +97,7 @@ const BaseDimoButton: React.FC<BaseDimoButtonProps> = ({
   return (
     <DimoAuthProvider>
       <div>
-        {mode === "embed" ? (
+        {mode === 'embed' ? (
           renderEmbedIframe()
         ) : (
           <button

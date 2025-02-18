@@ -1,7 +1,5 @@
-import { EntryState } from "../enums/globalEnums";
-import { BasePayload } from "../types/BasePayload";
-import { TransactionData } from "../types/TransactionData";
-import { handleMessageForEmbed } from "../utils/eventHandler";
+import { BasePayload } from '@dimo-types/BasePayload';
+import { handleMessageForEmbed } from '@utils/eventHandler';
 
 export const embedAuth = (
   basePayload: BasePayload,
