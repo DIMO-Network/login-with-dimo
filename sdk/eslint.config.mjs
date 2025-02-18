@@ -14,10 +14,10 @@ export default [
   pluginReact.configs.flat.recommended,
   {
     settings: {
-      "import/resolver": {
+      'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
-          project: "./tsconfig.json",
+          project: './tsconfig.json',
         },
       },
     },

@@ -10,7 +10,7 @@ import {
   useDimoAuthState,
   useDimoAuthUpdater,
 } from '@auth/context/DimoAuthContext';
-import { LoginMode } from '../types/LoginMode';
+import { LoginMode } from '@dimo-types/LoginMode';
 
 interface BaseDimoButtonProps {
   mode: LoginMode;

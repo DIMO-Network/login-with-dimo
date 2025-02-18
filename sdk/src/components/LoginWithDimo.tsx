@@ -1,7 +1,7 @@
 import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
 import { EntryState } from '@enums/globalEnums';
-import { LoginMode } from '../types/LoginMode';
+import { LoginMode } from '@dimo-types/LoginMode';
 
 interface LoginWithDimoProps {
   mode: LoginMode;
