@@ -1,5 +1,5 @@
-import { BasePayload } from "@dimo-types/index";
-import { handleMessageForPopup } from "@utils/eventHandler";
+import { BasePayload } from '@dimo-types/index';
+import { handleMessageForPopup } from '@utils/eventHandler';
 
 export const popupAuth = (
   basePayload: BasePayload,

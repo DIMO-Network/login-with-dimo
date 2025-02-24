@@ -1,2 +1,2 @@
-export * from "./BaseDimo";
-export * from "./globalEnums";
+export * from './BaseDimo';
+export * from './globalEnums';

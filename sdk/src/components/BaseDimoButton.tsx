@@ -1,22 +1,22 @@
-import React, { FC } from "react";
+import React, { type FC } from 'react';
 
-import { popupAuth } from "@auth/popupAuth";
-import { embedAuth } from "@auth/embedAuth";
-import { redirectAuth } from "@auth/redirectAuth";
-import { getDimoConfig } from "../config/sdkConfig";
-import { EntryState, EventTypes } from "@enums/index";
-import "../styles/BaseDimoButton.css";
+import { popupAuth } from '@auth/popupAuth';
+import { embedAuth } from '@auth/embedAuth';
+import { redirectAuth } from '@auth/redirectAuth';
+import { getDimoConfig } from '../config/sdkConfig';
+import { EntryState, EventTypes } from '@enums/index';
+import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
   useDimoAuthState,
   useDimoAuthUpdater,
-} from "../auth/context/DimoAuthContext";
+} from '../auth/context/DimoAuthContext';
 import {
   BaseButtonProps,
   BaseLoginButtonProps,
   BasePayload,
   RedirectAuth,
-} from "@dimo-types/index";
+} from '@dimo-types/index';
 
 interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
@@ -25,9 +25,8 @@ interface BaseDimoButtonOptions extends BaseButtonProps {
   payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
 }
 
-type BaseDimoButtonProps = BaseButtonProps &
-  BaseDimoButtonOptions &
-  (BaseLoginButtonProps | {});
+type BaseDimoButtonProps = BaseDimoButtonOptions &
+  (BaseLoginButtonProps | object);
 
 const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   mode,

@@ -1,5 +1,5 @@
-import { AuthData } from "./";
-import { LoginMode } from "./";
+import { AuthData } from './';
+import { LoginMode } from './';
 
 export interface BaseButtonProps {
   mode: LoginMode;

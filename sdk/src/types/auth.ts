@@ -1,5 +1,5 @@
-import { EntryState } from "@enums/index";
-import { TransactionData } from "./";
+import { EntryState } from '@enums/index';
+import { TransactionData } from './';
 
 export interface AuthData {
   token: string;
@@ -28,5 +28,5 @@ export interface RedirectAuth {
   vehicleMakes?: string[];
   expirationDate?: string;
   utm?: string | null;
-  transactionData?: TransactionData;
+  transactionData?: TransactionData | string;
 }

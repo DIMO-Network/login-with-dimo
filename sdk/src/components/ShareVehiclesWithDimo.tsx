@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import BaseDimoButton from "./BaseDimoButton";
+import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
   DynamicButtonLabels,
@@ -20,8 +20,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   vehicles,
   vehicleMakes,
   expirationDate,
-  authenticatedLabel = "Share Vehicles with DIMO",
-  unAuthenticatedLabel = "Sign in to Share Vehicles with DIMO",
+  authenticatedLabel = 'Share Vehicles with DIMO',
+  unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
   utm = null,
 }) => {
   return (
