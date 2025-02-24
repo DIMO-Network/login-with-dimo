@@ -1,5 +1,5 @@
-import { EntryState } from "../enums";
-import { TransactionData } from "./";
+import { EntryState } from '../enums';
+import { TransactionData } from './';
 
 export interface AuthData {
   token: string;

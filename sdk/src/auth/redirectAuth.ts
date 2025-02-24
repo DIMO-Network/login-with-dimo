@@ -3,7 +3,7 @@ import {
   BasePayloadParams,
   TransactionData,
   RedirectAuth,
-} from "../types";
+} from '@dimo-types/index';
 
 type RedirectAuthData = BasePayloadParams & RedirectAuth;
 
@@ -42,7 +42,7 @@ const transformTransactionData = (
 
   if (serializedTransactionData.length > 1000) {
     console.warn(
-      "Serialized transactionData is too large for a URL parameter."
+      'Serialized transactionData is too large for a URL parameter.'
     );
     return undefined;
   }
@@ -62,15 +62,15 @@ export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
   const params = new URLSearchParams();
 
   addParams(baseData, params, [
-    "clientId",
-    "entryState",
-    "expirationDate",
-    "forceEmail",
-    "permissionTemplateId",
-    "redirectUri",
-    "transactionData",
-    "vehicleMakes",
-    "vehicles",
+    'clientId',
+    'entryState',
+    'expirationDate',
+    'forceEmail',
+    'permissionTemplateId',
+    'redirectUri',
+    'transactionData',
+    'vehicleMakes',
+    'vehicles',
   ]);
 
   // Construct the full URL

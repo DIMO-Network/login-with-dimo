@@ -1,7 +1,7 @@
-import { AuthData } from "./";
+import { AuthData } from './';
 
 export interface BaseButtonProps {
-  mode: "popup" | "embed" | "redirect";
+  mode: 'popup' | 'embed' | 'redirect';
   onSuccess: (authData: AuthData) => void; // Success callback
   onError: (error: Error) => void; // Error callback
 }

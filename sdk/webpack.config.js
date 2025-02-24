@@ -1,4 +1,5 @@
 const path = require('path');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   entry: './src/index.ts', // Main entry point for the SDK
@@ -11,6 +12,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    plugins: [
+      new TsconfigPathsPlugin({
+        extensions: ['.tsx', '.ts', '.js'],
+      }),
+    ],
   },
   externals: {
     react: {

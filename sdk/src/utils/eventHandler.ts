@@ -1,6 +1,6 @@
-import { MessageEventType } from "../enums/globalEnums";
-import { BasePayload } from "../types";
-import { logout, processAuthResponse } from "./authUtils";
+import { MessageEventType } from '@enums/globalEnums';
+import { BasePayload } from '@dimo-types/index';
+import { logout, processAuthResponse } from './authUtils';
 
 /**
  * @file eventHandler.ts
@@ -21,7 +21,7 @@ function getDomain(url: string) {
 
 const validateOrigin = (origin: string, expectedDomain: string): boolean => {
   if (getDomain(origin) !== getDomain(expectedDomain)) {
-    console.warn("Received message from an unknown origin:", origin);
+    console.warn('Received message from an unknown origin:', origin);
     return false;
   }
   return true;
@@ -38,7 +38,7 @@ const sendMessageToTarget = (
       target.postMessage(message, origin);
     }, 0);
   } else {
-    onError(new Error("Target window not available to send credentials"));
+    onError(new Error('Target window not available to send credentials'));
   }
 };
 
@@ -57,7 +57,7 @@ export const handleMessageForPopup = (
     clientId,
     redirectUri,
     apiKey,
-    forceEmail
+    forceEmail,
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -74,7 +74,7 @@ export const handleMessageForPopup = (
       message,
     } = event.data;
 
-    if (mode === "popup") {
+    if (mode === 'popup') {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
           clientId,
@@ -92,7 +92,7 @@ export const handleMessageForPopup = (
         sendMessageToTarget(popup, dataMessage, expectedOrigin, onError);
       }
 
-      if (eventType === "authResponse") {
+      if (eventType === 'authResponse') {
         processAuthResponse(
           { token, walletAddress, email, sharedVehicles },
           setAuthenticated,
@@ -100,7 +100,10 @@ export const handleMessageForPopup = (
         );
       }
 
-      if (eventType === MessageEventType.TRANSACTION_RESPONSE && transactionHash) {
+      if (
+        eventType === MessageEventType.TRANSACTION_RESPONSE &&
+        transactionHash
+      ) {
         onSuccess({ token, transactionHash });
       }
 
@@ -108,14 +111,14 @@ export const handleMessageForPopup = (
         logout(setAuthenticated);
       }
 
-      if (eventType === "DIMO_ERROR") {
+      if (eventType === 'DIMO_ERROR') {
         onError(new Error(message));
       }
     }
   };
 
-  window.addEventListener("message", popupListener);
-  return () => window.removeEventListener("message", popupListener);
+  window.addEventListener('message', popupListener);
+  return () => window.removeEventListener('message', popupListener);
 };
 
 // Embed Handler
@@ -129,13 +132,13 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     redirectUri,
     apiKey,
     dimoLogin,
-    forceEmail
+    forceEmail,
   } = basePayload;
 
   const embedListener = (event: MessageEvent) => {
     if (!validateOrigin(event.origin, dimoLogin)) return;
 
-    const iframe = document.getElementById("dimo-iframe");
+    const iframe = document.getElementById('dimo-iframe');
 
     const {
       eventType,
@@ -148,7 +151,7 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
       message,
     } = event.data;
 
-    if (mode === "embed") {
+    if (mode === 'embed') {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
           clientId,
@@ -158,14 +161,25 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
           forceEmail,
           eventType: MessageEventType.AUTH_INIT,
         };
-        //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, initialMessage, dimoLogin, onError);
+
+        sendMessageToTarget(
+          // @ts-ignore
+          iframe?.contentWindow,
+          initialMessage,
+          dimoLogin,
+          onError
+        );
       }
 
       if (eventType === data.eventType) {
         const dataMessage = { ...data, eventType: data.eventType };
-        //@ts-ignore
-        sendMessageToTarget(iframe?.contentWindow, dataMessage, dimoLogin, onError);
+        sendMessageToTarget(
+          // @ts-ignore
+          iframe?.contentWindow,
+          dataMessage,
+          dimoLogin,
+          onError
+        );
       }
 
       processAuthResponse(
@@ -178,20 +192,20 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
         if (transactionHash || transactionReceipt) {
           onSuccess({ token, transactionHash, transactionReceipt });
         } else {
-          onError(new Error("Could not execute transaction"));
+          onError(new Error('Could not execute transaction'));
         }
       }
 
       if (eventType === MessageEventType.LOGOUT) {
         logout(setAuthenticated);
-      }      
+      }
 
-      if (eventType === "DIMO_ERROR") {
+      if (eventType === 'DIMO_ERROR') {
         onError(new Error(message));
       }
     }
   };
 
-  window.addEventListener("message", embedListener);
-  return () => window.removeEventListener("message", embedListener);
+  window.addEventListener('message', embedListener);
+  return () => window.removeEventListener('message', embedListener);
 };

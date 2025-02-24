@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import BaseDimoButton from "./BaseDimoButton";
-import { EntryState, EventTypes } from "../enums";
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
 import {
   DynamicButtonLabels,
   BaseButtonProps,
   BaseLoginButtonProps,
-} from "../types";
+} from '@dimo-types/index';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   BaseLoginButtonProps &
@@ -20,8 +20,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   vehicles,
   vehicleMakes,
   expirationDate,
-  authenticatedLabel = "Share Vehicles with DIMO",
-  unAuthenticatedLabel = "Sign in to Share Vehicles with DIMO",
+  authenticatedLabel = 'Share Vehicles with DIMO',
+  unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
 }) => {
   return (
     <BaseDimoButton
