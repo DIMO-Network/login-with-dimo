@@ -1,12 +1,12 @@
 import React from "react";
 
 import BaseDimoButton from "./BaseDimoButton";
-import { EntryState, EventTypes } from "../enums";
+import { EntryState, EventTypes } from '@enums/index';
 import {
   DynamicButtonLabels,
   BaseButtonProps,
   BaseLoginButtonProps,
-} from "../types";
+} from '@dimo-types/index';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   BaseLoginButtonProps &

@@ -1,4 +1,4 @@
-import { EntryState } from "../enums";
+import { EntryState } from "@enums/index";
 import { TransactionData } from "./";
 
 export interface AuthData {

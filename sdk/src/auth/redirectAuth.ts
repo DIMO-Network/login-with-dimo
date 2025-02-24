@@ -3,7 +3,7 @@ import {
   BasePayloadParams,
   TransactionData,
   RedirectAuth,
-} from "../types";
+} from "@dimo-types/index";
 
 type RedirectAuthData = BasePayloadParams & RedirectAuth;
 
