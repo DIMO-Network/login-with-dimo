@@ -32,9 +32,10 @@ const addParams = (
 };
 
 const transformTransactionData = (
-  transactionData: TransactionData | undefined
+  transactionData: TransactionData | string | undefined
 ) => {
   if (!transactionData) return undefined;
+  if (typeof transactionData === 'string') return transactionData;
 
   const serializedTransactionData = encodeURIComponent(
     JSON.stringify(transactionData)
@@ -53,11 +54,11 @@ const transformTransactionData = (
 export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
   const { dimoLogin } = payload;
 
-  const baseData = {
+  const baseData: RedirectAuthData = {
     ...payload,
     ...data,
     transactionData: transformTransactionData(data.transactionData),
-  } as RedirectAuthData;
+  };
 
   const params = new URLSearchParams();
 

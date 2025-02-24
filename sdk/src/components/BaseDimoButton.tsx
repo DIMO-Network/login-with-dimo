@@ -24,7 +24,8 @@ interface BaseDimoButtonOptions extends BaseButtonProps {
   payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
 }
 
-type BaseDimoButtonProps = BaseDimoButtonOptions & (BaseLoginButtonProps | {});
+type BaseDimoButtonProps = BaseDimoButtonOptions &
+  (BaseLoginButtonProps | object);
 
 const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   mode,
