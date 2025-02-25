@@ -1,9 +1,9 @@
-import { BasePayload } from '@dimo-types/index';
+import { BasePayload, DimoActionPayload } from '@dimo-types/index';
 import { handleMessageForPopup } from '@utils/eventHandler';
 
 export const popupAuth = (
   basePayload: BasePayload,
-  data?: Record<string, any> // Component-specific data
+  data?: DimoActionPayload // Component-specific data
 ) => {
   try {
     const { dimoLogin } = basePayload;

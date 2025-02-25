@@ -2,10 +2,10 @@ import {
   BasePayload,
   BasePayloadParams,
   TransactionData,
-  RedirectAuth,
+  DimoActionPayload,
 } from '@dimo-types/index';
 
-type RedirectAuthData = BasePayloadParams & RedirectAuth;
+type RedirectAuthData = BasePayloadParams & DimoActionPayload;
 
 const appendParams = (
   params: URLSearchParams,
@@ -51,7 +51,7 @@ const transformTransactionData = (
   return serializedTransactionData;
 };
 
-export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
+export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
   const baseData: RedirectAuthData = {
