@@ -1,18 +1,16 @@
 import React from 'react';
-import BaseDimoButton from './BaseDimoButton';
-import { EntryState } from '@enums/globalEnums';
 
-interface ShareVehiclesWithDimoProps {
-  mode: 'popup' | 'embed' | 'redirect';
-  onSuccess: (authData: { token: string }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
-  permissionTemplateId: string; // Permissions template required for sharing
-  vehicles?: string[]; // List of vehicles to share
-  vehicleMakes?: string[];
-  expirationDate?: string;
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
+import {
+  DynamicButtonLabels,
+  BaseButtonProps,
+  BaseLoginButtonProps,
+} from '@dimo-types/index';
+
+type ShareVehiclesWithDimoProps = BaseButtonProps &
+  BaseLoginButtonProps &
+  DynamicButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   mode,
@@ -39,7 +37,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
         vehicles,
         vehicleMakes,
         expirationDate,
-        eventType: 'SHARE_VEHICLES_DATA',
+        eventType: EventTypes.SHARE_VEHICLES_DATA,
       }}
     />
   );
