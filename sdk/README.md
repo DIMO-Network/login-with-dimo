@@ -96,6 +96,7 @@ import {
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
+            utm="utm_campaign=dimo"
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
           />
@@ -212,7 +213,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `expirationDate`      | Expiration date for permissions                                             | `undefined`                  | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Manage DIMO Account"`      | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Continue with DIMO"`       | `string`                       | No        |
-| `utm`                 | UTM parameters for tracking                                                 | `null`                       | `string`                       | No        |
+| `utm`                 | UTM parameters for tracking (a query string)                                                | `null`                       | `string`                       | No        |
 
 ### ShareVehiclesWithDimo
 
@@ -229,7 +230,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `expirationDate`      | Expiration date for permissions                                             | `undefined`                             | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
-| `utm`                 | UTM parameters for tracking                                                 | `null`                                  | `string`                       | No        |
+| `utm`                 | UTM parameters for tracking (a query string)                                                 | `null`                                  | `string`                       | No        |
 
 ### ExecuteAdvancedTransactionWithDimo
 
