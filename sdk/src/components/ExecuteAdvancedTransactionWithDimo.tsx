@@ -1,24 +1,17 @@
 import React from 'react';
-import BaseDimoButton from './BaseDimoButton';
-import { EntryState } from '@enums/globalEnums';
-import { TransactionData } from '@dimo-types/TransactionData';
 
-interface ExecuteAdvancedTransactionProps {
-  mode: 'popup' | 'embed' | 'redirect';
-  onSuccess: (data: {
-    token: string;
-    transactionHash?: string;
-    transactionReceipt?: any;
-  }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
-  address: string;
-  value?: string;
-  abi: any;
-  functionName: string;
-  args: string[];
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
+import {
+  TransactionData,
+  BaseButtonProps,
+  ExecuteAdvancedTransactionButtonProps,
+  DynamicButtonLabels,
+} from '@dimo-types/index';
+
+type ExecuteAdvancedTransactionProps = BaseButtonProps &
+  ExecuteAdvancedTransactionButtonProps &
+  DynamicButtonLabels;
 
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
@@ -54,7 +47,10 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
-      payload={{ transactionData, eventType: 'EXECUTE_ADVANCED_TRANSACTION' }}
+      payload={{
+        transactionData,
+        eventType: EventTypes.EXECUTE_ADVANCED_TRANSACTION,
+      }}
     />
   );
 };

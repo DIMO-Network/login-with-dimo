@@ -76,12 +76,9 @@ Based on this authenticated state, you can render the necessary Dimo components
 
 With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
 
-We offer three options
-
+We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
-- Embed Mode (best for keeping the dimo login within a developers app)
-  - NOTE: Apple SSO will not work in Embed Mode
-- Redirect Mode (best for developers that want to avoid popups, or embedding)
+- Redirect Mode (best for developers that want to avoid popups)
 
 ### Using the Button Components
 
@@ -99,6 +96,7 @@ import {
             onSuccess={(authData) => console.log("Success:", authData)}
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
+            utm="utm_campaign=dimo"
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
           />
@@ -134,7 +132,7 @@ In many cases - developers may want to couple/decouple usage of these components
 A common flow is
 
 1. Show the login button, when in authenticated
-2. Show the Share Vehicles and Execute Advanced Transaction button, when authenticed
+2. Show the Share Vehicles and Execute Advanced Transaction button, when authenticated
 
 This can be achieved by simply wrapping those buttons in a conditional as follows, to create a full example as follows
 
@@ -197,3 +195,56 @@ initializeDimoSDK({
   />
 )}
 ```
+
+## Component Descriptions and Parameters
+
+### LoginWithDimo
+
+The `LoginWithDimo` component allows users to authenticate with DIMO.
+
+| Parameter             | Description                                                                 | Default Value                | Type                           | Mandatory |
+|-----------------------|-----------------------------------------------------------------------------|------------------------------|--------------------------------|-----------|
+| `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                          | `"popup" \| "redirect"`        | Yes       |
+| `onSuccess`           | Callback function to handle success                                         | N/A                          | `(authData: AuthData) => void` | Yes       |
+| `onError`             | Callback function to handle errors                                          | N/A                          | `(error: Error) => void`       | Yes       |
+| `permissionTemplateId`| Permissions template ID                                                     | `undefined`                  | `string`                       | No        |
+| `vehicles`            | List of vehicles                                                            | `undefined`                  | `string[]`                     | No        |
+| `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                  | `string[]`                     | No        |
+| `expirationDate`      | Expiration date for permissions                                             | `undefined`                  | `string`                       | No        |
+| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Manage DIMO Account"`      | `string`                       | No        |
+| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Continue with DIMO"`       | `string`                       | No        |
+| `utm`                 | UTM parameters for tracking (a query string)                                                | `null`                       | `string`                       | No        |
+
+### ShareVehiclesWithDimo
+
+The `ShareVehiclesWithDimo` component allows users to share their vehicles data with DIMO.
+
+| Parameter             | Description                                                                 | Default Value                           | Type                           | Mandatory |
+|-----------------------|-----------------------------------------------------------------------------|-----------------------------------------|--------------------------------|-----------|
+| `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                     | `"popup" \| "redirect"`        | Yes       |
+| `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
+| `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
+| `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
+| `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
+| `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
+| `expirationDate`      | Expiration date for permissions                                             | `undefined`                             | `string`                       | No        |
+| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
+| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
+| `utm`                 | UTM parameters for tracking (a query string)                                                 | `null`                                  | `string`                       | No        |
+
+### ExecuteAdvancedTransactionWithDimo
+
+The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advanced web3 transactions with DIMO.
+
+| Parameter             | Description                                                                 | Default Value                                | Type                             | Mandatory |
+|-----------------------|-----------------------------------------------------------------------------|----------------------------------------------|----------------------------------|-----------|
+| `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                          | `"popup" \| "redirect"`          | Yes       |
+| `onSuccess`           | Callback function to handle success                                         | N/A                                          | `(transactionData: any) => void` | Yes       |
+| `onError`             | Callback function to handle errors                                          | N/A                                          | `(error: Error) => void`         | Yes       |
+| `address`             | Address for the transaction                                                 | N/A                                          | `string`                         | Yes       |
+| `value`               | Value for the transaction                                                   | `""`                                         | `string`                         | No        |
+| `abi`                 | ABI for the transaction                                                     | N/A                                          | `any`                            | Yes       |
+| `functionName`        | Function name for the transaction                                           | N/A                                          | `string`                         | Yes       |
+| `args`                | Arguments for the transaction                                               | N/A                                          | `string[]`                       | Yes       |
+| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
+| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |

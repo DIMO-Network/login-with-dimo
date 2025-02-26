@@ -1,19 +1,16 @@
 import React from 'react';
-import BaseDimoButton from './BaseDimoButton';
-import { EntryState } from '@enums/globalEnums';
-import { LoginMode } from '@dimo-types/LoginMode';
 
-interface LoginWithDimoProps {
-  mode: LoginMode;
-  onSuccess: (authData: { token: string }) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
-  permissionTemplateId?: string; // Optional: Permissions template
-  vehicles?: string[]; // Optional: List of vehicles
-  vehicleMakes?: string[];
-  expirationDate?: string;
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
+import {
+  DynamicButtonLabels,
+  BaseButtonProps,
+  BaseLoginButtonProps,
+} from '@dimo-types/index';
+
+type LoginWithDimoProps = BaseButtonProps &
+  BaseLoginButtonProps &
+  DynamicButtonLabels;
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   mode,
@@ -25,6 +22,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   expirationDate,
   authenticatedLabel = 'Manage DIMO Account',
   unAuthenticatedLabel = 'Continue with DIMO',
+  utm = null,
 }) => {
   return (
     <BaseDimoButton
@@ -45,7 +43,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         vehicles,
         vehicleMakes,
         expirationDate,
-        eventType: 'SHARE_VEHICLES_DATA',
+        eventType: EventTypes.SHARE_VEHICLES_DATA,
+        utm,
       }}
     />
   );
