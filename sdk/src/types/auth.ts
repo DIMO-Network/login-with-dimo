@@ -1,10 +1,11 @@
-import { EntryState } from '@enums/index';
+import { EntryState, EventTypes } from '@enums/index';
 import { TransactionData } from './';
 
 export interface AuthData {
   token: string;
   transactionHash?: string;
   transactionReceipt?: any;
+  sharedVehicles?: string[];
 }
 
 export interface BasePayload extends BasePayloadParams {
@@ -22,11 +23,12 @@ export interface BasePayloadParams {
   apiKey?: string; // Avoid sending API key in the URL
 }
 
-export interface RedirectAuth {
-  permissionTemplateId?: string; // Optional: Permissions template
-  vehicles?: string[]; // Optional: List of vehicles
+export type DimoActionPayload = {
+  eventType: EventTypes;
+  permissionTemplateId?: string;
+  vehicles?: string[];
   vehicleMakes?: string[];
   expirationDate?: string;
   utm?: string | null;
   transactionData?: TransactionData | string;
-}
+};

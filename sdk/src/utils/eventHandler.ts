@@ -88,7 +88,7 @@ export const handleMessageForPopup = (
       }
 
       if (eventType === data.eventType) {
-        const dataMessage = { ...data, eventType: data.eventType };
+        const dataMessage = { ...data, eventType: data.eventType }; //Data should already have event type if I understand correctly
         sendMessageToTarget(popup, dataMessage, expectedOrigin, onError);
       }
 

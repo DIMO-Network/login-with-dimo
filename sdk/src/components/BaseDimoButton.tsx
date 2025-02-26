@@ -15,14 +15,14 @@ import {
   BaseButtonProps,
   BaseLoginButtonProps,
   BasePayload,
-  RedirectAuth,
+  DimoActionPayload,
 } from '@dimo-types/index';
 
 interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
   entryState: EntryState;
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
-  payload: RedirectAuth | { eventType: EventTypes }; // Dynamic payload object
+  payload: DimoActionPayload
 }
 
 type BaseDimoButtonProps = BaseDimoButtonOptions &
@@ -67,7 +67,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
         popupAuth(basePayload, payload);
         break;
       case 'redirect':
-        redirectAuth(basePayload, payload as RedirectAuth);
+        redirectAuth(basePayload, payload);
         break;
       default:
         console.error('Unsupported mode for button click');
