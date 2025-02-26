@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 
-import BaseDimoButton from "./BaseDimoButton";
-import { EntryState, EventTypes } from "../enums";
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
 import {
   TransactionData,
   BaseButtonProps,
   ExecuteAdvancedTransactionButtonProps,
   DynamicButtonLabels,
-} from "../types";
+} from '@dimo-types/index';
 
 type ExecuteAdvancedTransactionProps = BaseButtonProps &
   ExecuteAdvancedTransactionButtonProps &
@@ -16,24 +16,24 @@ type ExecuteAdvancedTransactionProps = BaseButtonProps &
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
 > = ({
-  mode,
-  onSuccess,
-  onError,
-  address,
-  value,
   abi,
-  functionName,
-  args,
-  authenticatedLabel = "Execute Advanced Transaction with Dimo",
-  unAuthenticatedLabel = "Sign in to Execute Transaction",
+  address,
   altTitle,
+  args,
+  authenticatedLabel = 'Execute Advanced Transaction with Dimo',
+  functionName,
+  mode,
+  onError,
+  onSuccess,
+  unAuthenticatedLabel = 'Sign in to Execute Transaction',
+  value,
 }) => {
   if (!address || !abi || !functionName || !args) {
-    throw new Error("Missing required transaction parameters.");
+    throw new Error('Missing required transaction parameters.');
   }
   const transactionData: TransactionData = {
     address,
-    value: value ? value : "", // BigInt to string
+    value: value ? value : '', // BigInt to string
     abi,
     functionName,
     args,

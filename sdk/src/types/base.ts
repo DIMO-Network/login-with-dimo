@@ -1,8 +1,9 @@
-import { AuthData } from "./";
+import { AuthData } from './';
+import { LoginMode } from './';
 
 export interface BaseButtonProps {
   altTitle?: boolean;
-  mode: "popup" | "embed" | "redirect";
+  mode: LoginMode;
   onError: (error: Error) => void; // Error callback
   onSuccess: (authData: AuthData) => void; // Success callback
 }

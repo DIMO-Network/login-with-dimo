@@ -1,5 +1,5 @@
-import { BasePayload } from "../types";
-import { handleMessageForEmbed } from "../utils/eventHandler";
+import { BasePayload } from '@dimo-types/index';
+import { handleMessageForEmbed } from '@utils/eventHandler';
 
 export const embedAuth = (
   basePayload: BasePayload,

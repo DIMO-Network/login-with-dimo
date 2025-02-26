@@ -1,28 +1,28 @@
-import React from "react";
+import React from 'react';
 
-import BaseDimoButton from "./BaseDimoButton";
-import { EntryState, EventTypes } from "../enums";
+import BaseDimoButton from './BaseDimoButton';
+import { EntryState, EventTypes } from '@enums/index';
 import {
   DynamicButtonLabels,
   BaseButtonProps,
   BaseLoginButtonProps,
-} from "../types";
+} from '@dimo-types/index';
 
 type LoginWithDimoProps = BaseButtonProps &
   BaseLoginButtonProps &
   DynamicButtonLabels;
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
-  mode,
-  onSuccess,
-  onError,
-  permissionTemplateId,
-  vehicles,
-  vehicleMakes,
-  expirationDate,
-  authenticatedLabel = "Manage DIMO Account",
-  unAuthenticatedLabel = "Continue with DIMO",
   altTitle,
+  authenticatedLabel = 'Manage DIMO Account',
+  expirationDate,
+  mode,
+  onError,
+  onSuccess,
+  permissionTemplateId,
+  unAuthenticatedLabel = 'Continue with DIMO',
+  vehicleMakes,
+  vehicles,
 }) => {
   return (
     <BaseDimoButton

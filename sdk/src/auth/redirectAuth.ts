@@ -2,10 +2,10 @@ import {
   BasePayload,
   BasePayloadParams,
   TransactionData,
-  RedirectAuth,
-} from "../types";
+  DimoActionPayload,
+} from '@dimo-types/index';
 
-type RedirectAuthData = BasePayloadParams & RedirectAuth;
+type RedirectAuthData = BasePayloadParams & DimoActionPayload;
 
 const appendParams = (
   params: URLSearchParams,
@@ -32,9 +32,10 @@ const addParams = (
 };
 
 const transformTransactionData = (
-  transactionData: TransactionData | undefined
+  transactionData: TransactionData | string | undefined
 ) => {
   if (!transactionData) return undefined;
+  if (typeof transactionData === 'string') return transactionData;
 
   const serializedTransactionData = encodeURIComponent(
     JSON.stringify(transactionData)
@@ -42,7 +43,7 @@ const transformTransactionData = (
 
   if (serializedTransactionData.length > 1000) {
     console.warn(
-      "Serialized transactionData is too large for a URL parameter."
+      'Serialized transactionData is too large for a URL parameter.'
     );
     return undefined;
   }
@@ -50,28 +51,28 @@ const transformTransactionData = (
   return serializedTransactionData;
 };
 
-export const redirectAuth = (payload: BasePayload, data: RedirectAuth = {}) => {
+export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
-  const baseData = {
+  const baseData: RedirectAuthData = {
     ...payload,
     ...data,
     transactionData: transformTransactionData(data.transactionData),
-  } as RedirectAuthData;
+  };
 
   const params = new URLSearchParams();
 
   addParams(baseData, params, [
-    "altTitle",
-    "clientId",
-    "entryState",
-    "expirationDate",
-    "forceEmail",
-    "permissionTemplateId",
-    "redirectUri",
-    "transactionData",
-    "vehicleMakes",
-    "vehicles",
+    'altTitle',
+    'clientId',
+    'entryState',
+    'expirationDate',
+    'forceEmail',
+    'permissionTemplateId',
+    'redirectUri',
+    'transactionData',
+    'vehicleMakes',
+    'vehicles',
   ]);
 
   // Construct the full URL
