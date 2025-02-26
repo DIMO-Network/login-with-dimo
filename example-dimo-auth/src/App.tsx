@@ -12,8 +12,7 @@ import { sampleAbi } from './abi/sample-abi';
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
   const [forceEmail, setForceEmail] = useState(false);
-  const { isAuthenticated, email, walletAddress } =
-    useDimoAuthState();
+  const { isAuthenticated, email, walletAddress } = useDimoAuthState();
 
   const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
 
@@ -75,6 +74,8 @@ function App() {
             onError={(error: any) => console.error('Error:', error)}
             permissionTemplateId={permissionsEnabled ? '2' : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
+            utm="MOIZ"
+            // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
           />
@@ -114,6 +115,7 @@ function App() {
             onSuccess={(authData: any) => console.log('Success:', authData)}
             onError={(error: any) => console.error('Error:', error)}
             permissionTemplateId={permissionsEnabled ? '1' : undefined}
+            utm="dimo"
           />
 
           {isAuthenticated && (

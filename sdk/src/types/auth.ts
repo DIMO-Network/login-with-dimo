@@ -1,4 +1,4 @@
-import { EntryState, EventTypes } from '../enums';
+import { EntryState, EventTypes } from '@enums/index';
 import { TransactionData } from './';
 
 export interface AuthData {
@@ -29,5 +29,6 @@ export type DimoActionPayload = {
   vehicles?: string[];
   vehicleMakes?: string[];
   expirationDate?: string;
+  utm?: string | null;
   transactionData?: TransactionData | string;
 };
