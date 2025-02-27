@@ -13,15 +13,16 @@ type ShareVehiclesWithDimoProps = BaseButtonProps &
   DynamicButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
-  mode,
-  onSuccess,
-  onError,
-  permissionTemplateId,
-  vehicles,
-  vehicleMakes,
-  expirationDate,
+  altTitle,
   authenticatedLabel = 'Share Vehicles with DIMO',
+  expirationDate,
+  mode,
+  onError,
+  onSuccess,
+  permissionTemplateId,
   unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
+  vehicleMakes,
+  vehicles,
   utm = null,
 }) => {
   return (
@@ -33,6 +34,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
+      altTitle={altTitle}
       payload={{
         permissionTemplateId,
         vehicles,

@@ -63,6 +63,7 @@ export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
   const params = new URLSearchParams();
 
   addParams(baseData, params, [
+    'altTitle',
     'clientId',
     'entryState',
     'expirationDate',

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './App.css';
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
@@ -7,7 +6,9 @@ import {
   initializeDimoSDK,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
+
 import { sampleAbi } from './abi/sample-abi';
+import './App.css';
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
@@ -78,6 +79,8 @@ function App() {
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
 
           {isAuthenticated && (
@@ -87,6 +90,7 @@ function App() {
                 onSuccess={(authData: any) => console.log('Success:', authData)}
                 onError={(error: any) => console.error('Error:', error)}
                 permissionTemplateId={'2'}
+                // altTitle={true}
               />
 
               <ExecuteAdvancedTransactionWithDimo
@@ -103,6 +107,7 @@ function App() {
                 abi={sampleAbi}
                 functionName="transfer"
                 args={['0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1', '0']}
+                // altTitle={true}
               />
             </>
           )}
@@ -115,6 +120,7 @@ function App() {
             onSuccess={(authData: any) => console.log('Success:', authData)}
             onError={(error: any) => console.error('Error:', error)}
             permissionTemplateId={permissionsEnabled ? '1' : undefined}
+            // altTitle={true}
             utm="dimo"
           />
 
@@ -126,6 +132,7 @@ function App() {
               permissionTemplateId={'2'}
               expirationDate={sampleExpirationDate.toISOString()}
               vehicles={['752', '742']}
+              // altTitle={true}
             />
           )}
 
@@ -142,6 +149,8 @@ function App() {
             args={['0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1', '0']}
             authenticatedLabel="Execute Transaction"
             unAuthenticatedLabel="Sign In to Execute Transaction with DIMO"
+            // Optional: Change the sign in title to the alternative text
+            // altTitle={true}
           />
         </div>
       </header>
