@@ -23,6 +23,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   unAuthenticatedLabel = 'Continue with DIMO',
   vehicleMakes,
   vehicles,
+  utm = null,
 }) => {
   return (
     <BaseDimoButton
@@ -45,6 +46,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         vehicleMakes,
         expirationDate,
         eventType: EventTypes.SHARE_VEHICLES_DATA,
+        utm,
       }}
     />
   );

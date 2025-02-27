@@ -71,6 +71,7 @@ export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
     'permissionTemplateId',
     'redirectUri',
     'transactionData',
+    'utm',
     'vehicleMakes',
     'vehicles',
   ]);

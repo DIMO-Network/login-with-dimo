@@ -75,6 +75,8 @@ function App() {
             onError={(error: any) => console.error('Error:', error)}
             permissionTemplateId={permissionsEnabled ? '2' : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
+            utm="MOIZ"
+            // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}
             // Optional: Change the sign in title to the alternative text
@@ -119,6 +121,7 @@ function App() {
             onError={(error: any) => console.error('Error:', error)}
             permissionTemplateId={permissionsEnabled ? '1' : undefined}
             // altTitle={true}
+            utm="dimo"
           />
 
           {isAuthenticated && (

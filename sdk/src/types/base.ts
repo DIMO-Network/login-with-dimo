@@ -18,6 +18,7 @@ export interface BaseLoginButtonProps {
   vehicles?: string[]; // Optional: List of vehicles
   vehicleMakes?: string[];
   expirationDate?: string;
+  utm?: string | null;
 }
 
 export interface ExecuteAdvancedTransactionButtonProps {
