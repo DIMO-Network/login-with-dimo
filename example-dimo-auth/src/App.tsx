@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './App.css';
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
@@ -7,7 +6,9 @@ import {
   initializeDimoSDK,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
+
 import { sampleAbi } from './abi/sample-abi';
+import './App.css';
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);

@@ -15,12 +15,13 @@ export interface BasePayload extends BasePayloadParams {
 }
 
 export interface BasePayloadParams {
-  entryState: EntryState;
-  dimoLogin: string;
-  forceEmail: boolean;
-  clientId?: string;
-  redirectUri?: string;
+  altTitle?: boolean;
   apiKey?: string; // Avoid sending API key in the URL
+  clientId?: string;
+  dimoLogin: string;
+  entryState: EntryState;
+  forceEmail: boolean;
+  redirectUri?: string;
 }
 
 export type DimoActionPayload = {

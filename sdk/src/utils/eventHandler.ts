@@ -50,14 +50,15 @@ export const handleMessageForPopup = (
   popup: Window | null
 ) => {
   const {
-    entryState,
-    onSuccess,
-    onError,
-    setAuthenticated,
-    clientId,
-    redirectUri,
+    altTitle,
     apiKey,
+    clientId,
+    entryState,
     forceEmail,
+    onError,
+    onSuccess,
+    redirectUri,
+    setAuthenticated,
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -77,12 +78,13 @@ export const handleMessageForPopup = (
     if (mode === 'popup') {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
-          clientId,
-          redirectUri,
+          altTitle,
           apiKey,
+          clientId,
           entryState,
-          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
+          forceEmail,
+          redirectUri,
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
@@ -124,21 +126,22 @@ export const handleMessageForPopup = (
 // Embed Handler
 export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
   const {
-    entryState,
-    onSuccess,
-    onError,
-    setAuthenticated,
-    clientId,
-    redirectUri,
+    altTitle,
     apiKey,
+    clientId,
     dimoLogin,
+    entryState,
     forceEmail,
+    onError,
+    onSuccess,
+    redirectUri,
+    setAuthenticated,
   } = basePayload;
 
   const embedListener = (event: MessageEvent) => {
     if (!validateOrigin(event.origin, dimoLogin)) return;
 
-    const iframe = document.getElementById('dimo-iframe');
+    const iframe = document.getElementById('dimo-iframe') as HTMLIFrameElement;
 
     const {
       eventType,
@@ -154,12 +157,13 @@ export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
     if (mode === 'embed') {
       if (eventType === MessageEventType.READY) {
         const initialMessage = {
-          clientId,
-          redirectUri,
+          altTitle,
           apiKey,
+          clientId,
           entryState,
-          forceEmail,
           eventType: MessageEventType.AUTH_INIT,
+          forceEmail,
+          redirectUri,
         };
 
         sendMessageToTarget(

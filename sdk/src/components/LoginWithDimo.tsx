@@ -13,15 +13,16 @@ type LoginWithDimoProps = BaseButtonProps &
   DynamicButtonLabels;
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
-  mode,
-  onSuccess,
-  onError,
-  permissionTemplateId,
-  vehicles,
-  vehicleMakes,
-  expirationDate,
+  altTitle,
   authenticatedLabel = 'Manage DIMO Account',
+  expirationDate,
+  mode,
+  onError,
+  onSuccess,
+  permissionTemplateId,
   unAuthenticatedLabel = 'Continue with DIMO',
+  vehicleMakes,
+  vehicles,
   utm = null,
 }) => {
   return (
@@ -38,6 +39,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       } // Dynamic label based on auth state
       disableIfAuthenticated={false} // Disable button when authenticated
+      altTitle={altTitle}
       payload={{
         permissionTemplateId,
         vehicles,

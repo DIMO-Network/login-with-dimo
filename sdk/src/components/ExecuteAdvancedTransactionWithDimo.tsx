@@ -16,16 +16,17 @@ type ExecuteAdvancedTransactionProps = BaseButtonProps &
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps
 > = ({
-  mode,
-  onSuccess,
-  onError,
-  address,
-  value,
   abi,
-  functionName,
+  address,
+  altTitle,
   args,
   authenticatedLabel = 'Execute Advanced Transaction with Dimo',
+  functionName,
+  mode,
+  onError,
+  onSuccess,
   unAuthenticatedLabel = 'Sign in to Execute Transaction',
+  value,
 }) => {
   if (!address || !abi || !functionName || !args) {
     throw new Error('Missing required transaction parameters.');
@@ -47,6 +48,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
+      altTitle={altTitle}
       payload={{
         transactionData,
         eventType: EventTypes.EXECUTE_ADVANCED_TRANSACTION,
