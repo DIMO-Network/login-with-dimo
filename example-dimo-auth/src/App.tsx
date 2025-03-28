@@ -87,6 +87,7 @@ function App() {
                 onSuccess={(authData: any) => console.log('Success:', authData)}
                 onError={(error: any) => console.error('Error:', error)}
                 permissionTemplateId={'2'}
+                onboarding={[]}
               />
 
               <ExecuteAdvancedTransactionWithDimo
@@ -126,6 +127,7 @@ function App() {
               permissionTemplateId={'2'}
               expirationDate={sampleExpirationDate.toISOString()}
               vehicles={['752', '742']}
+              onboarding={["tesla"]}
             />
           )}
 
