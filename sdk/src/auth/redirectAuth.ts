@@ -72,6 +72,7 @@ export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
     'transactionData',
     'utm',
     'vehicleMakes',
+    'onboarding',
     'vehicles',
   ]);
 
