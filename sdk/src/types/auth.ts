@@ -28,6 +28,7 @@ export type DimoActionPayload = {
   permissionTemplateId?: string;
   vehicles?: string[];
   vehicleMakes?: string[];
+  onboarding?: string[];
   expirationDate?: string;
   utm?: string | null;
   transactionData?: TransactionData | string;
