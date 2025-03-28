@@ -97,8 +97,9 @@ import {
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
             utm="utm_campaign=dimo"
-            // Optionally, specify vehicles (uncomment the line below to use it)
+            // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
+            // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
           />
 
           <ShareVehiclesWithDimo
@@ -107,8 +108,9 @@ import {
             onError={(error) => console.error("Error:", error)}
             permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
             //expirationDate={} //OPTIONAL ISO STRING
-            // Optionally, specify vehicles (uncomment the line below to use it)
+            // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
             // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
+            // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
           />
 
         <ExecuteAdvancedTransactionWithDimo
@@ -210,6 +212,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `permissionTemplateId`| Permissions template ID                                                     | `undefined`                  | `string`                       | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                  | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                  | `string[]`                     | No        |
+| `onboarding`        | List of oracles for onboarding                                                       | `undefined`                  | `string[]`                     | No        |
 | `expirationDate`      | Expiration date for permissions                                             | `undefined`                  | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Manage DIMO Account"`      | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Continue with DIMO"`       | `string`                       | No        |
@@ -227,6 +230,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
+| `onboarding`        | List of oracles for onboarding                                                       | `undefined`                  | `string[]`                     | No        |
 | `expirationDate`      | Expiration date for permissions                                             | `undefined`                             | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |

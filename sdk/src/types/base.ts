@@ -16,6 +16,7 @@ export interface BaseLoginButtonProps {
   permissionTemplateId?: string; // Optional: Permissions template
   vehicles?: string[]; // Optional: List of vehicles
   vehicleMakes?: string[];
+  onboarding?: string[];
   expirationDate?: string;
   utm?: string | null;
 }
