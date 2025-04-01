@@ -24,6 +24,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   authenticatedLabel = 'Manage DIMO Account',
   unAuthenticatedLabel = 'Continue with DIMO',
   utm = null,
+  altTitle,
 }) => {
   return (
     <BaseDimoButton
@@ -39,6 +40,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       } // Dynamic label based on auth state
       disableIfAuthenticated={false} // Disable button when authenticated
+      altTitle={altTitle}
       payload={{
         permissionTemplateId,
         vehicles,

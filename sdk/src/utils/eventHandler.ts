@@ -58,6 +58,7 @@ export const handleMessageForPopup = (
     redirectUri,
     apiKey,
     forceEmail,
+    altTitle,
   } = basePayload;
 
   const popupListener = (event: MessageEvent) => {
@@ -83,6 +84,7 @@ export const handleMessageForPopup = (
           entryState,
           forceEmail,
           eventType: MessageEventType.AUTH_INIT,
+          altTitle
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
