@@ -21,6 +21,7 @@ export interface BasePayloadParams {
   clientId?: string;
   redirectUri?: string;
   apiKey?: string; // Avoid sending API key in the URL
+  altTitle?: boolean;
 }
 
 export type DimoActionPayload = {

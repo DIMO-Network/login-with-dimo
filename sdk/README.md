@@ -217,6 +217,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Manage DIMO Account"`      | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Continue with DIMO"`       | `string`                       | No        |
 | `utm`                 | UTM parameters for tracking (a query string)                                                | `null`                       | `string`                       | No        |
+| `altTitle` | Alternative title for the button | `false` | `boolean` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -235,6 +236,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
 | `utm`                 | UTM parameters for tracking (a query string)                                                 | `null`                                  | `string`                       | No        |
+| `altTitle` | Alternative title for the button | `false` | `boolean` | No |
 
 ### ExecuteAdvancedTransactionWithDimo
 
@@ -252,3 +254,4 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `args`                | Arguments for the transaction                                               | N/A                                          | `string[]`                       | Yes       |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
+| `altTitle` | Alternative title for the button | `false` | `boolean` | No |

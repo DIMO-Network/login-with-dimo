@@ -75,6 +75,7 @@ function App() {
             permissionTemplateId={permissionsEnabled ? '2' : undefined}
             unAuthenticatedLabel="Sign In with DIMO"
             utm="MOIZ"
+            altTitle={true}
             // Optionally, specify vehicles (uncomment the line below to use it)
             // vehicles={["752", "742", "738", "722"]}
             // vehicles={["585","586"]}

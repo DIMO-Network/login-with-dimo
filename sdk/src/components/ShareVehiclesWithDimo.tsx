@@ -24,6 +24,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   authenticatedLabel = 'Share Vehicles with DIMO',
   unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
   utm = null,
+  altTitle,
 }) => {
   return (
     <BaseDimoButton
@@ -34,6 +35,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
+      altTitle={altTitle}
       payload={{
         permissionTemplateId,
         vehicles,

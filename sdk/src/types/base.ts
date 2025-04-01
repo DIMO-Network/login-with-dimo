@@ -3,6 +3,7 @@ import { LoginMode } from './';
 
 export interface BaseButtonProps {
   mode: LoginMode;
+  altTitle?: boolean;
   onSuccess: (authData: AuthData) => void; // Success callback
   onError: (error: Error) => void; // Error callback
 }
