@@ -22,7 +22,7 @@ interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
   entryState: EntryState;
   disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
-  payload: DimoActionPayload
+  payload: DimoActionPayload;
 }
 
 type BaseDimoButtonProps = BaseDimoButtonOptions &
@@ -35,6 +35,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   onError,
   buttonLabel,
   disableIfAuthenticated = false,
+  altTitle = false,
   payload,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
@@ -54,6 +55,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     onSuccess,
     onError,
     setAuthenticated,
+    altTitle,
     dimoLogin,
     clientId,
     redirectUri,
