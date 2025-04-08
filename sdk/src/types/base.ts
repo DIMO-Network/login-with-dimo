@@ -20,6 +20,7 @@ export interface BaseLoginButtonProps {
   onboarding?: string[];
   expirationDate?: string;
   utm?: string | null;
+  powertrainTypes?: string[];
 }
 
 export interface ExecuteAdvancedTransactionButtonProps {
