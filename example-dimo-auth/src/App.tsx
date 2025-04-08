@@ -109,7 +109,6 @@ const Examples = (props: Props) => {
             onSuccess={onSuccess}
             onError={onError}
             authenticatedLabel={'Connect a Tesla'}
-            unauthenticatedLabel={'Connect a Tesla'}
             permissionTemplateId={'2'}
             onboarding={['tesla']}
           />
@@ -117,10 +116,17 @@ const Examples = (props: Props) => {
             mode={loginType}
             onSuccess={onSuccess}
             onError={onError}
-            authenticatedLabel={'Connect to ICE vehicles only'}
-            unauthenticatedLabel={'Connect to ICE vehicles only'}
+            authenticatedLabel={'Share ICE vehicles only'}
             permissionTemplateId={'2'}
             powertrainTypes={['ICE']}
+          />
+          <ShareVehiclesWithDimo
+            mode={loginType}
+            onSuccess={onSuccess}
+            onError={onError}
+            authenticatedLabel={'Share BEV vehicles only'}
+            permissionTemplateId={'2'}
+            powertrainTypes={['BEV']}
           />
           <AdvancedTransactionButton loginType={loginType} />
         </>
