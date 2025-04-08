@@ -204,20 +204,21 @@ initializeDimoSDK({
 
 The `LoginWithDimo` component allows users to authenticate with DIMO.
 
-| Parameter             | Description                                                                 | Default Value                | Type                           | Mandatory |
-|-----------------------|-----------------------------------------------------------------------------|------------------------------|--------------------------------|-----------|
-| `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                          | `"popup" \| "redirect"`        | Yes       |
-| `onSuccess`           | Callback function to handle success                                         | N/A                          | `(authData: AuthData) => void` | Yes       |
-| `onError`             | Callback function to handle errors                                          | N/A                          | `(error: Error) => void`       | Yes       |
-| `permissionTemplateId`| Permissions template ID                                                     | `undefined`                  | `string`                       | No        |
-| `vehicles`            | List of vehicles                                                            | `undefined`                  | `string[]`                     | No        |
-| `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                  | `string[]`                     | No        |
-| `onboarding`        | List of oracles for onboarding                                                       | `undefined`                  | `string[]`                     | No        |
-| `expirationDate`      | Expiration date for permissions                                             | `undefined`                  | `string`                       | No        |
-| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Manage DIMO Account"`      | `string`                       | No        |
-| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Continue with DIMO"`       | `string`                       | No        |
-| `utm`                 | UTM parameters for tracking (a query string)                                                | `null`                       | `string`                       | No        |
-| `altTitle` | Alternative title for the button | `false` | `boolean` | No |
+| Parameter              | Description                                  | Default Value                | Type                           | Mandatory |
+|------------------------|----------------------------------------------|------------------------------|--------------------------------|-----------|
+| `mode`                 | Mode of the button (`popup`, `redirect`)     | N/A                          | `"popup" \| "redirect"`        | Yes       |
+| `onSuccess`            | Callback function to handle success          | N/A                          | `(authData: AuthData) => void` | Yes       |
+| `onError`              | Callback function to handle errors           | N/A                          | `(error: Error) => void`       | Yes       |
+| `permissionTemplateId` | Permissions template ID                      | `undefined`                  | `string`                       | No        |
+| `vehicles`             | List of vehicles                             | `undefined`                  | `string[]`                     | No        |
+| `vehicleMakes`         | List of vehicle makes                        | `undefined`                  | `string[]`                     | No        |
+| `powertrainTypes`      | List of vehicle powertrain types             | `undefined`                  | `string[]`                     | No        |
+| `onboarding`           | List of oracles for onboarding               | `undefined`                  | `string[]`                     | No        |
+| `expirationDate`       | Expiration date for permissions              | `undefined`                  | `string`                       | No        |
+| `authenticatedLabel`   | Label when the user is authenticated         | `"Manage DIMO Account"`      | `string`                       | No        |
+| `unAuthenticatedLabel` | Label when the user is not authenticated     | `"Continue with DIMO"`       | `string`                       | No        |
+| `utm`                  | UTM parameters for tracking (a query string) | `null`                       | `string`                       | No        |
+| `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -231,6 +232,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
+| `powertrainTypes`      | List of vehicle powertrain types             | `undefined`                  | `string[]`                     | No        |
 | `onboarding`        | List of oracles for onboarding                                                       | `undefined`                  | `string[]`                     | No        |
 | `expirationDate`      | Expiration date for permissions                                             | `undefined`                             | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
