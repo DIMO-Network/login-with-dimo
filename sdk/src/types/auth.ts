@@ -33,4 +33,5 @@ export type DimoActionPayload = {
   expirationDate?: string;
   utm?: string | null;
   transactionData?: TransactionData | string;
+  powertrainTypes?: string[];
 };
