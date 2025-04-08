@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  overflow: scroll;
 }
 
 .App-logo {
@@ -22,6 +23,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-bottom: 48px;
 }
 
 .App-link {

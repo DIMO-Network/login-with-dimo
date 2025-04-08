@@ -75,6 +75,7 @@ export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
     'vehicleMakes',
     'onboarding',
     'vehicles',
+    'powertrainTypes'
   ]);
 
   // Construct the full URL
