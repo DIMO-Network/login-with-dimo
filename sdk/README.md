@@ -257,3 +257,29 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
 | `altTitle` | Alternative title for the button | `false` | `boolean` | No |
+
+### LogoutWithDimo
+
+The `LogoutWithDimo` component allows users to log out of their DIMO session. It clears the session data, including cookies and local storage, and updates the authentication state.
+
+#### Example Usage
+
+```jsx
+import { LogoutWithDimo } from "@dimo-network/login-with-dimo";
+
+<LogoutWithDimo
+  mode="popup" // or "redirect"
+  onSuccess={() => console.log('Logged out successfully')}
+  onError={(error) => console.error('Logout error:', error)}
+/>
+```
+
+#### Parameters
+
+| Parameter   | Type       | Description                                      |
+|-------------|------------|--------------------------------------------------|
+| `mode`      | `string`   | The mode of the button (`popup` or `redirect`). |
+| `onSuccess` | `function` | Callback function triggered on successful logout.|
+| `onError`   | `function` | Callback function triggered on logout error.     |
+
+This component is fully configurable and integrates seamlessly with the SDK.

@@ -1,5 +1,6 @@
 // DimoAuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import {
   getEmailFromLocalStorage,
   getJWTFromCookies,
@@ -59,14 +60,21 @@ export const DimoAuthProvider = ({
   };
 
   useEffect(() => {
-    if (getValidJWT()) {
+    const jwt = getValidJWT();
+    if (jwt) {
       setAuthenticated(true);
     }
   }, []);
 
   return (
     <DimoAuthContext.Provider
-      value={{ isAuthenticated, getValidJWT, email, getEmail, walletAddress }}
+      value={{
+        isAuthenticated,
+        getValidJWT,
+        email,
+        getEmail,
+        walletAddress,
+      }}
     >
       <DimoAuthUpdaterContext.Provider value={{ setAuthenticated }}>
         {children}
