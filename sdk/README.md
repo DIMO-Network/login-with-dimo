@@ -80,6 +80,8 @@ We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
 
+**Note:** When using redirect mode, it is not possible to retrieve the `email` and `walletAddress` values provided by the [Dimo Auth Provider](#the-dimo-auth-provider). These values are only accessible in popup mode.
+
 ### Using the Button Components
 
 The following example shows all buttons being rendered, with no auth state checking
@@ -91,40 +93,40 @@ import {
   ExecuteAdvancedTransactionWithDimo,
 } from "@dimo-network/login-with-dimo";
 
-          <LoginWithDimo
-            mode="popup"
-            onSuccess={(authData) => console.log("Success:", authData)}
-            onError={(error) => console.error("Error:", error)}
-            permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
-            utm="utm_campaign=dimo"
-            // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
-            // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
-            // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
-          />
+<LoginWithDimo
+  mode="popup"
+  onSuccess={(authData) => console.log("Success:", authData)}
+  onError={(error) => console.error("Error:", error)}
+  permissionTemplateId={permissionsEnabled ? "1" : undefined} //This will control if your users are asked to share vehicles, as part of the login flow. "1" is the template for all SACD permissions
+  utm="utm_campaign=dimo"
+  // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
+  // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
+  // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
+  />
 
-          <ShareVehiclesWithDimo
-            mode="popup"
-            onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
-            onError={(error) => console.error("Error:", error)}
-            permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
-            //expirationDate={} //OPTIONAL ISO STRING
-            // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
-            // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
-            // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
-          />
+<ShareVehiclesWithDimo
+  mode="popup"
+  onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
+  onError={(error) => console.error("Error:", error)}
+  permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
+  //expirationDate={} //OPTIONAL ISO STRING
+  // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
+  // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
+  // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
+  />
 
-        <ExecuteAdvancedTransactionWithDimo
-          mode="popup"
-          onSuccess={(transactionData: any) =>
-            console.log("Success:", transactionHash)
-          }
-          onError={(error: any) => console.error("Error:", error)}
-          address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
-          value="0"
-          abi={sampleAbi} //Some sample ABI required
-          functionName="transfer"
-          args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
-        />
+<ExecuteAdvancedTransactionWithDimo
+  mode="popup"
+  onSuccess={(transactionData: any) =>
+    console.log("Success:", transactionHash)
+  }
+  onError={(error: any) => console.error("Error:", error)}
+  address="0x21cFE003997fB7c2B3cfe5cf71e7833B7B2eCe10"
+  value="0"
+  abi={sampleAbi} //Some sample ABI required
+  functionName="transfer"
+  args={["0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1", "0"]}
+/>
 ```
 
 ### Putting it all together
