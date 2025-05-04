@@ -50,7 +50,9 @@ export const DimoAuthProvider = ({
     if (jwt && !isTokenExpired(jwt)) {
       return jwt;
     }
-    console.warn('Invalid or expired JWT.');
+    if (jwt) {
+      console.warn('Invalid or expired JWT.');
+    }
     return null;
   };
 
