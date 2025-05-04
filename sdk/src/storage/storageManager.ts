@@ -5,7 +5,7 @@
 
 const DEFAULT_COOKIE_EXPIRATION_YEARS = 10; // Default expiration for cookies is 10 years if not specified.
 
-const createCookieString = (
+export const createCookieString = (
   name: string,
   value: string,
   expiresAt?: Date
