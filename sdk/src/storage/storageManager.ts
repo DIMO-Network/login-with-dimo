@@ -24,8 +24,8 @@ export const createCookieString = (
   return cookieString;
 };
 
-export const storeJWTInCookies = (jwt: string, expiresAt?: Date): void => {
-  document.cookie = createCookieString('dimo_auth_token', jwt, expiresAt);
+export const storeJWTInCookies = (jwt: string): void => {
+  document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
 export const storeWalletAddressInLocalStorage = (
