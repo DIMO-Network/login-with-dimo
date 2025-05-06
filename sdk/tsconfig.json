@@ -111,11 +111,12 @@
     "paths": {
       "@auth/*": ["auth/*"],
       "@components/*": ["components/*"],
-      "@enums/*": ["enums/*"],
       "@dimo-types/*": ["types/*"],
-      "@utils/*": ["utils/*"],
+      "@enums/*": ["enums/*"],
+      "@hooks/*": ["hooks/*"],
       "@storage/*": ["storage/*"],
-      "@token/*": ["token/*"]
+      "@token/*": ["token/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": [

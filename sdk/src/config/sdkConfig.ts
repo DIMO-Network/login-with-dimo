@@ -1,8 +1,10 @@
+import { Environment } from '@enums/index';
+
 let sdkConfig: {
   clientId: string;
   redirectUri: string;
   apiKey?: string;
-  environment?: 'development' | 'production';
+  environment?: Environment;
   options?: {
     forceEmail?: boolean;
     // Add more options here in the future, for properties that need to be global
@@ -16,13 +18,13 @@ export const initializeDimoSDK = ({
   clientId,
   redirectUri,
   apiKey = 'some_api_key',
-  environment = 'production',
+  environment = Environment.PRODUCTION,
   options = {}, // ✅ Default to an empty object to prevent undefined issues
 }: {
   clientId: string;
   redirectUri: string;
   apiKey?: string;
-  environment?: 'development' | 'production';
+  environment?: Environment;
   options?: {
     forceEmail?: boolean;
   };
