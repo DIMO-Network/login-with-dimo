@@ -80,8 +80,6 @@ We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
 
-**Note:** When using redirect mode, it is not possible to retrieve the `email` and `walletAddress` values provided by the [Dimo Auth Provider](#the-dimo-auth-provider). These values are only accessible in popup mode.
-
 ### Using the Button Components
 
 The following example shows all buttons being rendered, with no auth state checking

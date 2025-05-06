@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import {
+  useAuthParamsFromURL,
   useLocalStorageData,
   useLogoutFromURL,
-  useTokenFromURL,
 } from '@hooks/index';
 import { getJWTFromCookies } from '@storage/storageManager';
 import { isTokenExpired } from '@token/tokenManager';
@@ -33,7 +33,7 @@ export const DimoAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const { isTokenStored } = useTokenFromURL();
+  const { isTokenStored } = useAuthParamsFromURL();
   const { hasLogoutParam } = useLogoutFromURL();
   const { email, walletAddress } = useLocalStorageData();
 
