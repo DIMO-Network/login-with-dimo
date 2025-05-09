@@ -6,6 +6,7 @@ export enum EntryState {
   ADVANCED_TRANSACTION = 'ADVANCED_TRANSACTION',
   ERROR = 'ERROR',
   LOADING = 'LOADING',
+  LOGOUT = 'LOGOUT',
 }
 
 export enum MessageEventType {
@@ -19,4 +20,10 @@ export enum DimoSDKModes {
   POPUP = 'popup',
   EMBED = 'embed',
   REDIRECT = 'redirect',
+}
+
+export enum Environment {
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+  LOCAL = 'local',
 }

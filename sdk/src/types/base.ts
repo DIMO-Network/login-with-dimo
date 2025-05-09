@@ -8,12 +8,7 @@ export interface BaseButtonProps {
   onError: (error: Error) => void; // Error callback
 }
 
-export interface DynamicButtonLabels {
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
-
-export interface BaseLoginButtonProps {
+export interface LoginButtonProps {
   permissionTemplateId?: string; // Optional: Permissions template
   vehicles?: string[]; // Optional: List of vehicles
   vehicleMakes?: string[];
@@ -21,6 +16,11 @@ export interface BaseLoginButtonProps {
   expirationDate?: string;
   utm?: string | null;
   powertrainTypes?: string[];
+}
+
+export interface DynamicButtonLabels {
+  authenticatedLabel?: string;
+  unAuthenticatedLabel?: string;
 }
 
 export interface ExecuteAdvancedTransactionButtonProps {

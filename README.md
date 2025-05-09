@@ -150,7 +150,6 @@ All SDK components (e.g., <LoginWithDimo />, <ShareVehiclesWithDimo />) follow t
 
 4. Both payloads, are then sent to the respective handlers based on the mode specified in the top-level components (LoginWithDimo, Share etc)
 
-
 ## 🧪 Local Testing Tips
 
-1. Since the redirect flow relies entirely on url Params, it can easily be tested without actually implementing new logic, by simply appending a query param. 
+1. Since the redirect flow relies entirely on url Params, it can easily be tested without actually implementing new logic, by simply appending a query param.

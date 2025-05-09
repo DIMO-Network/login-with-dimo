@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import './App.css';
+
 import {
-  LoginWithDimo,
-  ShareVehiclesWithDimo,
+  DimoSDKModes,
   ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
+  LoginWithDimo,
+  LogoutWithDimo,
+  ShareVehiclesWithDimo,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
+
 import { sampleAbi } from './abi/sample-abi';
+
+import './App.css';
 
 const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
 
@@ -55,15 +60,15 @@ function App() {
           </label>
         </div>
         <UserData />
-        <Examples loginType={'popup'} />
-        <Examples loginType={'redirect'} />
+        <Examples loginType={DimoSDKModes.POPUP} />
+        <Examples loginType={DimoSDKModes.REDIRECT} />
       </header>
     </div>
   );
 }
 
 interface Props {
-  loginType: 'popup' | 'redirect',
+  loginType: DimoSDKModes;
   permissionsEnabled?: string;
 }
 
@@ -76,18 +81,20 @@ const UserData = () => {
       <p>Wallet Address:{walletAddress}</p>
       {!!email && <p>{email}</p>}
     </div>
-  )
-}
+  );
+};
 
 const Examples = (props: Props) => {
-  const {loginType, permissionsEnabled} = props;
+  const { loginType, permissionsEnabled } = props;
   const onSuccess = (data: unknown) => console.log('Success:', data);
   const onError = (error: unknown) => console.log('Error:', error);
   const { isAuthenticated } = useDimoAuthState();
 
   return (
     <div>
-      <h3>{loginType === 'popup' ? 'Popup' : 'Redirect'} Examples</h3>
+      <h3>
+        {loginType === DimoSDKModes.POPUP ? 'Popup' : 'Redirect'} Examples
+      </h3>
       <LoginWithDimo
         mode={loginType}
         onSuccess={onSuccess}
@@ -129,22 +136,23 @@ const Examples = (props: Props) => {
             powertrainTypes={['BEV']}
           />
           <AdvancedTransactionButton loginType={loginType} />
+          <LogoutWithDimo
+            mode={loginType}
+            onSuccess={onSuccess}
+            onError={onError}
+          />
         </>
-
       )}
     </div>
-  )
-}
+  );
+};
 
 const AdvancedTransactionButton = (props: Pick<Props, 'loginType'>) => {
   const onSuccess = (data: any) => {
     console.log(data);
-    console.log(
-      'Transaction Hash:',
-      data.transactionHash,
-    );
-  }
-  const onError = (error: unknown) => console.error('Error:', error)
+    console.log('Transaction Hash:', data.transactionHash);
+  };
+  const onError = (error: unknown) => console.error('Error:', error);
   return (
     <ExecuteAdvancedTransactionWithDimo
       mode={props.loginType}
@@ -155,7 +163,7 @@ const AdvancedTransactionButton = (props: Pick<Props, 'loginType'>) => {
       functionName="transfer"
       args={['0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1', '0']}
     />
-  )
-}
+  );
+};
 
 export default App;

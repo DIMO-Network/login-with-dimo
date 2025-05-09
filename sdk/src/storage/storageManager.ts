@@ -1,21 +1,33 @@
 /**
  * @file storageManager.ts
  * @description This module is responsible for managing JWT tokens.
- * 
- * It handles:
- * Storing tokens (cookies)
- * Retrieving tokens from cookies
- 
  */
 
-export const storeJWTInCookies = (jwt: string): void => {
-  const expirationDate = new Date();
-  expirationDate.setFullYear(expirationDate.getFullYear() + 10); // Set expiration to 10 years in the future
+const DEFAULT_COOKIE_EXPIRATION_YEARS = 10; // Default expiration for cookies is 10 years if not specified.
 
-  document.cookie = `dimo_auth_token=${jwt}; expires=${expirationDate.toUTCString()}; path=/`;
+export const createCookieString = (
+  name: string,
+  value: string,
+  expiresAt?: Date
+): string => {
+  const expirationDate = expiresAt || new Date();
+  if (!expiresAt) {
+    // If no expiration date is provided, cookies are set to expire in 10 years by default.
+    expirationDate.setFullYear(
+      expirationDate.getFullYear() + DEFAULT_COOKIE_EXPIRATION_YEARS
+    );
+  }
+  let cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
+  if (window.location.hostname !== 'localhost') {
+    cookieString += '; SameSite=None; Secure';
+  }
+  return cookieString;
 };
 
-// Utility function to store user properties in localStorage for a given clientId
+export const storeJWTInCookies = (jwt: string): void => {
+  document.cookie = createCookieString('dimo_auth_token', jwt);
+};
+
 export const storeWalletAddressInLocalStorage = (
   walletAddress: string
 ): void => {
@@ -34,17 +46,15 @@ export const getJWTFromCookies = (): string | null => {
 };
 
 export const getWalletAddressFromLocalStorage = (): string | null => {
-  const walletAddress = localStorage.getItem('dimo_wallet_address');
-  return walletAddress;
+  return localStorage.getItem('dimo_wallet_address');
 };
 
 export const getEmailFromLocalStorage = (): string | null => {
-  const email = localStorage.getItem('dimo_user_email');
-  return email;
+  return localStorage.getItem('dimo_user_email');
 };
 
 export const clearSessionData = (): void => {
-  document.cookie = `dimo_auth_token=; Max-Age=0`; // Expire JWT cookie immediately
-  localStorage.removeItem(`dimo_wallet_address`); // Remove user data from localStorage
-  localStorage.removeItem(`dimo_user_email`); // Remove user data from localStorage
+  document.cookie = `dimo_auth_token=; Max-Age=0`;
+  localStorage.removeItem(`dimo_wallet_address`);
+  localStorage.removeItem(`dimo_user_email`);
 };

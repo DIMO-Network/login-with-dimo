@@ -5,11 +5,11 @@ import { EntryState, EventTypes } from '@enums/index';
 import {
   DynamicButtonLabels,
   BaseButtonProps,
-  BaseLoginButtonProps,
+  LoginButtonProps,
 } from '@dimo-types/index';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
-  BaseLoginButtonProps &
+  LoginButtonProps &
   DynamicButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
