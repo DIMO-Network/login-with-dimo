@@ -4,7 +4,7 @@ import { popupAuth } from '@auth/popupAuth';
 import { embedAuth } from '@auth/embedAuth';
 import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
-import { EntryState } from '@enums/index';
+import { EntryState, Environment } from '@enums/index';
 import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
@@ -13,10 +13,11 @@ import {
 } from '@auth/context/DimoAuthContext';
 import {
   BaseButtonProps,
-  BaseLoginButtonProps,
+  LoginButtonProps,
   BasePayload,
   DimoActionPayload,
 } from '@dimo-types/index';
+import { getDimoLoginUrl } from '../utils/url';
 
 interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
@@ -25,8 +26,7 @@ interface BaseDimoButtonOptions extends BaseButtonProps {
   payload: DimoActionPayload;
 }
 
-type BaseDimoButtonProps = BaseDimoButtonOptions &
-  (BaseLoginButtonProps | object);
+type BaseDimoButtonProps = BaseDimoButtonOptions & LoginButtonProps;
 
 const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   mode,
@@ -45,10 +45,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
 
-  const dimoLogin =
-    environment === 'development'
-      ? 'https://login.dev.dimo.org'
-      : 'https://login.dimo.org';
+  const dimoLogin = getDimoLoginUrl(environment!);
 
   const basePayload: BasePayload = {
     entryState,
