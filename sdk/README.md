@@ -28,9 +28,9 @@ import {
 } from "@dimo-network/login-with-dimo";
 
   initializeDimoSDK({
-    clientId: "YOUR CLIENT ID",
-    redirectUri: "YOUR REDIRECT URI",
-    apiKey: "YOUR API KEY",
+    clientId: "YOUR_CLIENT_ID",
+    redirectUri: "YOUR_REDIRECT_URI",
+    apiKey: "YOUR_API_KEY",
     environment: "development" | "production",
   });
 ```
@@ -99,7 +99,7 @@ import {
   utm="utm_campaign=dimo"
   // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
   // vehicles={["585","586"]}  // Specify the vehicles to be accessed after login
-  // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
+  // onboarding={["tesla"]}  // Specify the vehicles to be accessed after login
   />
 
 <ShareVehiclesWithDimo
@@ -107,10 +107,10 @@ import {
   onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
   onError={(error) => console.error("Error:", error)}
   permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
-  //expirationDate={} //OPTIONAL ISO STRING
+  // expirationDate={} // Optional ISO string
   // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
   // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
-  // omboarding={["tesla"]}  // Specify the vehicles to be accessed after login
+  // onboarding={["tesla"]}  // Specify the vehicles to be accessed after login
   />
 
 <ExecuteAdvancedTransactionWithDimo
@@ -138,7 +138,7 @@ A common flow is
 
 This can be achieved by simply wrapping those buttons in a conditional as follows, to create a full example as follows
 
-```
+```javascript
 import {
   LoginWithDimo,
   ShareVehiclesWithDimo,
@@ -171,7 +171,7 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={"1"}
-    //expirationDate={} //OPTIONAL ISO STRING
+    // expirationDate={} // Optional ISO string
   />
 
   <ExecuteAdvancedTransactionWithDimo
@@ -192,7 +192,7 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={permissionsEnabled ? "1" : undefined}
-    //expirationDate={} //OPTIONAL ISO STRING
+    // expirationDate={} // Optional ISO string
     // vehicles={["585","586"]}
   />
 )}

@@ -16,6 +16,7 @@ sdk/dist
 
 # production
 /build
+example-dimo-auth/build
 
 # misc
 .DS_Store
