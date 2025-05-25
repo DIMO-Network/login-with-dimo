@@ -1,5 +1,6 @@
 import { DimoSDKModes } from '@enums/index';
 import type { TransactionReceipt } from './transaction.types';
+import { EventHandlers } from './auth.types';
 
 export interface MessageData {
   eventType: string;
@@ -18,3 +19,9 @@ export interface MessageHandlerConfig {
   origin: string;
   mode: DimoSDKModes;
 }
+
+export type EventHandler = (
+  data: MessageData,
+  handlers: EventHandlers,
+  extraData: Record<string, unknown>
+) => void;

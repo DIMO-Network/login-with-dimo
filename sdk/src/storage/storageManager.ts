@@ -27,13 +27,19 @@ export const storeJWTInCookies = (jwt: string): void => {
   document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
+const isValidCookieStringValue = (str: string): boolean => {
+  return !!str && str !== 'undefined';
+};
+
 export const storeWalletAddressInLocalStorage = (
   walletAddress: string
 ): void => {
+  if (!isValidCookieStringValue(walletAddress)) return;
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
 };
 
 export const storeEmailInLocalStorage = (email: string): void => {
+  if (!isValidCookieStringValue(email)) return;
   localStorage.setItem(`dimo_user_email`, email);
 };
 
