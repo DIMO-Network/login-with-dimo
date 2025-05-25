@@ -1,5 +1,5 @@
 import { MessageEventType } from '@enums/globalEnums';
-import { BasePayload } from '@dimo-types/index';
+import { AuthPayload } from '@dimo-types/index';
 import { logout, processAuthResponse } from './authUtils';
 
 /**
@@ -44,7 +44,7 @@ const sendMessageToTarget = (
 
 // Popup Handler
 export const handleMessageForPopup = (
-  basePayload: BasePayload,
+  basePayload: AuthPayload,
   data: any,
   expectedOrigin: string,
   popup: Window | null
@@ -84,7 +84,7 @@ export const handleMessageForPopup = (
           entryState,
           forceEmail,
           eventType: MessageEventType.AUTH_INIT,
-          altTitle
+          altTitle,
         };
         sendMessageToTarget(popup, initialMessage, expectedOrigin, onError);
       }
@@ -124,7 +124,7 @@ export const handleMessageForPopup = (
 };
 
 // Embed Handler
-export const handleMessageForEmbed = (basePayload: BasePayload, data: any) => {
+export const handleMessageForEmbed = (basePayload: AuthPayload, data: any) => {
   const {
     entryState,
     onSuccess,

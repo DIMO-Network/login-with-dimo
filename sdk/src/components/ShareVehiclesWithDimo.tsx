@@ -3,14 +3,14 @@ import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
-  DynamicButtonLabels,
+  ButtonLabels,
   BaseButtonProps,
   LoginButtonProps,
 } from '@dimo-types/index';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   LoginButtonProps &
-  DynamicButtonLabels;
+  ButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   mode,

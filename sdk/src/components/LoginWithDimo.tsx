@@ -3,14 +3,12 @@ import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
-  DynamicButtonLabels,
+  ButtonLabels,
   BaseButtonProps,
   LoginButtonProps,
 } from '@dimo-types/index';
 
-type LoginWithDimoProps = BaseButtonProps &
-  LoginButtonProps &
-  DynamicButtonLabels;
+type LoginWithDimoProps = BaseButtonProps & LoginButtonProps & ButtonLabels;
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   mode,

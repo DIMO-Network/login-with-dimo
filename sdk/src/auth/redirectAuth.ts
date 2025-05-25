@@ -1,11 +1,12 @@
 import {
-  BasePayload,
-  BasePayloadParams,
+  AuthPayload,
+  BaseAuthParams,
   TransactionData,
   DimoActionPayload,
 } from '@dimo-types/index';
+import { AuthParam } from '@dimo-types/auth';
 
-type RedirectAuthData = BasePayloadParams & DimoActionPayload;
+type RedirectAuthData = BaseAuthParams & DimoActionPayload;
 
 const appendParams = (
   params: URLSearchParams,
@@ -51,7 +52,7 @@ const transformTransactionData = (
   return serializedTransactionData;
 };
 
-export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
+export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
   const baseData: RedirectAuthData = {
@@ -63,19 +64,19 @@ export const redirectAuth = (payload: BasePayload, data: DimoActionPayload) => {
   const params = new URLSearchParams();
 
   addParams(baseData, params, [
-    'altTitle',
-    'clientId',
-    'entryState',
-    'expirationDate',
-    'forceEmail',
-    'permissionTemplateId',
-    'redirectUri',
-    'transactionData',
-    'utm',
-    'vehicleMakes',
-    'onboarding',
-    'vehicles',
-    'powertrainTypes'
+    AuthParam.AltTitle,
+    AuthParam.ClientId,
+    AuthParam.EntryState,
+    AuthParam.ExpirationDate,
+    AuthParam.ForceEmail,
+    AuthParam.PermissionTemplateId,
+    AuthParam.RedirectUri,
+    AuthParam.TransactionData,
+    AuthParam.Utm,
+    AuthParam.VehicleMakes,
+    AuthParam.Onboarding,
+    AuthParam.Vehicles,
+    AuthParam.PowertrainTypes,
   ]);
 
   // Construct the full URL

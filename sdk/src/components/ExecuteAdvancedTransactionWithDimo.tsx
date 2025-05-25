@@ -6,12 +6,12 @@ import {
   TransactionData,
   BaseButtonProps,
   ExecuteAdvancedTransactionButtonProps,
-  DynamicButtonLabels,
+  ButtonLabels,
 } from '@dimo-types/index';
 
 type ExecuteAdvancedTransactionProps = BaseButtonProps &
   ExecuteAdvancedTransactionButtonProps &
-  DynamicButtonLabels;
+  ButtonLabels;
 
 const ExecuteAdvancedTransactionWithDimo: React.FC<
   ExecuteAdvancedTransactionProps

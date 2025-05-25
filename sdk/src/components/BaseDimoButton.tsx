@@ -4,7 +4,7 @@ import { popupAuth } from '@auth/popupAuth';
 import { embedAuth } from '@auth/embedAuth';
 import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
-import { EntryState, Environment } from '@enums/index';
+import { EntryState } from '@enums/index';
 import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
@@ -14,7 +14,7 @@ import {
 import {
   BaseButtonProps,
   LoginButtonProps,
-  BasePayload,
+  AuthPayload,
   DimoActionPayload,
 } from '@dimo-types/index';
 import { getDimoLoginUrl } from '../utils/url';
@@ -47,7 +47,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
 
   const dimoLogin = getDimoLoginUrl(environment!);
 
-  const basePayload: BasePayload = {
+  const basePayload: AuthPayload = {
     entryState,
     onSuccess,
     onError,

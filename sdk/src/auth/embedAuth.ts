@@ -1,8 +1,8 @@
-import { BasePayload } from '@dimo-types/index';
+import { AuthPayload } from '@dimo-types/index';
 import { handleMessageForEmbed } from '@utils/eventHandler';
 
 export const embedAuth = (
-  basePayload: BasePayload,
+  basePayload: AuthPayload,
   data?: Record<string, any>
 ) => {
   const cleanup = handleMessageForEmbed(basePayload, data);
