@@ -5,5 +5,5 @@ export const embedAuth = (
   basePayload: AuthPayload,
   data?: Record<string, any>
 ) => {
-  const cleanup = handleMessageForEmbed(basePayload, data);
+  handleMessageForEmbed(basePayload, data);
 };

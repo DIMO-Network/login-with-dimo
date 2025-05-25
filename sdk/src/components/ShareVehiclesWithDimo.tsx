@@ -30,7 +30,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   return (
     <BaseDimoButton
       mode={mode}
-      entryState={EntryState.VEHICLE_MANAGER} // Set entry state for permissions flow
+      entryState={EntryState.VEHICLE_MANAGER}
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>

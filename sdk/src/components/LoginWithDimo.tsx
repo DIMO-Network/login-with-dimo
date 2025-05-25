@@ -31,13 +31,13 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         permissionTemplateId
           ? EntryState.VEHICLE_MANAGER
           : EntryState.EMAIL_INPUT
-      } // Go to vehicle sharing if permissions are toggled, otherwise only login
+      }
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
-      } // Dynamic label based on auth state
-      disableIfAuthenticated={false} // Disable button when authenticated
+      }
+      disableIfAuthenticated={false}
       altTitle={altTitle}
       payload={{
         permissionTemplateId,

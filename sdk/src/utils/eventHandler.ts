@@ -2,22 +2,10 @@ import { MessageEventType } from '@enums/globalEnums';
 import { AuthPayload } from '@dimo-types/index';
 import { logout, processAuthResponse } from './authUtils';
 
-/**
- * @file eventHandler.ts
- * @description Handles message passing between the parent window and a child window (popup or iframe)
- * via the `postMessage` API.
- *
- * Responsibilities:
- * - Handles messages from a popup window or of an embedded iframe, these are separated to prevent duplicate listeners
- * - Validates the message origin.
- * - Calls `onSuccess` with the token, or `onError` on failure.
- * - Optionally closes the popup window after receiving the message.
- * - Provides a cleanup function to remove the event listener.
- */
-function getDomain(url: string) {
+const getDomain = (url: string) => {
   const parsedUrl = new URL(url);
   return parsedUrl.hostname;
-}
+};
 
 const validateOrigin = (origin: string, expectedDomain: string): boolean => {
   if (getDomain(origin) !== getDomain(expectedDomain)) {
@@ -42,7 +30,6 @@ const sendMessageToTarget = (
   }
 };
 
-// Popup Handler
 export const handleMessageForPopup = (
   basePayload: AuthPayload,
   data: any,
@@ -90,7 +77,7 @@ export const handleMessageForPopup = (
       }
 
       if (eventType === data.eventType) {
-        const dataMessage = { ...data, eventType: data.eventType }; //Data should already have event type if I understand correctly
+        const dataMessage = { ...data, eventType: data.eventType };
         sendMessageToTarget(popup, dataMessage, expectedOrigin, onError);
       }
 
@@ -123,7 +110,6 @@ export const handleMessageForPopup = (
   return () => window.removeEventListener('message', popupListener);
 };
 
-// Embed Handler
 export const handleMessageForEmbed = (basePayload: AuthPayload, data: any) => {
   const {
     entryState,

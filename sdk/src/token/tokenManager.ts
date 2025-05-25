@@ -1,20 +1,20 @@
 /**
  * @file tokenManager.ts
  * @description This module is responsible for managing JWT tokens.
- * 
+ *
  * It handles:
  * - Decoding JWT Tokens
  * - Checking for Expiry
- * 
- 
  */
+
+const ONE_SECOND = 1000;
+
 function base64UrlDecode(base64Url: string) {
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   const decodedData = atob(base64);
   return decodedData;
 }
 
-// Function to decode JWT
 function decodeJWT(token: string) {
   try {
     const parts = token.split('.');
@@ -22,7 +22,6 @@ function decodeJWT(token: string) {
       throw new Error('Invalid JWT format');
     }
 
-    // Decode the payload (second part of the JWT)
     const payload = base64UrlDecode(parts[1]);
     return JSON.parse(payload);
   } catch (e) {
@@ -33,10 +32,10 @@ function decodeJWT(token: string) {
 export const isTokenExpired = (token: string) => {
   try {
     const decoded = decodeJWT(token);
-    const currentTime = Date.now() / 1000; // current time in seconds
+    const currentTime = Date.now() / ONE_SECOND;
     return decoded.exp < currentTime;
   } catch (error) {
     console.error('Failed to decode JWT:', error);
-    return true; // If decoding fails, assume it's expired
+    return true;
   }
 };

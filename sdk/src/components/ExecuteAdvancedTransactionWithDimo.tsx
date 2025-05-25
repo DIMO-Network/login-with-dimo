@@ -33,7 +33,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   }
   const transactionData: TransactionData = {
     address,
-    value: value ? value : '', // BigInt to string
+    value: value ? value : '',
     abi,
     functionName,
     args,
@@ -42,7 +42,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   return (
     <BaseDimoButton
       mode={mode}
-      entryState={EntryState.ADVANCED_TRANSACTION} // Set entry state for permissions flow
+      entryState={EntryState.ADVANCED_TRANSACTION}
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
