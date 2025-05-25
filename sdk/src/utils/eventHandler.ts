@@ -3,6 +3,7 @@ import {
   AuthData,
   AuthPayload,
   DimoActionPayload,
+  EventHandler,
   EventHandlers,
   MessageData,
   MessageHandlerConfig,
@@ -22,7 +23,7 @@ const getDomain = (url: string): string => {
 const validateOrigin = (origin: string, expectedDomain: string): boolean => {
   const isValid = getDomain(origin) === getDomain(expectedDomain);
   if (!isValid) {
-    console.warn('Received message from an unknown origin:', origin);
+    console.error('Received message from an unknown origin:', origin);
   }
   return isValid;
 };
@@ -38,7 +39,11 @@ const sendMessageToTarget = (
     return;
   }
 
-  setTimeout(() => target.postMessage(message, origin), 0);
+  try {
+    target.postMessage(message, origin);
+  } catch (error) {
+    onError(error instanceof Error ? error : new Error(String(error)));
+  }
 };
 
 const handleCommonEvents = (
@@ -46,54 +51,65 @@ const handleCommonEvents = (
   data: MessageData,
   handlers: EventHandlers,
   extraData: Record<string, unknown> = {}
-): boolean => {
-  const {
-    token,
-    walletAddress,
-    email,
-    sharedVehicles,
-    message,
-    transactionHash,
-    transactionReceipt,
-  } = data;
-
-  switch (eventType) {
-    case MessageEventType.AUTH_RESPONSE:
-      processAuthResponse(
-        { token, walletAddress, email, sharedVehicles, ...extraData },
-        handlers.setAuthenticated,
-        handlers.onSuccess
-      );
-      return true;
-
-    case MessageEventType.TRANSACTION_RESPONSE:
-      if (!token) {
-        handlers.onError(new Error('Missing authentication token'));
-        return false;
-      }
-
-      if (transactionHash || transactionReceipt) {
-        const responseData: AuthData = {
-          token: token,
-          ...(transactionHash && { transactionHash }),
-          ...(transactionReceipt && { transactionReceipt }),
-        };
-        handlers.onSuccess(responseData);
-      } else {
-        handlers.onError(new Error('Could not execute transaction'));
-      }
-      return true;
-
-    case MessageEventType.LOGOUT:
-      logout(handlers.setAuthenticated);
-      return true;
-
-    case MessageEventType.DIMO_ERROR:
-      handlers.onError(new Error(message || 'An unknown error occurred'));
-      return true;
+): void => {
+  const handler = eventHandlers[eventType as keyof typeof eventHandlers];
+  if (!handler) {
+    console.warn('No handler found for event type:', eventType);
+    return;
   }
 
-  return false;
+  handler(data, handlers, extraData);
+};
+
+const handleAuthResponse = (
+  data: MessageData,
+  handlers: EventHandlers,
+  extraData: Record<string, unknown>
+): void => {
+  processAuthResponse(
+    { ...data, ...extraData },
+    handlers.setAuthenticated,
+    handlers.onSuccess
+  );
+};
+
+const handleTransactionResponse = (
+  { token, transactionHash, transactionReceipt }: MessageData,
+  handlers: EventHandlers
+): void => {
+  if (!token) {
+    handlers.onError(new Error('Missing authentication token'));
+    return;
+  }
+
+  if (transactionHash || transactionReceipt) {
+    const responseData: AuthData = {
+      token: token,
+      ...(transactionHash && { transactionHash }),
+      ...(transactionReceipt && { transactionReceipt }),
+    };
+    handlers.onSuccess(responseData);
+  } else {
+    handlers.onError(new Error('Could not execute transaction'));
+  }
+};
+
+const handleLogout = (_: MessageData, handlers: EventHandlers): void => {
+  logout(handlers.setAuthenticated);
+};
+
+const handleDimoError = (
+  { message }: MessageData,
+  handlers: EventHandlers
+): void => {
+  handlers.onError(new Error(message || 'An unknown error occurred'));
+};
+
+const eventHandlers: Record<string, EventHandler> = {
+  [MessageEventType.AUTH_RESPONSE]: handleAuthResponse,
+  [MessageEventType.TRANSACTION_RESPONSE]: handleTransactionResponse,
+  [MessageEventType.LOGOUT]: handleLogout,
+  [MessageEventType.DIMO_ERROR]: handleDimoError,
 };
 
 export const createMessageHandler = (
@@ -172,7 +188,10 @@ export const handleMessageForPopup = (
   });
 };
 
-export const handleMessageForEmbed = (basePayload: AuthPayload, data: any) => {
+export const handleMessageForEmbed = (
+  basePayload: AuthPayload,
+  data: DimoActionPayload | undefined
+) => {
   const iframe = document.getElementById('dimo-iframe') as HTMLIFrameElement;
   return createMessageHandler(basePayload, data, {
     target: iframe?.contentWindow,
