@@ -1,37 +1,14 @@
-import { EntryState, EventTypes } from '@enums/index';
-import { TransactionData } from './';
+import { EventTypes } from '@enums/index';
+import { TransactionData } from './TransactionData';
+import { AuthData, BaseAuthParams, DimoActionParams } from './common';
 
-export interface AuthData {
-  token: string;
-  transactionHash?: string;
-  transactionReceipt?: any;
-  sharedVehicles?: string[];
-}
-
-export interface BasePayload extends BasePayloadParams {
+export interface AuthPayload extends BaseAuthParams {
   onSuccess: (authData: AuthData) => void;
   onError: (error: Error) => void;
   setAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface BasePayloadParams {
-  entryState: EntryState;
-  dimoLogin: string;
-  forceEmail: boolean;
-  clientId?: string;
-  redirectUri?: string;
-  apiKey?: string; // Avoid sending API key in the URL
-  altTitle?: boolean;
-}
-
-export type DimoActionPayload = {
+export interface DimoActionPayload extends DimoActionParams {
   eventType: EventTypes;
-  permissionTemplateId?: string;
-  vehicles?: string[];
-  vehicleMakes?: string[];
-  onboarding?: string[];
-  expirationDate?: string;
-  utm?: string | null;
   transactionData?: TransactionData | string;
-  powertrainTypes?: string[];
-};
+}

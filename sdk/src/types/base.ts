@@ -1,32 +1,14 @@
-import { AuthData } from './';
-import { LoginMode } from './';
+import { LoginMode } from './LoginMode';
+import { AuthData, DimoActionParams, ButtonLabels, TransactionParams } from './common';
 
-export interface BaseButtonProps {
+export interface BaseButtonProps extends DimoActionParams {
   mode: LoginMode;
   altTitle?: boolean;
-  onSuccess: (authData: AuthData) => void; // Success callback
-  onError: (error: Error) => void; // Error callback
+  onSuccess: (authData: AuthData) => void;
+  onError: (error: Error) => void;
+  labels?: ButtonLabels;
 }
 
-export interface LoginButtonProps {
-  permissionTemplateId?: string; // Optional: Permissions template
-  vehicles?: string[]; // Optional: List of vehicles
-  vehicleMakes?: string[];
-  onboarding?: string[];
-  expirationDate?: string;
-  utm?: string | null;
-  powertrainTypes?: string[];
-}
+export type LoginButtonProps = DimoActionParams;
 
-export interface DynamicButtonLabels {
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
-}
-
-export interface ExecuteAdvancedTransactionButtonProps {
-  address: string;
-  value?: string;
-  abi: any;
-  functionName: string;
-  args: string[];
-}
+export type ExecuteAdvancedTransactionButtonProps = TransactionParams;
