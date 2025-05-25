@@ -1,5 +1,10 @@
-import { LoginMode } from './LoginMode';
-import { AuthData, DimoActionParams, ButtonLabels, TransactionParams } from './common';
+import { LoginMode } from '@enums/index';
+import { AuthData, DimoActionParams } from './common.types';
+
+export interface ButtonLabels {
+  authenticatedLabel?: string;
+  unAuthenticatedLabel?: string;
+}
 
 export interface BaseButtonProps extends DimoActionParams {
   mode: LoginMode;
@@ -10,5 +15,3 @@ export interface BaseButtonProps extends DimoActionParams {
 }
 
 export type LoginButtonProps = DimoActionParams;
-
-export type ExecuteAdvancedTransactionButtonProps = TransactionParams;

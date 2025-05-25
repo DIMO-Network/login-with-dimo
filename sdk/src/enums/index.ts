@@ -1,2 +1,4 @@
-export * from './BaseDimo';
-export * from './globalEnums';
+export * from './auth.enums';
+export * from './events.enums';
+export * from './ui.enums';
+export * from './common.enums';

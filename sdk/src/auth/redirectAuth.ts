@@ -1,10 +1,10 @@
+import { AuthParam } from '@enums/index';
 import {
   AuthPayload,
   BaseAuthParams,
-  TransactionData,
   DimoActionPayload,
+  TransactionData,
 } from '@dimo-types/index';
-import { AuthParam } from '@dimo-types/auth';
 
 type RedirectAuthData = BaseAuthParams & DimoActionPayload;
 

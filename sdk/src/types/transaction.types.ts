@@ -1,5 +1,3 @@
-import { EntryState } from '@enums/index';
-
 export interface LogEntry {
   address: string;
   topics: string[];
@@ -31,36 +29,12 @@ export interface TransactionReceipt {
   confirmations?: number;
 }
 
-export interface AuthData {
-  token: string;
-  transactionHash?: string;
-  transactionReceipt?: TransactionReceipt;
-  sharedVehicles?: string[];
-}
-
-export interface BaseAuthParams {
-  entryState: EntryState;
-  dimoLogin: string;
-  forceEmail: boolean;
-  clientId?: string;
-  redirectUri?: string;
-  apiKey?: string;
-  altTitle?: boolean;
-}
-
-export interface DimoActionParams {
-  permissionTemplateId?: string;
-  vehicles?: string[];
-  vehicleMakes?: string[];
-  onboarding?: string[];
-  expirationDate?: string;
-  utm?: string | null;
-  powertrainTypes?: string[];
-}
-
-export interface ButtonLabels {
-  authenticatedLabel?: string;
-  unAuthenticatedLabel?: string;
+export interface TransactionData {
+  address: string;
+  value: string;
+  abi: AbiItem[];
+  functionName: string;
+  args: string[];
 }
 
 export interface AbiItem {
@@ -79,3 +53,6 @@ export interface TransactionParams {
   functionName: string;
   args: string[];
 }
+
+export type ExecuteAdvancedTransactionButtonProps = TransactionParams;
+
