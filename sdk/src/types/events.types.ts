@@ -1,4 +1,4 @@
-import { LoginMode } from '@enums/index';
+import { DimoSDKModes } from '@enums/index';
 import type { TransactionReceipt } from './transaction.types';
 
 export interface MessageData {
@@ -6,7 +6,7 @@ export interface MessageData {
   token?: string;
   walletAddress?: string;
   email?: string;
-  mode?: LoginMode;
+  mode?: DimoSDKModes;
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
@@ -16,5 +16,5 @@ export interface MessageData {
 export interface MessageHandlerConfig {
   target: Window | null | undefined;
   origin: string;
-  mode: LoginMode;
+  mode: DimoSDKModes;
 }

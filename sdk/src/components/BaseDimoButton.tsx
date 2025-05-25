@@ -4,7 +4,7 @@ import { popupAuth } from '@auth/popupAuth';
 import { embedAuth } from '@auth/embedAuth';
 import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
-import { EntryState } from '@enums/index';
+import { EntryState, DimoSDKModes } from '@enums/index';
 import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
@@ -61,10 +61,10 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
 
   const handleButtonClick = () => {
     switch (mode) {
-      case 'popup':
+      case DimoSDKModes.POPUP:
         popupAuth(basePayload, payload);
         break;
-      case 'redirect':
+      case DimoSDKModes.REDIRECT:
         redirectAuth(basePayload, payload);
         break;
       default:
@@ -73,7 +73,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   };
 
   const handleIframeLoad = () => {
-    if (mode === 'embed') {
+    if (mode === DimoSDKModes.EMBED) {
       embedAuth(basePayload, payload);
     }
   };
@@ -96,7 +96,7 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   return (
     <DimoAuthProvider>
       <div>
-        {mode === 'embed' ? (
+        {mode === DimoSDKModes.EMBED ? (
           renderEmbedIframe()
         ) : (
           <button

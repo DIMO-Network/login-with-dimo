@@ -1,4 +1,4 @@
-import { MessageEventType, LoginMode } from '@enums/index';
+import { MessageEventType, DimoSDKModes } from '@enums/index';
 import {
   AuthData,
   AuthPayload,
@@ -55,16 +55,7 @@ const handleCommonEvents = (
     message,
     transactionHash,
     transactionReceipt,
-    mode,
   } = data;
-
-  if (
-    mode &&
-    ![LoginMode.Popup, LoginMode.Embed, LoginMode.Redirect].includes(mode)
-  ) {
-    handlers.onError(new Error('Invalid mode provided'));
-    return false;
-  }
 
   switch (eventType) {
     case MessageEventType.AUTH_RESPONSE:
@@ -140,7 +131,7 @@ export const createMessageHandler = (
         entryState,
         forceEmail,
         eventType: MessageEventType.AUTH_INIT,
-        ...(mode === LoginMode.Popup && { altTitle }),
+        ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };
       sendMessageToTarget(target, initialMessage, origin, onError);
     }
@@ -158,7 +149,7 @@ export const createMessageHandler = (
       eventType,
       messageData,
       { onSuccess, onError, setAuthenticated },
-      mode === LoginMode.Popup
+      mode === DimoSDKModes.POPUP
         ? { sharedVehicles: messageData.sharedVehicles }
         : {}
     );
@@ -177,7 +168,7 @@ export const handleMessageForPopup = (
   return createMessageHandler(basePayload, data, {
     target: popup,
     origin: expectedOrigin,
-    mode: LoginMode.Popup,
+    mode: DimoSDKModes.POPUP,
   });
 };
 
@@ -186,6 +177,6 @@ export const handleMessageForEmbed = (basePayload: AuthPayload, data: any) => {
   return createMessageHandler(basePayload, data, {
     target: iframe?.contentWindow,
     origin: basePayload.dimoLogin,
-    mode: LoginMode.Embed,
+    mode: DimoSDKModes.EMBED,
   });
 };
