@@ -3,14 +3,14 @@ import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
-  DynamicButtonLabels,
+  ButtonLabels,
   BaseButtonProps,
   LoginButtonProps,
 } from '@dimo-types/index';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   LoginButtonProps &
-  DynamicButtonLabels;
+  ButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   mode,
@@ -30,7 +30,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   return (
     <BaseDimoButton
       mode={mode}
-      entryState={EntryState.VEHICLE_MANAGER} // Set entry state for permissions flow
+      entryState={EntryState.VEHICLE_MANAGER}
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>

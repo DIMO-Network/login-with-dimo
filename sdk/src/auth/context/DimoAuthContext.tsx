@@ -35,7 +35,7 @@ export const DimoAuthProvider = ({
   const [isAuthenticated, setAuthenticated] = useState(false);
   const { isTokenStored } = useAuthParamsFromURL();
   const { hasLogoutParam } = useLogoutFromURL();
-  const { email, walletAddress } = useLocalStorageData();
+  const { email, walletAddress } = useLocalStorageData(isAuthenticated);
 
   const getEmail = () => {
     if (email) {

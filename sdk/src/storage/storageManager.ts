@@ -3,7 +3,7 @@
  * @description This module is responsible for managing JWT tokens.
  */
 
-const DEFAULT_COOKIE_EXPIRATION_YEARS = 10; // Default expiration for cookies is 10 years if not specified.
+const DEFAULT_COOKIE_EXPIRATION_YEARS = 10;
 
 export const createCookieString = (
   name: string,
@@ -12,7 +12,6 @@ export const createCookieString = (
 ): string => {
   const expirationDate = expiresAt || new Date();
   if (!expiresAt) {
-    // If no expiration date is provided, cookies are set to expire in 10 years by default.
     expirationDate.setFullYear(
       expirationDate.getFullYear() + DEFAULT_COOKIE_EXPIRATION_YEARS
     );
@@ -28,13 +27,19 @@ export const storeJWTInCookies = (jwt: string): void => {
   document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
+const isValidCookieStringValue = (str: string): boolean => {
+  return !!str && str !== 'undefined';
+};
+
 export const storeWalletAddressInLocalStorage = (
   walletAddress: string
 ): void => {
+  if (!isValidCookieStringValue(walletAddress)) return;
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
 };
 
 export const storeEmailInLocalStorage = (email: string): void => {
+  if (!isValidCookieStringValue(email)) return;
   localStorage.setItem(`dimo_user_email`, email);
 };
 
