@@ -1,6 +1,6 @@
 import { EntryState, EventTypes } from '@enums/index';
 import { TransactionData } from './transaction.types';
-import { AuthData, DimoActionParams } from './common.types';
+import { AuthData, InternalDimoActionParams } from './common.types';
 
 export interface EventHandlers {
   onSuccess: (data: AuthData) => void;
@@ -20,7 +20,8 @@ export interface BaseAuthParams {
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}
 
-export interface DimoActionPayload extends DimoActionParams {
+export interface DimoActionPayload extends InternalDimoActionParams {
   eventType: EventTypes;
   transactionData?: TransactionData | string;
 }
+

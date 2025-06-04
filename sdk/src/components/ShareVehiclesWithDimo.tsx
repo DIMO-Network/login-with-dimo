@@ -1,12 +1,14 @@
 import React from 'react';
 
-import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
-  ButtonLabels,
   BaseButtonProps,
+  ButtonLabels,
+  InternalDimoActionParams,
   LoginButtonProps,
 } from '@dimo-types/index';
+import { getPermissionsBinary } from '@utils/index';
+import { BaseDimoButton } from './BaseDimoButton';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   LoginButtonProps &
@@ -17,6 +19,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   onSuccess,
   onError,
   permissionTemplateId,
+  permissions,
   vehicles,
   vehicleMakes,
   onboarding,
@@ -25,8 +28,20 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
   utm = null,
   altTitle,
-  powertrainTypes
+  powertrainTypes,
 }) => {
+  const payload: InternalDimoActionParams & { eventType: EventTypes } = {
+    permissionTemplateId,
+    vehicles,
+    vehicleMakes,
+    onboarding,
+    expirationDate,
+    eventType: EventTypes.SHARE_VEHICLES_DATA,
+    utm,
+    powertrainTypes,
+    ...getPermissionsBinary(permissions, permissionTemplateId),
+  };
+
   return (
     <BaseDimoButton
       mode={mode}
@@ -37,16 +52,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
         authenticated ? authenticatedLabel : unAuthenticatedLabel
       }
       altTitle={altTitle}
-      payload={{
-        permissionTemplateId,
-        vehicles,
-        vehicleMakes,
-        onboarding,
-        expirationDate,
-        eventType: EventTypes.SHARE_VEHICLES_DATA,
-        utm,
-        powertrainTypes
-      }}
+      payload={payload}
     />
   );
 };

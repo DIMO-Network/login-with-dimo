@@ -6,7 +6,9 @@ import {
   ButtonLabels,
   BaseButtonProps,
   LoginButtonProps,
+  InternalDimoActionParams,
 } from '@dimo-types/index';
+import { getPermissionsBinary } from '@utils/index';
 
 type LoginWithDimoProps = BaseButtonProps & LoginButtonProps & ButtonLabels;
 
@@ -15,6 +17,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   onSuccess,
   onError,
   permissionTemplateId,
+  permissions,
   vehicles,
   vehicleMakes,
   onboarding,
@@ -24,11 +27,21 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   utm = null,
   altTitle,
 }) => {
+  const payload: InternalDimoActionParams & { eventType: EventTypes } = {
+    ...getPermissionsBinary(permissions, permissionTemplateId),
+    vehicles,
+    vehicleMakes,
+    onboarding,
+    expirationDate,
+    eventType: EventTypes.SHARE_VEHICLES_DATA,
+    utm,
+  };
+
   return (
     <BaseDimoButton
       mode={mode}
       entryState={
-        permissionTemplateId
+        permissionTemplateId || permissions
           ? EntryState.VEHICLE_MANAGER
           : EntryState.EMAIL_INPUT
       }
@@ -39,15 +52,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       }
       disableIfAuthenticated={false}
       altTitle={altTitle}
-      payload={{
-        permissionTemplateId,
-        vehicles,
-        vehicleMakes,
-        onboarding,
-        expirationDate,
-        eventType: EventTypes.SHARE_VEHICLES_DATA,
-        utm,
-      }}
+      payload={payload}
     />
   );
 };
