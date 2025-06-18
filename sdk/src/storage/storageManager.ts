@@ -3,7 +3,7 @@
  * @description This module is responsible for managing JWT tokens.
  */
 
-const DEFAULT_COOKIE_EXPIRATION_YEARS = 10;
+const DEFAULT_COOKIE_EXPIRATION_YEARS = 1;
 
 export const createCookieString = (
   name: string,
