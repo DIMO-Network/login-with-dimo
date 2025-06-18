@@ -188,14 +188,3 @@ export const handleMessageForPopup = (
   });
 };
 
-export const handleMessageForEmbed = (
-  basePayload: AuthPayload,
-  data: DimoActionPayload | undefined
-) => {
-  const iframe = document.getElementById('dimo-iframe') as HTMLIFrameElement;
-  return createMessageHandler(basePayload, data, {
-    target: iframe?.contentWindow,
-    origin: basePayload.dimoLogin,
-    mode: DimoSDKModes.EMBED,
-  });
-};
