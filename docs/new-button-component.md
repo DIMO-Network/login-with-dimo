@@ -1,6 +1,6 @@
 # 🧱 Guide: Creating a New SDK Button Component
 
-This guide explains how to create a new SDK button component that launches the DIMO Webapp in either **popup**, **redirect**, or (deprecated) **embed** mode using the shared `BaseDimoButton` abstraction.
+This guide explains how to create a new SDK button component that launches the DIMO Webapp in either **popup** or **redirect** mode using the shared `BaseDimoButton` abstraction.
 
 ---
 
@@ -9,7 +9,7 @@ This guide explains how to create a new SDK button component that launches the D
 All SDK button components are wrappers around a common `BaseDimoButton` which:
 
 - Reads credentials from SDK config
-- Handles popup/redirect/embed mode
+- Handles popup and redirect modes
 - Accepts an `eventPayload` and `entryState`
 - Launches the webapp with the provided data
 

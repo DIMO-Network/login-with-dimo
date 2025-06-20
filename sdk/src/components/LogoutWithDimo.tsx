@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EntryState, EventTypes } from '@enums/index';
-import { BaseButtonProps } from '@dimo-types/base';
+import { BaseButtonProps } from '@dimo-types/index';
 
 import BaseDimoButton from './BaseDimoButton';
 
