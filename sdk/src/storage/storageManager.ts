@@ -3,14 +3,24 @@
  * @description This module is responsible for managing JWT tokens.
  */
 
+import { jwtDecode } from 'jwt-decode';
+
 const DEFAULT_COOKIE_EXPIRATION_DAYS = 14; // Default expiration for cookies is 2 weeks
 
-export const createCookieString = (name: string, value: string): string => {
-  const expirationDate = new Date();
-  expirationDate.setDate(
-    expirationDate.getDate() + DEFAULT_COOKIE_EXPIRATION_DAYS
-  );
-  let cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
+const getExpiration = (jwt: string) => {
+  let expirationDate = new Date();
+  const decoded = jwtDecode(jwt);
+  if (decoded.exp) {
+    expirationDate = new Date(decoded.exp * 1000);
+  } else {
+    expirationDate.setDate(expirationDate.getDate() + DEFAULT_COOKIE_EXPIRATION_DAYS);
+  }
+  return expirationDate;
+};
+
+export const createCookieString = (name: string, jwt: string): string => {
+  const expires = getExpiration(jwt);
+  let cookieString = `${name}=${jwt}; expires=${expires.toUTCString()}; path=/`;
   if (window.location.hostname !== 'localhost') {
     cookieString += '; SameSite=None; Secure';
   }
