@@ -7,7 +7,6 @@ let sdkConfig: {
   environment?: Environment;
   options?: {
     forceEmail?: boolean;
-    // Add more options here in the future, for properties that need to be global
   };
 } = {
   clientId: '',
@@ -19,7 +18,7 @@ export const initializeDimoSDK = ({
   redirectUri,
   apiKey = 'some_api_key',
   environment = Environment.PRODUCTION,
-  options = {}, // ✅ Default to an empty object to prevent undefined issues
+  options = {},
 }: {
   clientId: string;
   redirectUri: string;
