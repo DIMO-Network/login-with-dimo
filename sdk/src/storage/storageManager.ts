@@ -5,12 +5,11 @@
 
 const DEFAULT_COOKIE_EXPIRATION_DAYS = 14; // Default expiration for cookies is 2 weeks
 
-export const createCookieString = (
-  name: string,
-  value: string,
-): string => {
+export const createCookieString = (name: string, value: string): string => {
   const expirationDate = new Date();
-  expirationDate.setDate(expirationDate.getDate() + DEFAULT_COOKIE_EXPIRATION_DAYS);
+  expirationDate.setDate(
+    expirationDate.getDate() + DEFAULT_COOKIE_EXPIRATION_DAYS
+  );
   let cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
   if (window.location.hostname !== 'localhost') {
     cookieString += '; SameSite=None; Secure';
@@ -22,13 +21,19 @@ export const storeJWTInCookies = (jwt: string): void => {
   document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
+const isValidCookieStringValue = (str: string): boolean => {
+  return !!str && str !== 'undefined';
+};
+
 export const storeWalletAddressInLocalStorage = (
   walletAddress: string
 ): void => {
+  if (!isValidCookieStringValue(walletAddress)) return;
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
 };
 
 export const storeEmailInLocalStorage = (email: string): void => {
+  if (!isValidCookieStringValue(email)) return;
   localStorage.setItem(`dimo_user_email`, email);
 };
 

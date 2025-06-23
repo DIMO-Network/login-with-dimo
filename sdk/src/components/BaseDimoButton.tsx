@@ -1,10 +1,9 @@
 import React, { type FC } from 'react';
 
 import { popupAuth } from '@auth/popupAuth';
-import { embedAuth } from '@auth/embedAuth';
 import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
-import { EntryState, Environment } from '@enums/index';
+import { EntryState, DimoSDKModes } from '@enums/index';
 import '../styles/BaseDimoButton.css';
 import {
   DimoAuthProvider,
@@ -14,15 +13,15 @@ import {
 import {
   BaseButtonProps,
   LoginButtonProps,
-  BasePayload,
+  AuthPayload,
   DimoActionPayload,
 } from '@dimo-types/index';
 import { getDimoLoginUrl } from '../utils/url';
 
 interface BaseDimoButtonOptions extends BaseButtonProps {
-  buttonLabel: (authenticated: boolean) => string; // Function to determine button label dynamically
+  buttonLabel: (authenticated: boolean) => string;
   entryState: EntryState;
-  disableIfAuthenticated?: boolean; // Disable button if authenticated (default: false)
+  disableIfAuthenticated?: boolean;
   payload: DimoActionPayload;
 }
 
@@ -41,13 +40,12 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   const { clientId, redirectUri, apiKey, environment, options } =
     getDimoConfig();
 
-  //DimoAuthProvider contexts, the following can only be used when the component using them is wrapped in a <DimoAuthProvider/>
   const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
 
   const dimoLogin = getDimoLoginUrl(environment!);
 
-  const basePayload: BasePayload = {
+  const basePayload: AuthPayload = {
     entryState,
     onSuccess,
     onError,
@@ -57,15 +55,15 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     clientId,
     redirectUri,
     apiKey,
-    forceEmail: options?.forceEmail ?? false, // Ensure it's always present
+    forceEmail: options?.forceEmail ?? false,
   };
 
   const handleButtonClick = () => {
     switch (mode) {
-      case 'popup':
+      case DimoSDKModes.POPUP:
         popupAuth(basePayload, payload);
         break;
-      case 'redirect':
+      case DimoSDKModes.REDIRECT:
         redirectAuth(basePayload, payload);
         break;
       default:
@@ -73,54 +71,28 @@ const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     }
   };
 
-  // Trigger embedAuth only once the iframe has fully loaded
-  const handleIframeLoad = () => {
-    if (mode === 'embed') {
-      embedAuth(basePayload, payload);
-    }
-  };
-
-  // Renders iframe for embed mode
-  const renderEmbedIframe = () => (
-    <iframe
-      id="dimo-iframe"
-      src={dimoLogin} // Pull Dimo Login URL from ENV
-      allow="publickey-credentials-create; publickey-credentials-get" //Note: This is used to allow passkey creation and retrieval
-      width="600px"
-      height="300px" //Allow this to be customized by developer
-      title="Dimo Login"
-      style={{ border: '4px solid white' }}
-      frameBorder="0"
-      onLoad={handleIframeLoad} // Trigger embedAuth when the iframe loads
-    />
-  );
-
   return (
     <DimoAuthProvider>
       <div>
-        {mode === 'embed' ? (
-          renderEmbedIframe()
-        ) : (
-          <button
-            className="custom-button"
-            disabled={isAuthenticated && disableIfAuthenticated} // Disable only if authenticated and explicitly requested
-            onClick={handleButtonClick}
+        <button
+          className="custom-button"
+          disabled={isAuthenticated && disableIfAuthenticated}
+          onClick={handleButtonClick}
+        >
+          <svg
+            width="20"
+            height="18"
+            viewBox="0 0 20 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              width="20"
-              height="18"
-              viewBox="0 0 20 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
-                fill="black"
-              />
-            </svg>
-            <span className="button-label">{buttonLabel(isAuthenticated)}</span>
-          </button>
-        )}
+            <path
+              d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
+              fill="black"
+            />
+          </svg>
+          <span className="button-label">{buttonLabel(isAuthenticated)}</span>
+        </button>
       </div>
     </DimoAuthProvider>
   );

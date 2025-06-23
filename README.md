@@ -6,7 +6,7 @@ This repository includes two components:
 2. **Example React App**: A React application demonstrating the use of the SDK for user authentication.
 
 ###  🚧 Prerequisites
-The example app embeds/frames the DIMO auth flow (login.dimo). To test both sides locally, please make sure (https://github.com/DIMO-Network/dimo-login) is running locally, and set the BaseDimoButton endpoint to point to that port
+The example app handles buttons for the DIMO auth flow (login.dimo). To test both sides locally, please make sure (https://github.com/DIMO-Network/dimo-login) is running locally, and set the BaseDimoButton endpoint to point to that port
 
 ## ⚙️ Getting Started
 
@@ -73,7 +73,7 @@ Create `example-dimo-auth/.env` with the following keys:
 
 ```env
 REACT_APP_DIMO_CLIENT_ID=your-client-id
-REACT_APP_DIMO_REDIRECT_URI=the correspodning redirect uri for your client id
+REACT_APP_DIMO_REDIRECT_URI=the corresponding redirect uri for your client id
 REACT_APP_DIMO_ENV=development | production (development will open login.dev.dimo.org, production will open login.dimo.org)
 REACT_APP_DIMO_API_KEY=your-api-key (not directly used, so can put any value here)
 ```
@@ -117,10 +117,8 @@ We recommend the following steps for pushing updates, and releasing new versions
 The SDK exports sample React Button Components (LoginWithDimo, ShareVehiclesWithDimo, ExecuteAdvancedTransactionWithDimo), as well as configuration functions (initializeDimoSDK)
 
 The SDK then takes the properties provided within the components, and configuration, and drills them into the LIWD app, through the following launch modes
-1. Popup:Opens the DIMO app in a new window and communicates via postMessage.
+1. Popup: Opens the DIMO app in a new window and communicates via postMessage.
 2. Redirect: Redirects the user to the DIMO app with data in query params.
-3. Embed(Deprecated)
-
 
 ## 🔄 Flow Overview
 

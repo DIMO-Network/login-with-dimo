@@ -3,14 +3,12 @@ import React from 'react';
 import BaseDimoButton from './BaseDimoButton';
 import { EntryState, EventTypes } from '@enums/index';
 import {
-  DynamicButtonLabels,
+  ButtonLabels,
   BaseButtonProps,
   LoginButtonProps,
 } from '@dimo-types/index';
 
-type LoginWithDimoProps = BaseButtonProps &
-  LoginButtonProps &
-  DynamicButtonLabels;
+type LoginWithDimoProps = BaseButtonProps & LoginButtonProps & ButtonLabels;
 
 const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   mode,
@@ -33,13 +31,13 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
         permissionTemplateId
           ? EntryState.VEHICLE_MANAGER
           : EntryState.EMAIL_INPUT
-      } // Go to vehicle sharing if permissions are toggled, otherwise only login
+      }
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
         authenticated ? authenticatedLabel : unAuthenticatedLabel
-      } // Dynamic label based on auth state
-      disableIfAuthenticated={false} // Disable button when authenticated
+      }
+      disableIfAuthenticated={false}
       altTitle={altTitle}
       payload={{
         permissionTemplateId,

@@ -10,11 +10,11 @@ export const processAuthResponse = (
   setAuthenticated: (status: boolean) => void,
   onSuccess: (data: { token: string; sharedVehicles: string[] }) => void
 ) => {
-  //This auth response may be triggered for a coupled or decoupled flow
-  //If decoupled, it will only return token
-  //If coupled, it will return token + updatedVehicles
-  if (walletAddress) storeWalletAddressInLocalStorage(walletAddress);
-  if (email) storeEmailInLocalStorage(email);
+  // This auth response may be triggered for a coupled or decoupled flow
+  // If decoupled, it will only return token
+  // If coupled, it will return token + updatedVehicles
+  storeWalletAddressInLocalStorage(walletAddress);
+  storeEmailInLocalStorage(email);
   if (token) {
     storeJWTInCookies(token);
     setAuthenticated(true);
