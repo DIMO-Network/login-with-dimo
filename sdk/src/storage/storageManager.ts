@@ -3,19 +3,13 @@
  * @description This module is responsible for managing JWT tokens.
  */
 
-const DEFAULT_COOKIE_EXPIRATION_YEARS = 10;
+const DEFAULT_COOKIE_EXPIRATION_DAYS = 14; // Default expiration for cookies is 2 weeks
 
-export const createCookieString = (
-  name: string,
-  value: string,
-  expiresAt?: Date
-): string => {
-  const expirationDate = expiresAt || new Date();
-  if (!expiresAt) {
-    expirationDate.setFullYear(
-      expirationDate.getFullYear() + DEFAULT_COOKIE_EXPIRATION_YEARS
-    );
-  }
+export const createCookieString = (name: string, value: string): string => {
+  const expirationDate = new Date();
+  expirationDate.setDate(
+    expirationDate.getDate() + DEFAULT_COOKIE_EXPIRATION_DAYS
+  );
   let cookieString = `${name}=${value}; expires=${expirationDate.toUTCString()}; path=/`;
   if (window.location.hostname !== 'localhost') {
     cookieString += '; SameSite=None; Secure';

@@ -6,6 +6,5 @@ export enum Environment {
 
 export enum DimoSDKModes {
   POPUP = 'popup',
-  EMBED = 'embed',
   REDIRECT = 'redirect',
 }
