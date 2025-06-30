@@ -1,11 +1,6 @@
 import { Environment } from '../enums';
 
-/**
- * Utility function to get the Dimo login URL based on the environment.
- * @param environment - The current environment (e.g., production, staging).
- * @returns The Dimo login URL.
- */
-export function getDimoLoginUrl(environment: Environment): string {
+export const getDimoLoginUrl = (environment: Environment): string => {
   const dimoLoginMap: Record<Environment, string> = {
     [Environment.LOCAL]: 'http://localhost:3000',
     [Environment.DEVELOPMENT]: 'https://login.dev.dimo.org',
@@ -18,4 +13,4 @@ export function getDimoLoginUrl(environment: Environment): string {
     );
   }
   return dimoLoginMap[environment] || dimoLoginMap[Environment.PRODUCTION];
-}
+};

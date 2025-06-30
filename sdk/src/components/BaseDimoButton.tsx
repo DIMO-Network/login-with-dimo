@@ -27,7 +27,7 @@ interface BaseDimoButtonOptions extends BaseButtonProps {
 
 type BaseDimoButtonProps = BaseDimoButtonOptions & LoginButtonProps;
 
-const BaseDimoButton: FC<BaseDimoButtonProps> = ({
+export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   mode,
   entryState,
   onSuccess,
