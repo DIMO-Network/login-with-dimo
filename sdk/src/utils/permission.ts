@@ -1,43 +1,48 @@
 import { PERMISSIONS } from '../enums/permission.enum';
-import { Permission } from '../types/common.types';
 
 // Supported base permissions templates
-const DEFAULT_PERMISSIONS: Permission[] = [
-  PERMISSIONS.NONLOCATION_TELEMETRY,
-  PERMISSIONS.CURRENT_LOCATION,
-  PERMISSIONS.ALLTIME_LOCATION,
-  PERMISSIONS.CREDENTIALS,
-  PERMISSIONS.STREAMS,
+const DEFAULT_PERMISSIONS: PERMISSIONS[] = [
+  PERMISSIONS.GetNonLocationHistory,
+  PERMISSIONS.GetCurrentLocation,
+  PERMISSIONS.GetLocationHistory,
+  PERMISSIONS.GetVINCredential,
+  PERMISSIONS.GetLiveData,
 ];
 
 export const mapTemplateToPermissions = (
   permissionTemplateId?: string
-): Permission[] => {
+): PERMISSIONS[] => {
   const permissions = [...DEFAULT_PERMISSIONS];
 
   if (permissionTemplateId === '1') {
-    permissions.push(PERMISSIONS.COMMANDS);
+    permissions.push(PERMISSIONS.ExecuteCommands);
   }
 
   return permissions;
 };
 
 export const getPermissionsBinary = (
-  permissions?: Permission[],
+  permissions?: PERMISSIONS[],
   permissionTemplateId?: string
-): { permissions?: string } => {
+) => {
   if (!permissions && !permissionTemplateId) {
     return {};
   }
 
-  const permissionsToUse = permissions || mapTemplateToPermissions(permissionTemplateId);
+  const permissionsToUse =
+    Array.isArray(permissions) && permissions.length > 0
+      ? permissions
+      : mapTemplateToPermissions(permissionTemplateId);
+
   return {
     permissions: permissionsToBinary(permissionsToUse),
   };
 };
 
-export const permissionsToBinary = (permissions: Permission[] = []): string => {
-  const permissionKeys = Object.keys(PERMISSIONS) as Permission[];
+export const permissionsToBinary = (
+  permissions: PERMISSIONS[] = []
+): string => {
+  const permissionKeys = Object.values(PERMISSIONS) as PERMISSIONS[];
   const permissionSet = new Set(permissions);
 
   return permissionKeys

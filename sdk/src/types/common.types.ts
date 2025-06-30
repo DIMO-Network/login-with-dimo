@@ -1,8 +1,6 @@
 import { TransactionReceipt } from './transaction.types';
 import { PERMISSIONS } from '../enums/permission.enum';
 
-export type Permission = keyof typeof PERMISSIONS;
-
 export interface AuthData {
   token: string;
   transactionHash?: string;
@@ -18,7 +16,7 @@ export interface DimoActionParams {
   expirationDate?: string;
   utm?: string | null;
   powertrainTypes?: string[];
-  permissions?: Permission[];
+  permissions?: PERMISSIONS[];
 }
 
 export interface InternalDimoActionParams
