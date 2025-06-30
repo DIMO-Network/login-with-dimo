@@ -1,4 +1,4 @@
-export enum PERMISSIONS {
+export enum Permissions {
   GetNonLocationHistory = 'NONLOCATION_TELEMETRY',
   ExecuteCommands = 'COMMANDS',
   GetCurrentLocation = 'CURRENT_LOCATION',

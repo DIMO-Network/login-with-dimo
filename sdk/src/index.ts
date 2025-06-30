@@ -13,4 +13,4 @@ export {
 } from './auth/context/DimoAuthContext';
 
 // Export enums
-export { EntryState, DimoSDKModes, PERMISSIONS } from '@enums/index';
+export { EntryState, DimoSDKModes, Permissions } from '@enums/index';

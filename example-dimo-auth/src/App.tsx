@@ -6,7 +6,7 @@ import {
   initializeDimoSDK,
   LoginWithDimo,
   LogoutWithDimo,
-  PERMISSIONS,
+  Permissions,
   ShareVehiclesWithDimo,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
@@ -110,11 +110,11 @@ const Examples = (props: Props) => {
             onSuccess={onSuccess}
             onError={onError}
             permissions={[
-              PERMISSIONS.GetNonLocationHistory,
-              PERMISSIONS.GetCurrentLocation,
-              PERMISSIONS.GetLocationHistory,
-              PERMISSIONS.GetVINCredential,
-              PERMISSIONS.GetLiveData,
+              Permissions.GetNonLocationHistory,
+              Permissions.GetCurrentLocation,
+              Permissions.GetLocationHistory,
+              Permissions.GetVINCredential,
+              Permissions.GetLiveData,
             ]}
             expirationDate={sampleExpirationDate.toISOString()}
           />

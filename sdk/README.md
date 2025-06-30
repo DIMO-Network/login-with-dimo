@@ -230,15 +230,61 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
 | `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
+| `permissions`         | Array of permission strings to request specific access (see below)          | `undefined`                             | `string[]`                     | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
-| `powertrainTypes`      | List of vehicle powertrain types             | `undefined`                  | `string[]`                     | No        |
-| `onboarding`        | List of oracles for onboarding                                                       | `undefined`                  | `string[]`                     | No        |
-| `expirationDate`      | Expiration date for permissions                                             | `undefined`                             | `string`                       | No        |
+| `powertrainTypes`     | List of vehicle powertrain types                                            | `undefined`                             | `string[]`                     | No        |
+| `onboarding`          | List of oracles for onboarding                                              | `undefined`                             | `string[]`                     | No        |
+| `expirationDate`      | Expiration date for permissions                                | `undefined`                             | `string`                       | No        |
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
-| `utm`                 | UTM parameters for tracking (a query string)                                                 | `null`                                  | `string`                       | No        |
-| `altTitle` | Alternative title for the button | `false` | `boolean` | No |
+| `utm`                | UTM parameters for tracking (a query string)                                | `null`                                  | `string`                       | No        |
+| `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
+
+### Available Permissions
+
+When using the `permissions` prop, you can include either string literals or use the `Permissions` enum for better type safety. The available permissions are:
+
+- `NONLOCATION_TELEMETRY`: Access to non-location vehicle telemetry
+- `COMMANDS`: Execute vehicle commands
+- `CURRENT_LOCATION`: Access to current vehicle location
+- `ALLTIME_LOCATION`: Access to historical location data
+- `CREDENTIALS`: Access to VIN credentials
+- `STREAMS`: Access to live data streams
+- `RAW_DATA`: Access to raw vehicle data
+- `APPROXIMATE_LOCATION`: Access to approximate location data
+
+#### Example Usage:
+
+Using string literals:
+```typescript
+<ShareVehiclesWithDimo
+  permissions={[
+    'NONLOCATION_TELEMETRY',
+    'CURRENT_LOCATION',
+    'STREAMS'
+  ]}
+  // other props...
+/>
+```
+
+Using the `Permissions` enum (recommended for TypeScript projects):
+```typescript
+import { Permissions } from '@dimo-network/login-with-dimo';
+
+// ...
+
+<ShareVehiclesWithDimo
+  permissions={[
+    Permissions.GetNonLocationHistory,
+    Permissions.GetCurrentLocation,
+    Permissions.GetLocationHistory,
+    Permissions.GetVINCredential,
+    Permissions.GetLiveData
+  ]}
+  // other props...
+/>
+```
 
 ### ExecuteAdvancedTransactionWithDimo
 
