@@ -1,4 +1,5 @@
 import { TransactionReceipt } from './transaction.types';
+import { Permissions } from '../enums/permission.enum';
 
 export interface AuthData {
   token: string;
@@ -15,4 +16,10 @@ export interface DimoActionParams {
   expirationDate?: string;
   utm?: string | null;
   powertrainTypes?: string[];
+  permissions?: Permissions[];
+}
+
+export interface InternalDimoActionParams
+  extends Omit<DimoActionParams, 'permissions'> {
+  permissions?: string;
 }

@@ -69,14 +69,15 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.EntryState,
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,
+    AuthParam.Onboarding,
     AuthParam.PermissionTemplateId,
+    AuthParam.Permissions,
+    AuthParam.PowertrainTypes,
     AuthParam.RedirectUri,
     AuthParam.TransactionData,
     AuthParam.Utm,
     AuthParam.VehicleMakes,
-    AuthParam.Onboarding,
     AuthParam.Vehicles,
-    AuthParam.PowertrainTypes,
   ]);
 
   // Construct the full URL
