@@ -45,7 +45,7 @@ function App() {
               checked={permissionsEnabled}
               onChange={() => setPermissionsEnabled(!permissionsEnabled)}
             />
-            Enable Permissions
+            Enable Vehicle Manager as entry state
           </label>
         </div>
 
@@ -60,8 +60,8 @@ function App() {
           </label>
         </div>
         <UserData />
-        <Examples loginType={DimoSDKModes.POPUP} />
-        <Examples loginType={DimoSDKModes.REDIRECT} />
+        <Examples loginType={DimoSDKModes.POPUP} permissionsEnabled={permissionsEnabled} />
+        <Examples loginType={DimoSDKModes.REDIRECT} permissionsEnabled={permissionsEnabled} />
       </header>
     </div>
   );
@@ -69,7 +69,7 @@ function App() {
 
 interface Props {
   loginType: DimoSDKModes;
-  permissionsEnabled?: string;
+  permissionsEnabled?: boolean;
 }
 
 const UserData = () => {
