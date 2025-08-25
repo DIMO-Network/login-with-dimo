@@ -56,19 +56,25 @@ interface ConfigFormProps {
 const ConfigForm = ({ onConfigSave, isOpen, onClose }: ConfigFormProps) => {
   const [config, setConfig] = useState<DimoConfig>(() => {
     const savedConfig = loadConfigFromStorage();
-    return savedConfig || {
-      clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
-      redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
-      environment: (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') || 'development',
-      apiKey: process.env.REACT_APP_DIMO_API_KEY || ''
-    };
+    return (
+      savedConfig || {
+        clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
+        redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
+        environment:
+          (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') ||
+          'development',
+        apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
+      }
+    );
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -81,44 +87,53 @@ const ConfigForm = ({ onConfigSave, isOpen, onClose }: ConfigFormProps) => {
   if (!isOpen) return null;
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      backgroundColor: 'white',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      zIndex: 1000,
-      maxWidth: '90%',
-      width: '500px',
-      maxHeight: '90vh',
-      overflowY: 'auto'
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+    <div
+      style={{
+        position: 'fixed',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        zIndex: 1000,
+        maxWidth: '90%',
+        width: '500px',
+        maxHeight: '90vh',
+        overflowY: 'auto',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <h3 style={{ margin: 0 }}>DIMO Configuration</h3>
-        <button 
+        <button
           onClick={onClose}
           style={{
             background: 'none',
             border: 'none',
             cursor: 'pointer',
             fontSize: '1.2rem',
-            color: '#666'
+            color: '#666',
           }}
         >
           ×
         </button>
       </div>
-      <form 
-        onSubmit={handleSubmit} 
-        style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '15px', 
-          maxWidth: '500px', 
-          margin: '0 auto' 
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '15px',
+          maxWidth: '500px',
+          margin: '0 auto',
         }}
       >
         <Input
@@ -159,16 +174,16 @@ const ConfigForm = ({ onConfigSave, isOpen, onClose }: ConfigFormProps) => {
           onChange={handleChange}
           options={[
             { value: 'development', label: 'Development' },
-            { value: 'production', label: 'Production' }
+            { value: 'production', label: 'Production' },
           ]}
           required
         />
 
-        <button 
-          type="submit" 
-          style={{ 
-            padding: '12px', 
-            marginTop: '10px', 
+        <button
+          type="submit"
+          style={{
+            padding: '12px',
+            marginTop: '10px',
             cursor: 'pointer',
             backgroundColor: '#4f46e5',
             color: 'white',
@@ -193,12 +208,16 @@ function App() {
   const [showConfig, setShowConfig] = useState(false);
   const [config, setConfig] = useState<DimoConfig>(() => {
     const savedConfig = loadConfigFromStorage();
-    return savedConfig || {
-      clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
-      redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
-      environment: (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') || 'development',
-      apiKey: process.env.REACT_APP_DIMO_API_KEY || ''
-    };
+    return (
+      savedConfig || {
+        clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
+        redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
+        environment:
+          (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') ||
+          'development',
+        apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
+      }
+    );
   });
 
   useEffect(() => {
@@ -224,9 +243,16 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+            alignItems: 'center',
+          }}
+        >
           <h1>DIMO Login Example</h1>
-          <button 
+          <button
             onClick={() => setShowConfig(!showConfig)}
             style={{
               background: 'none',
@@ -238,15 +264,15 @@ function App() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
             }}
             title="Settings"
           >
             <Cog6ToothIcon style={{ width: '24px', height: '24px' }} />
           </button>
         </div>
-        <ConfigForm 
-          onConfigSave={handleConfigSave} 
+        <ConfigForm
+          onConfigSave={handleConfigSave}
           isOpen={showConfig}
           onClose={() => setShowConfig(false)}
         />
@@ -258,7 +284,7 @@ function App() {
               checked={permissionsEnabled}
               onChange={() => setPermissionsEnabled(!permissionsEnabled)}
             />
-            Enable Permissions
+            Enable Vehicle Manager as entry state
           </label>
         </div>
 
@@ -275,8 +301,14 @@ function App() {
         {isConfigured ? (
           <>
             <UserData />
-            <Examples loginType={DimoSDKModes.POPUP} />
-            <Examples loginType={DimoSDKModes.REDIRECT} />
+            <Examples
+              loginType={DimoSDKModes.POPUP}
+              permissionsEnabled={permissionsEnabled}
+            />
+            <Examples
+              loginType={DimoSDKModes.REDIRECT}
+              permissionsEnabled={permissionsEnabled}
+            />
           </>
         ) : (
           <p>Please configure your DIMO credentials to continue</p>
@@ -288,7 +320,7 @@ function App() {
 
 interface Props {
   loginType: DimoSDKModes;
-  permissionsEnabled?: string;
+  permissionsEnabled?: boolean;
 }
 
 const UserData = () => {
