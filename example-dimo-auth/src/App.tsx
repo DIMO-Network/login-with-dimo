@@ -20,8 +20,6 @@ import './App.css';
 const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
 
 function App() {
-  const [permissionsEnabled, setPermissionsEnabled] = useState(false);
-  const [forceEmail, setForceEmail] = useState(false);
   const [isConfigured, setIsConfigured] = useState(false);
   const [config, setConfig] = useState<DimoConfig>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -30,11 +28,18 @@ function App() {
         (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') ||
         'development',
       apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
+      enableVehicleManager: false,
+      forceEmail: false,
     };
 
     if (saved) {
       const savedConfig = JSON.parse(saved);
-      return { ...savedConfig, ...envConfig }; // Always use env values for these fields
+      return {
+        ...savedConfig,
+        ...envConfig, // Always use env values for these fields
+        enableVehicleManager: savedConfig.enableVehicleManager || false,
+        forceEmail: savedConfig.forceEmail || false,
+      };
     }
 
     return {
@@ -46,23 +51,24 @@ function App() {
   const [isConfigOpen, setConfigOpen] = useState(false);
 
   useEffect(() => {
-    if (config.clientId && config.redirectUri) {
+    const { clientId, redirectUri, environment, apiKey, forceEmail } = config;
+    if (clientId && redirectUri) {
       initializeDimoSDK({
-        clientId: config.clientId,
-        redirectUri: config.redirectUri,
-        environment: config.environment,
-        apiKey: config.apiKey,
+        clientId,
+        redirectUri,
+        environment,
+        apiKey,
         options: {
           forceEmail,
         },
       });
       setIsConfigured(true);
     }
-  }, [config, forceEmail]);
+  }, [config]);
 
   const handleConfigSave = (newConfig: DimoConfig) => {
     setConfig(newConfig);
-    setConfigOpen(false);
+    window.location.reload();
   };
 
   return (
@@ -104,37 +110,16 @@ function App() {
             apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
           }}
         />
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={permissionsEnabled}
-              onChange={() => setPermissionsEnabled(!permissionsEnabled)}
-            />
-            Enable Vehicle Manager as entry state
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={forceEmail}
-              onChange={() => setForceEmail(!forceEmail)}
-            />
-            Force Email
-          </label>
-        </div>
         {isConfigured ? (
           <>
             <UserData />
             <Examples
               loginType={DimoSDKModes.POPUP}
-              permissionsEnabled={permissionsEnabled}
+              permissionsEnabled={!!config.enableVehicleManager}
             />
             <Examples
               loginType={DimoSDKModes.REDIRECT}
-              permissionsEnabled={permissionsEnabled}
+              permissionsEnabled={!!config.enableVehicleManager}
             />
           </>
         ) : (

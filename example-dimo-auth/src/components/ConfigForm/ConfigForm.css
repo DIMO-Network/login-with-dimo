@@ -73,5 +73,31 @@
 }
 
 .submit-button:hover {
-  background-color: #4338ca;
+  color: #E80303;
+  border: 1px solid #E80303;
+  background-color: white;
+}
+
+.form-group {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkbox-label:hover {
+  color: #1f2937;
 }

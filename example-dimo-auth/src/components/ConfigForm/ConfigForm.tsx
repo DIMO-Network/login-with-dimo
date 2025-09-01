@@ -43,10 +43,10 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, type, checked, value } = e.target as HTMLInputElement;
     setConfig((prev: DimoConfig) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
@@ -90,6 +90,30 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
 
           <input type="hidden" name="environment" value={environment} />
           <input type="hidden" name="apiKey" value={apiKey} />
+
+          <div className="form-group">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                name="enableVehicleManager"
+                checked={!!config.enableVehicleManager}
+                onChange={handleChange}
+              />
+              Enable Vehicle Manager as entry state
+            </label>
+          </div>
+
+          <div className="form-group">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                name="forceEmail"
+                checked={!!config.forceEmail}
+                onChange={handleChange}
+              />
+              Force Email
+            </label>
+          </div>
 
           <button type="submit" className="submit-button">
             Save Configuration

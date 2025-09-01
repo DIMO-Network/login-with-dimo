@@ -3,4 +3,6 @@ export interface DimoConfig {
   redirectUri: string;
   environment: 'production' | 'development';
   apiKey: string;
+  enableVehicleManager?: boolean;
+  forceEmail?: boolean;
 }
