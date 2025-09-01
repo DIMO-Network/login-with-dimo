@@ -14,18 +14,10 @@ import {
 
 import { sampleAbi } from './abi/sample-abi';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { DimoConfig, STORAGE_KEY } from './utils/storage';
 import './App.css';
 
 const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
-
-interface DimoConfig {
-  clientId: string;
-  redirectUri: string;
-  environment: 'production' | 'development';
-  apiKey: string;
-}
-
-const STORAGE_KEY = 'dimoConfig';
 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
