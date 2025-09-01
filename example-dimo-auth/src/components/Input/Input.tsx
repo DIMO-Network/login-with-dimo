@@ -17,5 +17,3 @@ export const Input = ({ label, id, ...inputProps }: InputProps) => {
     </div>
   );
 };
-
-export default Input;

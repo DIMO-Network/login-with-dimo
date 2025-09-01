@@ -1,4 +1,8 @@
 .container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
   margin-bottom: 15px;
 }
 
@@ -6,6 +10,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .input {

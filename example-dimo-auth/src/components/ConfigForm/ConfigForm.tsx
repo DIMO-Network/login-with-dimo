@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 
 import { Input, Select } from '../';
+import {
+  DimoConfig,
+  loadConfigFromStorage,
+  saveConfigToStorage,
+} from '../../utils/storage';
 
 import './ConfigForm.css';
-
-interface DimoConfig {
-  clientId: string;
-  redirectUri: string;
-  environment: 'production' | 'development';
-  apiKey: string;
-}
 
 interface ConfigFormProps {
   onConfigSave: (config: DimoConfig) => void;
@@ -17,15 +15,6 @@ interface ConfigFormProps {
   onClose: () => void;
   initialConfig?: DimoConfig;
 }
-
-const loadConfigFromStorage = (): DimoConfig | null => {
-  const saved = localStorage.getItem('dimoConfig');
-  return saved ? JSON.parse(saved) : null;
-};
-
-const saveConfigToStorage = (config: DimoConfig) => {
-  localStorage.setItem('dimoConfig', JSON.stringify(config));
-};
 
 export const ConfigForm: React.FC<ConfigFormProps> = ({
   onConfigSave,
@@ -127,5 +116,3 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
     </div>
   );
 };
-
-export default ConfigForm;
