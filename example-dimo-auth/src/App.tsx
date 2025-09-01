@@ -46,7 +46,7 @@ function App() {
   const [isConfigOpen, setConfigOpen] = useState(false);
 
   useEffect(() => {
-    if (config.clientId && config.redirectUri && config.apiKey) {
+    if (config.clientId && config.redirectUri) {
       initializeDimoSDK({
         clientId: config.clientId,
         redirectUri: config.redirectUri,
@@ -60,6 +60,10 @@ function App() {
     }
   }, [config, forceEmail]);
 
+  const handleConfigSave = (newConfig: DimoConfig) => {
+    setConfig(newConfig);
+    setConfigOpen(false);
+  };
 
   return (
     <div className="App">
@@ -89,14 +93,14 @@ function App() {
         <ConfigForm
           isOpen={isConfigOpen}
           onClose={() => setConfigOpen(false)}
-          onConfigSave={(newConfig) => {
-            setConfig(newConfig);
-            setConfigOpen(false);
-          }}
+          onConfigSave={handleConfigSave}
           initialConfig={{
             clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
             redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
-            environment: (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') || 'development',
+            environment:
+              (process.env.REACT_APP_DIMO_ENV as
+                | 'production'
+                | 'development') || 'development',
             apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
           }}
         />
