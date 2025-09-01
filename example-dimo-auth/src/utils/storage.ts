@@ -1,11 +1,5 @@
-export interface DimoConfig {
-  clientId: string;
-  redirectUri: string;
-  environment: 'production' | 'development';
-  apiKey: string;
-}
-
-export const STORAGE_KEY = 'dimoConfig';
+import { DimoConfig } from '../types';
+import { STORAGE_KEY } from '../constants';
 
 export const loadConfigFromStorage = (): DimoConfig | null => {
   const saved = localStorage.getItem(STORAGE_KEY);

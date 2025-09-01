@@ -7,14 +7,14 @@ import {
   initializeDimoSDK,
   LoginWithDimo,
   LogoutWithDimo,
-  Permissions,
   ShareVehiclesWithDimo,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
 
 import { sampleAbi } from './abi/sample-abi';
 import { Cog6ToothIcon } from '@heroicons/react/24/outline';
-import { DimoConfig, STORAGE_KEY } from './utils/storage';
+import { STORAGE_KEY } from './constants';
+import { DimoConfig } from './types';
 import './App.css';
 
 const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: Month is zero-based
@@ -25,11 +25,22 @@ function App() {
   const [isConfigured, setIsConfigured] = useState(false);
   const [config, setConfig] = useState<DimoConfig>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : {
+    const envConfig = {
+      environment:
+        (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') ||
+        'development',
+      apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
+    };
+
+    if (saved) {
+      const savedConfig = JSON.parse(saved);
+      return { ...savedConfig, ...envConfig }; // Always use env values for these fields
+    }
+
+    return {
       clientId: process.env.REACT_APP_DIMO_CLIENT_ID || '',
       redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI || '',
-      environment: (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') || 'development',
-      apiKey: process.env.REACT_APP_DIMO_API_KEY || '',
+      ...envConfig,
     };
   });
   const [isConfigOpen, setConfigOpen] = useState(false);

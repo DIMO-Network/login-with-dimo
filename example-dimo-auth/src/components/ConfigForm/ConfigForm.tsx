@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 
-import { Input, Select } from '../';
-import {
-  DimoConfig,
-  loadConfigFromStorage,
-  saveConfigToStorage,
-} from '../../utils/storage';
+import { Input } from '../';
+import { loadConfigFromStorage, saveConfigToStorage } from '../../utils';
+import { DimoConfig } from '../../types';
 
 import './ConfigForm.css';
 
@@ -37,11 +34,17 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
     );
   });
 
+  // Get environment and apiKey from environment variables
+  const environment =
+    (process.env.REACT_APP_DIMO_ENV as 'production' | 'development') ||
+    'development';
+  const apiKey = process.env.REACT_APP_DIMO_API_KEY || '';
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setConfig((prev) => ({
+    setConfig((prev: DimoConfig) => ({
       ...prev,
       [name]: value,
     }));
@@ -85,28 +88,8 @@ export const ConfigForm: React.FC<ConfigFormProps> = ({
             required
           />
 
-          <Input
-            id="apiKey"
-            name="apiKey"
-            label="API Key"
-            type="password"
-            value={config.apiKey}
-            onChange={handleChange}
-            required
-          />
-
-          <Select
-            id="environment"
-            name="environment"
-            label="Environment"
-            value={config.environment}
-            onChange={handleChange}
-            options={[
-              { value: 'development', label: 'Development' },
-              { value: 'production', label: 'Production' },
-            ]}
-            required
-          />
+          <input type="hidden" name="environment" value={environment} />
+          <input type="hidden" name="apiKey" value={apiKey} />
 
           <button type="submit" className="submit-button">
             Save Configuration
