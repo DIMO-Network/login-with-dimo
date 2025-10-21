@@ -12,6 +12,7 @@ export enum EntryState {
 export enum AuthParam {
   AltTitle = 'altTitle',
   ClientId = 'clientId',
+  ConfigId = 'configId',
   EntryState = 'entryState',
   ExpirationDate = 'expirationDate',
   ForceEmail = 'forceEmail',
