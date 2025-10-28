@@ -10,7 +10,7 @@ export interface AuthData {
 
 export interface DimoActionParams {
   permissionTemplateId?: string;
-  configId?: string;
+  configurationId?: string;
   vehicles?: string[];
   vehicleMakes?: string[];
   onboarding?: string[];

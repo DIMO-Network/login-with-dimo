@@ -19,7 +19,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   onSuccess,
   onError,
   permissionTemplateId,
-  configId,
+  configurationId,
   permissions,
   vehicles,
   vehicleMakes,
@@ -33,7 +33,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
 }) => {
   const payload: InternalDimoActionParams & { eventType: EventTypes } = {
     permissionTemplateId,
-    configId,
+    configurationId,
     vehicles,
     vehicleMakes,
     onboarding,

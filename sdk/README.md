@@ -107,7 +107,7 @@ import {
   onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
   onError={(error) => console.error("Error:", error)}
   permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
-  // configId="your-config-id" // Optional: Configuration ID for SACD attestations
+  // configurationId="your-config-id" // Optional: Configuration ID for SACD attestations
   // expirationDate={} // Optional ISO string
   // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
   // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
@@ -172,7 +172,7 @@ initializeDimoSDK({
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={"1"}
-    // configId="your-config-id" // Optional: Configuration ID for SACD attestations
+    // configurationId="your-config-id" // Optional: Configuration ID for SACD attestations
     // expirationDate={} // Optional ISO string
   />
 
@@ -212,7 +212,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `onSuccess`            | Callback function to handle success          | N/A                          | `(authData: AuthData) => void` | Yes       |
 | `onError`              | Callback function to handle errors           | N/A                          | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId` | Permissions template ID                      | `undefined`                  | `string`                       | No        |
-| `configId`             | Configuration ID for SACD attestations       | `undefined`                  | `string`                       | No        |
+| `configurationId`      | Configuration ID for SACD attestations       | `undefined`                  | `string`                       | No        |
 | `vehicles`             | List of vehicles                             | `undefined`                  | `string[]`                     | No        |
 | `vehicleMakes`         | List of vehicle makes                        | `undefined`                  | `string[]`                     | No        |
 | `powertrainTypes`      | List of vehicle powertrain types             | `undefined`                  | `string[]`                     | No        |
@@ -233,7 +233,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
 | `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
-| `configId`            | Configuration ID for SACD attestations                                      | `undefined`                             | `string`                       | No        |
+| `configurationId`     | Configuration ID for SACD attestations                                      | `undefined`                             | `string`                       | No        |
 | `permissions`         | Array of permission strings to request specific access (see below)          | `undefined`                             | `string[]`                     | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
