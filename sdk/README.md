@@ -87,7 +87,7 @@ The following example shows all buttons being rendered, with no auth state check
 ```
 import {
   LoginWithDimo,
-  ShareVehiclesWithDimo,
+  ShareWithDimo,
   ExecuteAdvancedTransactionWithDimo,
 } from "@dimo-network/login-with-dimo";
 
@@ -102,7 +102,7 @@ import {
   // onboarding={["tesla"]}  // Specify the vehicles to be accessed after login
   />
 
-<ShareVehiclesWithDimo
+<ShareWithDimo
   mode="popup"
   onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
   onError={(error) => console.error("Error:", error)}
@@ -142,7 +142,7 @@ This can be achieved by simply wrapping those buttons in a conditional as follow
 ```javascript
 import {
   LoginWithDimo,
-  ShareVehiclesWithDimo,
+  ShareWithDimo,
   ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
   useDimoAuthState,
@@ -167,7 +167,7 @@ initializeDimoSDK({
 
 
 {isAuthenticated ? (
-  <ShareVehiclesWithDimo
+  <ShareWithDimo
     mode="popup"
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
@@ -223,9 +223,9 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `utm`                  | UTM parameters for tracking (a query string) | `null`                       | `string`                       | No        |
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 
-### ShareVehiclesWithDimo
+### ShareWithDimo
 
-The `ShareVehiclesWithDimo` component allows users to share their vehicles data with DIMO.
+The `ShareWithDimo` component allows users to share their vehicles data with DIMO.
 
 | Parameter             | Description                                                                 | Default Value                           | Type                           | Mandatory |
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------|--------------------------------|-----------|
@@ -240,8 +240,8 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `powertrainTypes`     | List of vehicle powertrain types                                            | `undefined`                             | `string[]`                     | No        |
 | `onboarding`          | List of oracles for onboarding                                              | `undefined`                             | `string[]`                     | No        |
 | `expirationDate`      | Expiration date for permissions                                | `undefined`                             | `string`                       | No        |
-| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
-| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
+| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share with DIMO"`                     | `string`                       | No        |
+| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share with DIMO"`          | `string`                       | No        |
 | `utm`                | UTM parameters for tracking (a query string)                                | `null`                                  | `string`                       | No        |
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 
@@ -262,7 +262,7 @@ When using the `permissions` prop, you can include either string literals or use
 
 Using string literals:
 ```typescript
-<ShareVehiclesWithDimo
+<ShareWithDimo
   permissions={[
     'NONLOCATION_TELEMETRY',
     'CURRENT_LOCATION',
@@ -278,7 +278,7 @@ import { Permissions } from '@dimo-network/login-with-dimo';
 
 // ...
 
-<ShareVehiclesWithDimo
+<ShareWithDimo
   permissions={[
     Permissions.GetNonLocationHistory,
     Permissions.GetCurrentLocation,

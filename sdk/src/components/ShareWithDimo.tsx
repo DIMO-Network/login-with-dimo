@@ -10,11 +10,11 @@ import {
 import { getPermissionsBinary } from '@utils/index';
 import { BaseDimoButton } from './BaseDimoButton';
 
-type ShareVehiclesWithDimoProps = BaseButtonProps &
+type ShareWithDimoProps = BaseButtonProps &
   LoginButtonProps &
   ButtonLabels;
 
-const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
+const ShareWithDimo: React.FC<ShareWithDimoProps> = ({
   mode,
   onSuccess,
   onError,
@@ -25,8 +25,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   vehicleMakes,
   onboarding,
   expirationDate,
-  authenticatedLabel = 'Share Vehicles with DIMO',
-  unAuthenticatedLabel = 'Sign in to Share Vehicles with DIMO',
+  authenticatedLabel = 'Share with DIMO',
+  unAuthenticatedLabel = 'Sign in to Share with DIMO',
   utm = null,
   altTitle,
   powertrainTypes,
@@ -59,4 +59,4 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   );
 };
 
-export default ShareVehiclesWithDimo;
+export default ShareWithDimo;

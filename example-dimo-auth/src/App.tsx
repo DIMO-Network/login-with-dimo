@@ -7,7 +7,7 @@ import {
   LoginWithDimo,
   LogoutWithDimo,
   Permissions,
-  ShareVehiclesWithDimo,
+  ShareWithDimo,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
 
@@ -105,7 +105,7 @@ const Examples = (props: Props) => {
       />
       {isAuthenticated && (
         <>
-          <ShareVehiclesWithDimo
+          <ShareWithDimo
             mode={loginType}
             onSuccess={onSuccess}
             onError={onError}
@@ -118,7 +118,7 @@ const Examples = (props: Props) => {
             ]}
             expirationDate={sampleExpirationDate.toISOString()}
           />
-          <ShareVehiclesWithDimo
+          <ShareWithDimo
             mode={loginType}
             onSuccess={onSuccess}
             onError={onError}
@@ -126,7 +126,7 @@ const Examples = (props: Props) => {
             permissionTemplateId={'2'}
             onboarding={['tesla']}
           />
-          <ShareVehiclesWithDimo
+          <ShareWithDimo
             mode={loginType}
             onSuccess={onSuccess}
             onError={onError}
@@ -134,7 +134,7 @@ const Examples = (props: Props) => {
             permissionTemplateId={'2'}
             powertrainTypes={['ICE']}
           />
-          <ShareVehiclesWithDimo
+          <ShareWithDimo
             mode={loginType}
             onSuccess={onSuccess}
             onError={onError}
