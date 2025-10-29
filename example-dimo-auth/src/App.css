@@ -30,6 +30,31 @@
   color: #61dafb;
 }
 
+.settings-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.settings-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.settings-icon {
+  width: 24px;
+  height: 24px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
