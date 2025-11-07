@@ -44,5 +44,3 @@ jobs:
         working-directory: ./sdk        
       - run: npm publish --access public --verbose
         working-directory: ./sdk                 
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
