@@ -12,6 +12,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DIMO-Network/login-with-dimo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DIMO-Network/login-with-dimo/issues"
+  },
+  "homepage": "https://github.com/DIMO-Network/login-with-dimo#readme",
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
