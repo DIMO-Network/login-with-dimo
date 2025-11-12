@@ -114,7 +114,7 @@ We recommend the following steps for pushing updates, and releasing new versions
 
 ## 🧠 How It Works
 
-The SDK exports sample React Button Components (LoginWithDimo, ShareVehiclesWithDimo, ExecuteAdvancedTransactionWithDimo), as well as configuration functions (initializeDimoSDK)
+The SDK exports sample React Button Components (LoginWithDimo, ShareWithDimo, ExecuteAdvancedTransactionWithDimo), as well as configuration functions (initializeDimoSDK)
 
 The SDK then takes the properties provided within the components, and configuration, and drills them into the LIWD app, through the following launch modes
 1. Popup: Opens the DIMO app in a new window and communicates via postMessage.
@@ -138,7 +138,7 @@ The SDK then takes the properties provided within the components, and configurat
 
 ## 📦 Component Design
 
-All SDK components (e.g., <LoginWithDimo />, <ShareVehiclesWithDimo />) follow the same pattern:
+All SDK components (e.g., <LoginWithDimo />, <ShareWithDimo />) follow the same pattern:
 
 1. The developer initializes the SDK with credentials (clientId, redirectUri, etc).
 

@@ -87,7 +87,7 @@ The following example shows all buttons being rendered, with no auth state check
 ```
 import {
   LoginWithDimo,
-  ShareVehiclesWithDimo,
+  ShareWithDimo,
   ExecuteAdvancedTransactionWithDimo,
 } from "@dimo-network/login-with-dimo";
 
@@ -102,11 +102,12 @@ import {
   // onboarding={["tesla"]}  // Specify the vehicles to be accessed after login
   />
 
-<ShareVehiclesWithDimo
+<ShareWithDimo
   mode="popup"
   onSuccess={(authData) => console.log("Success:", authData)} //authData will include the sharedVehicles
   onError={(error) => console.error("Error:", error)}
   permissionTemplateId={"1"} //REQUIRED: "1" is the template for all SACD permissions
+  // configurationId="your-config-id" // Optional: Configuration ID for SACD attestations
   // expirationDate={} // Optional ISO string
   // Optionally, specify vehicles/onboarding oracles (uncomment the line below to use it)
   // vehicles={["585","586"]}  // Specify the vehicles to be accessed when triggered
@@ -141,7 +142,7 @@ This can be achieved by simply wrapping those buttons in a conditional as follow
 ```javascript
 import {
   LoginWithDimo,
-  ShareVehiclesWithDimo,
+  ShareWithDimo,
   ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
   useDimoAuthState,
@@ -166,11 +167,12 @@ initializeDimoSDK({
 
 
 {isAuthenticated ? (
-  <ShareVehiclesWithDimo
+  <ShareWithDimo
     mode="popup"
     onSuccess={(authData) => console.log("Success:", authData)}
     onError={(error) => console.error("Error:", error)}
     permissionTemplateId={"1"}
+    // configurationId="your-config-id" // Optional: Configuration ID for SACD attestations
     // expirationDate={} // Optional ISO string
   />
 
@@ -210,6 +212,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `onSuccess`            | Callback function to handle success          | N/A                          | `(authData: AuthData) => void` | Yes       |
 | `onError`              | Callback function to handle errors           | N/A                          | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId` | Permissions template ID                      | `undefined`                  | `string`                       | No        |
+| `configurationId`      | Configuration ID for SACD attestations       | `undefined`                  | `string`                       | No        |
 | `vehicles`             | List of vehicles                             | `undefined`                  | `string[]`                     | No        |
 | `vehicleMakes`         | List of vehicle makes                        | `undefined`                  | `string[]`                     | No        |
 | `powertrainTypes`      | List of vehicle powertrain types             | `undefined`                  | `string[]`                     | No        |
@@ -220,9 +223,9 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `utm`                  | UTM parameters for tracking (a query string) | `null`                       | `string`                       | No        |
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 
-### ShareVehiclesWithDimo
+### ShareWithDimo
 
-The `ShareVehiclesWithDimo` component allows users to share their vehicles data with DIMO.
+The `ShareWithDimo` component allows users to share their vehicles data with DIMO.
 
 | Parameter             | Description                                                                 | Default Value                           | Type                           | Mandatory |
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------|--------------------------------|-----------|
@@ -230,14 +233,15 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
 | `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
+| `configurationId`     | Configuration ID for SACD attestations                                      | `undefined`                             | `string`                       | No        |
 | `permissions`         | Array of permission strings to request specific access (see below)          | `undefined`                             | `string[]`                     | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
 | `vehicleMakes`        | List of vehicle makes                                                       | `undefined`                             | `string[]`                     | No        |
 | `powertrainTypes`     | List of vehicle powertrain types                                            | `undefined`                             | `string[]`                     | No        |
 | `onboarding`          | List of oracles for onboarding                                              | `undefined`                             | `string[]`                     | No        |
 | `expirationDate`      | Expiration date for permissions                                | `undefined`                             | `string`                       | No        |
-| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share Vehicles with DIMO"`            | `string`                       | No        |
-| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
+| `authenticatedLabel`  | Label when the user is authenticated                                        | `"Share with DIMO"`                     | `string`                       | No        |
+| `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share with DIMO"`          | `string`                       | No        |
 | `utm`                | UTM parameters for tracking (a query string)                                | `null`                                  | `string`                       | No        |
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 
@@ -258,7 +262,7 @@ When using the `permissions` prop, you can include either string literals or use
 
 Using string literals:
 ```typescript
-<ShareVehiclesWithDimo
+<ShareWithDimo
   permissions={[
     'NONLOCATION_TELEMETRY',
     'CURRENT_LOCATION',
@@ -274,7 +278,7 @@ import { Permissions } from '@dimo-network/login-with-dimo';
 
 // ...
 
-<ShareVehiclesWithDimo
+<ShareWithDimo
   permissions={[
     Permissions.GetNonLocationHistory,
     Permissions.GetCurrentLocation,

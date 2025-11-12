@@ -1,6 +1,6 @@
 // Export components
 export { default as LoginWithDimo } from './components/LoginWithDimo';
-export { default as ShareVehiclesWithDimo } from './components/ShareVehiclesWithDimo';
+export { default as ShareWithDimo } from './components/ShareWithDimo';
 export { default as ExecuteAdvancedTransactionWithDimo } from './components/ExecuteAdvancedTransactionWithDimo';
 export { default as LogoutWithDimo } from './components/LogoutWithDimo';
 

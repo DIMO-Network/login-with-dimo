@@ -17,6 +17,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   onSuccess,
   onError,
   permissionTemplateId,
+  configurationId,
   permissions,
   vehicles,
   vehicleMakes,
@@ -29,6 +30,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
 }) => {
   const payload: InternalDimoActionParams & { eventType: EventTypes } = {
     ...getPermissionsBinary(permissions, permissionTemplateId),
+    configurationId,
     vehicles,
     vehicleMakes,
     onboarding,
