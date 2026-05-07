@@ -6,6 +6,8 @@ export interface AuthData {
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
+  signature?: `0x${string}`;
+  signer?: `0x${string}`;
 }
 
 export interface DimoActionParams {

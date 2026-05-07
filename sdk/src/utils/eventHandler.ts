@@ -94,6 +94,26 @@ const handleTransactionResponse = (
   }
 };
 
+const handleMessageResponse = (
+  { token, signature, signer }: MessageData,
+  handlers: EventHandlers
+): void => {
+  if (!token) {
+    handlers.onError(new Error('Missing authentication token'));
+    return;
+  }
+
+  if (signature) {
+    handlers.onSuccess({
+      token,
+      signature,
+      ...(signer && { signer }),
+    });
+  } else {
+    handlers.onError(new Error('Could not produce signature'));
+  }
+};
+
 const handleLogout = (_: MessageData, handlers: EventHandlers): void => {
   logout(handlers.setAuthenticated);
 };
@@ -108,6 +128,7 @@ const handleDimoError = (
 const eventHandlers: Record<string, EventHandler> = {
   [MessageEventType.AUTH_RESPONSE]: handleAuthResponse,
   [MessageEventType.TRANSACTION_RESPONSE]: handleTransactionResponse,
+  [MessageEventType.MESSAGE_RESPONSE]: handleMessageResponse,
   [MessageEventType.LOGOUT]: handleLogout,
   [MessageEventType.DIMO_ERROR]: handleDimoError,
 };
@@ -187,4 +208,3 @@ export const handleMessageForPopup = (
     mode: DimoSDKModes.POPUP,
   });
 };
-

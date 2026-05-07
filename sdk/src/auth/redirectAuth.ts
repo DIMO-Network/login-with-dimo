@@ -3,6 +3,7 @@ import {
   AuthPayload,
   BaseAuthParams,
   DimoActionPayload,
+  SignMessageData,
   TransactionData,
 } from '@dimo-types/index';
 
@@ -52,6 +53,24 @@ const transformTransactionData = (
   return serializedTransactionData;
 };
 
+const transformMessageData = (
+  messageData: SignMessageData | string | undefined
+) => {
+  if (!messageData) return undefined;
+  if (typeof messageData === 'string') return messageData;
+
+  const serializedMessageData = encodeURIComponent(JSON.stringify(messageData));
+
+  if (serializedMessageData.length > 1000) {
+    console.warn(
+      'Serialized messageData is too large for a URL parameter. Pass a 32-byte hash via { raw } instead.'
+    );
+    return undefined;
+  }
+
+  return serializedMessageData;
+};
+
 export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
@@ -59,6 +78,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     ...payload,
     ...data,
     transactionData: transformTransactionData(data.transactionData),
+    messageData: transformMessageData(data.messageData),
   };
 
   const params = new URLSearchParams();
@@ -69,6 +89,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.EntryState,
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,
+    AuthParam.MessageData,
     AuthParam.Onboarding,
     AuthParam.PermissionTemplateId,
     AuthParam.Permissions,
