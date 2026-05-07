@@ -8,6 +8,7 @@ import {
   LogoutWithDimo,
   Permissions,
   ShareVehiclesWithDimo,
+  SignMessageWithDimo,
   useDimoAuthState,
 } from '@dimo-network/login-with-dimo';
 
@@ -143,6 +144,8 @@ const Examples = (props: Props) => {
             powertrainTypes={['BEV']}
           />
           <AdvancedTransactionButton loginType={loginType} />
+          <SignMessageButton loginType={loginType} />
+          <SignHashButton loginType={loginType} />
           <LogoutWithDimo
             mode={loginType}
             onSuccess={onSuccess}
@@ -169,6 +172,42 @@ const AdvancedTransactionButton = (props: Pick<Props, 'loginType'>) => {
       abi={sampleAbi}
       functionName="transfer"
       args={['0x62b98e019e0d3e4A1Ad8C786202e09017Bd995e1', '0']}
+    />
+  );
+};
+
+const SignMessageButton = (props: Pick<Props, 'loginType'>) => {
+  const onSuccess = (data: any) => {
+    console.log('Signature:', data.signature);
+    console.log('Signer:', data.signer);
+  };
+  const onError = (error: unknown) => console.error('Error:', error);
+  return (
+    <SignMessageWithDimo
+      mode={props.loginType}
+      onSuccess={onSuccess}
+      onError={onError}
+      message={`Sign in to example-dimo-auth at ${Math.floor(Date.now() / 1000)}`}
+      authenticatedLabel="Sign Message"
+    />
+  );
+};
+
+const SignHashButton = (props: Pick<Props, 'loginType'>) => {
+  const onSuccess = (data: any) => {
+    console.log('Hash signature:', data.signature);
+    console.log('Signer:', data.signer);
+  };
+  const onError = (error: unknown) => console.error('Error:', error);
+  return (
+    <SignMessageWithDimo
+      mode={props.loginType}
+      onSuccess={onSuccess}
+      onError={onError}
+      message={{
+        raw: '0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef',
+      }}
+      authenticatedLabel="Sign 32-byte Hash"
     />
   );
 };

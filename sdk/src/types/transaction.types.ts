@@ -56,3 +56,13 @@ export interface TransactionParams {
 
 export type ExecuteAdvancedTransactionButtonProps = TransactionParams;
 
+export interface SignMessageData {
+  message: string;
+  isHex: boolean;
+}
+
+export type SignMessageInput = string | { raw: `0x${string}` };
+
+export interface SignMessageButtonProps {
+  message: SignMessageInput;
+}

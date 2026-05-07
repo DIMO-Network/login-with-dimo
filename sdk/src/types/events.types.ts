@@ -12,6 +12,8 @@ export interface MessageData {
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
   message?: string;
+  signature?: `0x${string}`;
+  signer?: `0x${string}`;
 }
 
 export interface MessageHandlerConfig {
