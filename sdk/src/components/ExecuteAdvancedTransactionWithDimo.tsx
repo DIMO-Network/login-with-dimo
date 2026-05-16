@@ -8,6 +8,7 @@ import {
   ExecuteAdvancedTransactionButtonProps,
   ButtonLabels,
 } from '@dimo-types/index';
+import { useResolvedBrand, formatBrandedLabel } from '@utils/brand';
 
 type ExecuteAdvancedTransactionProps = BaseButtonProps &
   ExecuteAdvancedTransactionButtonProps &
@@ -24,9 +25,10 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   abi,
   functionName,
   args,
-  authenticatedLabel = 'Execute Advanced Transaction with Dimo',
-  unAuthenticatedLabel = 'Sign in to Execute Transaction',
+  authenticatedLabel,
+  unAuthenticatedLabel,
   altTitle,
+  brandOverride,
 }) => {
   if (!address || !abi || !functionName || !args) {
     throw new Error('Missing required transaction parameters.');
@@ -39,6 +41,15 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
     args,
   };
 
+  const brand = useResolvedBrand(brandOverride);
+
+  const resolvedAuthLabel =
+    authenticatedLabel ??
+    formatBrandedLabel('Execute Transaction with {name}', brand.name, 'Execute Advanced Transaction with Dimo');
+  const resolvedUnAuthLabel =
+    unAuthenticatedLabel ??
+    formatBrandedLabel('Sign in to Execute Transaction', brand.name, 'Sign in to Execute Transaction');
+
   return (
     <BaseDimoButton
       mode={mode}
@@ -46,13 +57,14 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
-        authenticated ? authenticatedLabel : unAuthenticatedLabel
+        authenticated ? resolvedAuthLabel : resolvedUnAuthLabel
       }
       altTitle={altTitle}
       payload={{
         transactionData,
         eventType: EventTypes.EXECUTE_ADVANCED_TRANSACTION,
       }}
+      brand={brand}
     />
   );
 };
