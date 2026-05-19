@@ -41,6 +41,7 @@ interface BrandResponse {
 }
 
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+const FETCH_TIMEOUT_MS = 3000;
 
 export async function fetchOemBrand(
   clientId: string,
@@ -50,8 +51,13 @@ export async function fetchOemBrand(
   const base = DEV_CONSOLE_API_URLS[environment] ?? DEV_CONSOLE_API_URLS[Environment.PRODUCTION];
   const url = `${base}/api/brand?clientId=${encodeURIComponent(clientId)}`;
 
+  // Bounded so a slow console-api can't keep the button stuck on the default
+  // DIMO chrome forever — falling back to defaults is acceptable; hanging is
+  // not. 3s is comfortably above p99 for this endpoint.
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
   try {
-    const r = await fetch(url);
+    const r = await fetch(url, { signal: ctrl.signal });
     if (!r.ok) return null;
     const body = await r.json() as BrandResponse;
     if (!body.name) return null;
@@ -66,5 +72,7 @@ export async function fetchOemBrand(
     };
   } catch {
     return null;
+  } finally {
+    clearTimeout(timer);
   }
 }
