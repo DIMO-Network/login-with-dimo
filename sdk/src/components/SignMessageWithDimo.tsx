@@ -8,6 +8,7 @@ import {
   SignMessageButtonProps,
   SignMessageData,
 } from '@dimo-types/index';
+import { useResolvedBrand, formatBrandedLabel } from '@utils/brand';
 
 type SignMessageProps = BaseButtonProps & SignMessageButtonProps & ButtonLabels;
 
@@ -43,11 +44,20 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
   onSuccess,
   onError,
   message,
-  authenticatedLabel = 'Sign Message with Dimo',
-  unAuthenticatedLabel = 'Sign in to Sign Message',
+  authenticatedLabel,
+  unAuthenticatedLabel,
   altTitle,
+  brandOverride,
 }) => {
   const messageData = normalizeMessage(message);
+  const brand = useResolvedBrand(brandOverride);
+
+  const resolvedAuthLabel =
+    authenticatedLabel ??
+    formatBrandedLabel('Sign Message with {name}', brand.name, 'Sign Message with Dimo');
+  const resolvedUnAuthLabel =
+    unAuthenticatedLabel ??
+    formatBrandedLabel('Sign in to Sign Message', brand.name, 'Sign in to Sign Message');
 
   return (
     <BaseDimoButton
@@ -56,13 +66,14 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
-        authenticated ? authenticatedLabel : unAuthenticatedLabel
+        authenticated ? resolvedAuthLabel : resolvedUnAuthLabel
       }
       altTitle={altTitle}
       payload={{
         messageData,
         eventType: EventTypes.SIGN_MESSAGE,
       }}
+      brand={brand}
     />
   );
 };
