@@ -59,11 +59,10 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
 
   const dimoLogin = getDimoLoginUrl(environment!);
 
-  // Prefer iconURI (square, popup-chrome-friendly) for the param payload sent
-  // to the hosted auth page; fall back to logoURI when only the wide mark is
-  // configured. The button itself always renders the wide logoURI.
-  const popupIcon = brand?.iconURI ?? brand?.logoURI ?? undefined;
-
+  // Brand metadata (name, logo) is intentionally NOT propagated to the auth
+  // popup. The popup at login.dimo.org fetches its own brand record from
+  // console-api.dimo.org using `clientId`, keeping the trust boundary on the
+  // dimo.org domain. The SDK only uses brand for the local button render.
   const basePayload: AuthPayload = {
     entryState,
     onSuccess,
@@ -75,8 +74,6 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     redirectUri,
     apiKey,
     forceEmail: options?.forceEmail ?? false,
-    icon: popupIcon,
-    label: brand?.name ?? undefined,
   };
 
   const handleButtonClick = () => {

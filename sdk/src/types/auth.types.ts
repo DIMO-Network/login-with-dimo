@@ -16,10 +16,6 @@ export interface BaseAuthParams {
   redirectUri?: string;
   apiKey?: string;
   altTitle?: boolean;
-  /** OEM logo URL passed to the auth popup/redirect for brand-aware chrome. */
-  icon?: string;
-  /** OEM brand name used in popup/redirect copy (e.g. "Toyota"). */
-  label?: string;
 }
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}
