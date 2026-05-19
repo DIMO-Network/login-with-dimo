@@ -18,6 +18,8 @@ export interface BrandOverride {
   name?: string;
   logoURI?: string;
   iconURI?: string;
+  /** 7-char hex (#RRGGBB) — overrides the fetched primary color. */
+  primaryColor?: string;
 }
 
 export interface BaseButtonProps extends DimoActionParams {

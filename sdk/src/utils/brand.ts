@@ -19,9 +19,10 @@ import type { ResolvedBrand } from '@components/BaseDimoButton';
 export function useResolvedBrand(override?: BrandOverride): ResolvedBrand {
   const fetched = useDimoAuthBrand();
   return {
-    name:    override?.name    ?? fetched?.name    ?? null,
-    logoURI: override?.logoURI ?? fetched?.logoURI ?? null,
-    iconURI: override?.iconURI ?? fetched?.iconURI ?? null,
+    name:    override?.name         ?? fetched?.name         ?? null,
+    logoURI: override?.logoURI      ?? fetched?.logoURI      ?? null,
+    iconURI: override?.iconURI      ?? fetched?.iconURI      ?? null,
+    primaryColor: override?.primaryColor ?? fetched?.primaryColor ?? null,
   };
 }
 

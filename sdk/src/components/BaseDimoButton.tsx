@@ -1,4 +1,4 @@
-import React, { type FC } from 'react';
+import React, { type CSSProperties, type FC } from 'react';
 
 import { popupAuth } from '@auth/popupAuth';
 import { redirectAuth } from '@auth/redirectAuth';
@@ -17,18 +17,38 @@ import {
   DimoActionPayload,
 } from '@dimo-types/index';
 import { getDimoLoginUrl } from '../utils/url';
+import { readableTextOn } from '@utils/colorContrast';
 
 /**
- * Resolved brand passed by each wrapper to BaseDimoButton. `name` drives the
- * `label` query-param sent to the auth chrome; `logoURI` replaces the
- * hardcoded DIMO mark inside the button itself. Both are nullable so the
- * default DIMO chrome renders when no OEM is linked to the dev license.
+ * Resolved brand passed by each wrapper to BaseDimoButton.
+ *   `name`         drives the auth label ("Sign in with {name}").
+ *   `logoURI`      replaces the hardcoded DIMO mark inside the button.
+ *   `primaryColor` (#RRGGBB) recolors the button bg + border + label; label
+ *                  text contrast is picked automatically.
+ *
+ * Each field is nullable so the default DIMO chrome renders when no OEM is
+ * linked to the dev license.
  */
 export interface ResolvedBrand {
   name: string | null;
   logoURI: string | null;
   iconURI: string | null;
+  primaryColor: string | null;
 }
+
+/**
+ * Builds the inline style override for the button when a brand color is set.
+ * The default CSS reads from these custom properties with fallback values, so
+ * an empty object cleanly leaves the DIMO defaults in place.
+ */
+const brandButtonStyle = (color: string | null | undefined): CSSProperties => {
+  if (!color) return {};
+  return {
+    ['--dimo-btn-bg' as string]: color,
+    ['--dimo-btn-border' as string]: color,
+    ['--dimo-btn-text' as string]: readableTextOn(color),
+  };
+};
 
 interface BaseDimoButtonOptions extends BaseButtonProps {
   buttonLabel: (authenticated: boolean) => string;
@@ -89,11 +109,18 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     }
   };
 
+  // When the OEM has picked a brand color, the SVG DIMO mark needs to use the
+  // contrasting text color (black/white) too — otherwise a hardcoded black
+  // path on a dark brand bg becomes invisible. Image logos pass through
+  // unchanged; they're assumed pre-styled by the OEM.
+  const svgFill = brand?.primaryColor ? readableTextOn(brand.primaryColor) : 'black';
+
   return (
     <DimoAuthProvider>
       <div>
         <button
           className="custom-button"
+          style={brandButtonStyle(brand?.primaryColor)}
           disabled={isAuthenticated && disableIfAuthenticated}
           onClick={handleButtonClick}
         >
@@ -113,7 +140,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
             >
               <path
                 d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
-                fill="black"
+                fill={svgFill}
               />
             </svg>
           )}

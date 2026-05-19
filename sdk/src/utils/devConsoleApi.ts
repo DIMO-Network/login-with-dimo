@@ -21,6 +21,8 @@ export interface OemBrand {
   logoURI: string | null;
   /** Square icon — resolved HTTPS URL ready for <img src>. */
   iconURI: string | null;
+  /** Primary accent color as a 7-char hex string (#RRGGBB) or null. */
+  primaryColor: string | null;
 }
 
 const DEV_CONSOLE_API_URLS: Record<Environment, string> = {
@@ -35,7 +37,10 @@ interface BrandResponse {
   iconCid?: string | null;
   logoUrl?: string | null;
   iconUrl?: string | null;
+  primaryColor?: string | null;
 }
+
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 
 export async function fetchOemBrand(
   clientId: string,
@@ -54,6 +59,10 @@ export async function fetchOemBrand(
       name: body.name,
       logoURI: body.logoUrl ?? null,
       iconURI: body.iconUrl ?? null,
+      primaryColor:
+        body.primaryColor && HEX_COLOR_RE.test(body.primaryColor)
+          ? body.primaryColor
+          : null,
     };
   } catch {
     return null;
