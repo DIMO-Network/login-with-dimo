@@ -22,16 +22,22 @@ let sdkConfig: {
 let sdkBrand: OemBrand | null = null;
 const brandSubscribers = new Set<() => void>();
 
-const BRAND_STORAGE_KEY = 'dimo.brand.v1';
+// Cache key is namespaced per clientId so a browser that loads multiple
+// DIMO-integrated apps doesn't constantly evict the cache for app A every
+// time app B is opened. Each clientId gets its own slot.
+const BRAND_STORAGE_KEY_PREFIX = 'dimo.brand.v1.';
 const BRAND_STORAGE_TTL_MS = 24 * 60 * 60 * 1000; // 24h — re-fetch daily.
+
+function brandStorageKey(clientId: string): string {
+  return BRAND_STORAGE_KEY_PREFIX + clientId.toLowerCase();
+}
 
 function readBrandFromStorage(clientId: string): OemBrand | null {
   if (typeof window === 'undefined' || !window.localStorage) return null;
   try {
-    const raw = window.localStorage.getItem(BRAND_STORAGE_KEY);
+    const raw = window.localStorage.getItem(brandStorageKey(clientId));
     if (!raw) return null;
-    const cached = JSON.parse(raw) as { clientId: string; cachedAt: number; brand: OemBrand };
-    if (cached.clientId.toLowerCase() !== clientId.toLowerCase()) return null;
+    const cached = JSON.parse(raw) as { cachedAt: number; brand: OemBrand };
     if (Date.now() - cached.cachedAt > BRAND_STORAGE_TTL_MS) return null;
     return cached.brand;
   } catch {
@@ -42,8 +48,8 @@ function readBrandFromStorage(clientId: string): OemBrand | null {
 function writeBrandToStorage(clientId: string, brand: OemBrand): void {
   if (typeof window === 'undefined' || !window.localStorage) return;
   try {
-    window.localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify({
-      clientId, cachedAt: Date.now(), brand,
+    window.localStorage.setItem(brandStorageKey(clientId), JSON.stringify({
+      cachedAt: Date.now(), brand,
     }));
   } catch { /* quota / private mode — ignore */ }
 }
