@@ -64,6 +64,9 @@ function setBrand(b: OemBrand | null): void {
  * brand null and the button keeps its default DIMO chrome.
  */
 function loadBrand(clientId: string, environment: Environment): void {
+  // Clear stale brand from a previous init before seeding from cache/network.
+  setBrand(null);
+
   // Seed from localStorage first so the first render is already branded
   // (avoids a flash of DIMO before the network round-trip resolves).
   const cached = readBrandFromStorage(clientId);

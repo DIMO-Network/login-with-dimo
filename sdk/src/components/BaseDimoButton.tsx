@@ -129,6 +129,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
               className="button-icon"
               src={brand.logoURI}
               alt={brand.name ? `${brand.name} logo` : 'OEM logo'}
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           ) : (
             <svg
