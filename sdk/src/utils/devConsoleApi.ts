@@ -46,10 +46,16 @@ const FETCH_TIMEOUT_MS = 3000;
 export async function fetchOemBrand(
   clientId: string,
   environment: Environment = Environment.PRODUCTION,
+  brandName?: string | null,
 ): Promise<OemBrand | null> {
   if (!clientId) return null;
   const base = DEV_CONSOLE_API_URLS[environment] ?? DEV_CONSOLE_API_URLS[Environment.PRODUCTION];
-  const url = `${base}/api/brand?clientId=${encodeURIComponent(clientId)}`;
+  // `brandName` selects a specific brand for multi-brand licenses; omitted ->
+  // the license default. console-api scopes the lookup to clientId, so a name
+  // can only ever resolve a brand the license actually owns.
+  const params = new URLSearchParams({ clientId });
+  if (brandName) params.set('brandName', brandName);
+  const url = `${base}/api/brand?${params.toString()}`;
 
   // Bounded so a slow console-api can't keep the button stuck on the default
   // DIMO chrome forever — falling back to defaults is acceptable; hanging is

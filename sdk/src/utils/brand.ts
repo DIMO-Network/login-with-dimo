@@ -1,28 +1,31 @@
 import { useDimoAuthBrand } from '@hooks/useDimoAuthBrand';
+import { useOemBrand } from '@hooks/useOemBrand';
+import { getDimoConfig } from '../config/sdkConfig';
 import type { BrandOverride } from '@dimo-types/index';
 import type { ResolvedBrand } from '@components/BaseDimoButton';
 
 /**
- * Merges the per-call `brandOverride` prop with the brand fetched at SDK
- * init and produces the ResolvedBrand shape that BaseDimoButton + the
- * popup/redirect URL payload consume.
+ * Resolves the brand a button renders entirely from the DIMO dev console —
+ * callers can only *select* which brand (by `brandOverride.name`), never
+ * supply assets. Produces the ResolvedBrand shape that BaseDimoButton + the
+ * popup/redirect payload consume.
  *
- *   - override.name     wins over fetched name
- *   - override.logoURI  wins over fetched logoURI (https expected at this
- *                       layer; the SDK no longer resolves ipfs:// itself
- *                       since dev-console-api emits ready URLs)
- *   - override.iconURI  wins over fetched iconURI
+ *   - no `name`  -> the license default brand (init-time fetch, `clientId`)
+ *   - with `name` -> that specific console brand (`clientId + name`)
  *
- * Anything not overridden falls back to the init-time brand, or `null` if
- * no brand could be fetched.
+ * Unknown/absent brand -> all fields null -> default DIMO chrome.
  */
 export function useResolvedBrand(override?: BrandOverride): ResolvedBrand {
-  const fetched = useDimoAuthBrand();
+  const { clientId, environment } = getDimoConfig();
+  // Both hooks run every render (Rules of Hooks); we pick based on `name`.
+  const defaultBrand = useDimoAuthBrand();
+  const namedBrand = useOemBrand({ clientId, environment, brandName: override?.name });
+  const brand = override?.name ? namedBrand : defaultBrand;
   return {
-    name:    override?.name         ?? fetched?.name         ?? null,
-    logoURI: override?.logoURI      ?? fetched?.logoURI      ?? null,
-    iconURI: override?.iconURI      ?? fetched?.iconURI      ?? null,
-    primaryColor: override?.primaryColor ?? fetched?.primaryColor ?? null,
+    name:         brand?.name         ?? null,
+    logoURI:      brand?.logoURI      ?? null,
+    iconURI:      brand?.iconURI      ?? null,
+    primaryColor: brand?.primaryColor ?? null,
   };
 }
 
