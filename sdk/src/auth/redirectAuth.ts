@@ -85,6 +85,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
 
   addParams(baseData, params, [
     AuthParam.AltTitle,
+    AuthParam.BrandName,
     AuthParam.ClientId,
     AuthParam.EntryState,
     AuthParam.ExpirationDate,

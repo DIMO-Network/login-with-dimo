@@ -16,6 +16,7 @@ export interface BaseAuthParams {
   redirectUri?: string;
   apiKey?: string;
   altTitle?: boolean;
+  brandName?: string;
 }
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}

@@ -79,10 +79,13 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
 
   const dimoLogin = getDimoLoginUrl(environment!);
 
-  // Brand metadata (name, logo) is intentionally NOT propagated to the auth
-  // popup. The popup at login.dimo.org fetches its own brand record from
-  // console-api.dimo.org using `clientId`, keeping the trust boundary on the
-  // dimo.org domain. The SDK only uses brand for the local button render.
+  // Brand logo/color is NOT propagated to the auth popup — the popup at
+  // login.dimo.org fetches its own brand record from console-api.dimo.org,
+  // keeping the trust boundary on the dimo.org domain. We forward only the
+  // brand *name* so the popup keys its lookup on `clientId + brandName`
+  // instead of `clientId` alone, themeing to the same brand the button picked
+  // rather than the license default. The name is clientId-scoped server-side,
+  // so it can't select a brand the license doesn't own.
   const basePayload: AuthPayload = {
     entryState,
     onSuccess,
@@ -93,6 +96,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     clientId,
     redirectUri,
     apiKey,
+    brandName: brand?.name ?? undefined,
     forceEmail: options?.forceEmail ?? false,
   };
 
