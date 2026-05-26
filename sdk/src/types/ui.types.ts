@@ -7,19 +7,14 @@ export interface ButtonLabels {
 }
 
 /**
- * Per-call override for the OEM brand the button renders. Wins over the
- * brand fetched at init time from dev-console-api. All three fields are
- * optional — pass only what you want to override.
- *
- * `logoURI` and `iconURI` should be ready-to-render https URLs (the
- * dev-console-api already resolves IPFS CIDs to its gateway server-side).
+ * Per-call brand *selector* — picks which console brand the button renders,
+ * for licenses that have more than one. Assets (logo/icon/color) are always
+ * resolved from the DIMO dev console by `clientId + name`; callers cannot
+ * supply local assets. Omit `name` to render the license's default brand.
  */
 export interface BrandOverride {
+  /** Which console brand to render, for licenses with more than one. */
   name?: string;
-  logoURI?: string;
-  iconURI?: string;
-  /** 7-char hex (#RRGGBB) — overrides the fetched primary color. */
-  primaryColor?: string;
 }
 
 export interface BaseButtonProps extends DimoActionParams {
