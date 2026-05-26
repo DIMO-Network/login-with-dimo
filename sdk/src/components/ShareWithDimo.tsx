@@ -8,6 +8,7 @@ import {
   LoginButtonProps,
 } from '@dimo-types/index';
 import { getPermissionsBinary } from '@utils/index';
+import { useResolvedBrand, formatBrandedLabel } from '@utils/brand';
 import { BaseDimoButton } from './BaseDimoButton';
 
 type ShareWithDimoProps = BaseButtonProps &
@@ -25,12 +26,22 @@ const ShareWithDimo: React.FC<ShareWithDimoProps> = ({
   vehicleMakes,
   onboarding,
   expirationDate,
-  authenticatedLabel = 'Share with DIMO',
-  unAuthenticatedLabel = 'Sign in to Share with DIMO',
+  authenticatedLabel,
+  unAuthenticatedLabel,
   utm = null,
   altTitle,
   powertrainTypes,
+  brandOverride,
 }) => {
+  const brand = useResolvedBrand(brandOverride);
+
+  const resolvedAuthLabel =
+    authenticatedLabel ??
+    formatBrandedLabel('Share with {name}', brand.name, 'Share with DIMO');
+  const resolvedUnAuthLabel =
+    unAuthenticatedLabel ??
+    formatBrandedLabel('Sign in to Share with {name}', brand.name, 'Sign in to Share with DIMO');
+
   const payload: InternalDimoActionParams & { eventType: EventTypes } = {
     permissionTemplateId,
     configurationId,
@@ -51,10 +62,11 @@ const ShareWithDimo: React.FC<ShareWithDimoProps> = ({
       onSuccess={onSuccess}
       onError={onError}
       buttonLabel={(authenticated) =>
-        authenticated ? authenticatedLabel : unAuthenticatedLabel
+        authenticated ? resolvedAuthLabel : resolvedUnAuthLabel
       }
       altTitle={altTitle}
       payload={payload}
+      brand={brand}
     />
   );
 };

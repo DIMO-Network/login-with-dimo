@@ -4,6 +4,7 @@ export enum EntryState {
   SUCCESS = 'SUCCESS',
   VEHICLE_MANAGER = 'VEHICLE_MANAGER',
   ADVANCED_TRANSACTION = 'ADVANCED_TRANSACTION',
+  SIGN_MESSAGE = 'SIGN_MESSAGE',
   ERROR = 'ERROR',
   LOADING = 'LOADING',
   LOGOUT = 'LOGOUT',
@@ -11,11 +12,13 @@ export enum EntryState {
 
 export enum AuthParam {
   AltTitle = 'altTitle',
+  BrandName = 'brandName',
   ClientId = 'clientId',
   ConfigurationId = 'configurationId',
   EntryState = 'entryState',
   ExpirationDate = 'expirationDate',
   ForceEmail = 'forceEmail',
+  MessageData = 'messageData',
   Onboarding = 'onboarding',
   PermissionTemplateId = 'permissionTemplateId',
   Permissions = 'permissions',

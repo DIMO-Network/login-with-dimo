@@ -1,9 +1,20 @@
+/*
+ * The button picks up brand colors via CSS custom properties set inline on
+ * the .custom-button element by BaseDimoButton.tsx when a primaryColor is
+ * resolved from the OEM brand. When no brand is set the inline style is
+ * empty and these fall back to the DIMO black-on-white defaults — the same
+ * chrome the SDK has shipped since 0.0.x.
+ *
+ *   --dimo-btn-bg     background-color
+ *   --dimo-btn-border border-color
+ *   --dimo-btn-text   foreground (label + svg path via inline fill)
+ */
 .custom-button {
   width: 375px;
   height: 40px;
   border-radius: 24px;
   padding: 6px 16px;
-  border: 1px solid #000000;
+  border: 1px solid var(--dimo-btn-border, #000000);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,8 +22,8 @@
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
-  color: #000000;
-  background-color: #ffffff;
+  color: var(--dimo-btn-text, #000000);
+  background-color: var(--dimo-btn-bg, #ffffff);
   font-family: 'Universal Sans Display', sans-serif;
   transition:
     background-color 0.3s ease,
@@ -24,23 +35,29 @@
   cursor: not-allowed;
 }
 
+/*
+ * Hover/active states use color-mix against the contrasting text color so
+ * the same rules work on any brand background — a tiny tint toward the text
+ * color for hover, deeper for active. The default DIMO chrome (white bg,
+ * black text) reduces to the previous #f7f7f7 / #e5e5e5 by construction.
+ */
 .custom-button:not(:disabled):hover {
-  background-color: #f7f7f7; /* Adjusted for a lighter, subtle hover effect */
-  transform: scale(1.02); /* Slightly enlarges the button for a modern feel */
+  background-color: color-mix(in srgb, var(--dimo-btn-bg, #ffffff) 92%, var(--dimo-btn-text, #000000));
+  transform: scale(1.02);
 }
 
 .custom-button:active {
-  background-color: #e5e5e5; /* Darker shade for the active state */
-  transform: scale(0.98); /* Gives a slight pressed effect */
+  background-color: color-mix(in srgb, var(--dimo-btn-bg, #ffffff) 84%, var(--dimo-btn-text, #000000));
+  transform: scale(0.98);
 }
 
 .button-icon {
-  width: 20px; /* Adjust as needed */
+  width: 20px;
   height: 20px;
 }
 
 .button-text {
-  color: #000;
+  color: var(--dimo-btn-text, #000000);
   font-weight: 500;
-  font-size: 16px; /* Adjust if necessary */
+  font-size: 16px;
 }
