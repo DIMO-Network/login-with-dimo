@@ -149,6 +149,7 @@ export const createMessageHandler = (
     forceEmail,
     altTitle,
     brandName,
+    tosUrl,
   } = basePayload;
 
   const { target, origin, mode } = config;
@@ -169,6 +170,7 @@ export const createMessageHandler = (
         entryState,
         forceEmail,
         brandName,
+        tosUrl,
         eventType: MessageEventType.AUTH_INIT,
         ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };

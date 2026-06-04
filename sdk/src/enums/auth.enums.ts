@@ -24,6 +24,7 @@ export enum AuthParam {
   PowertrainTypes = 'powertrainTypes',
   RedirectUri = 'redirectUri',
   TransactionData = 'transactionData',
+  TosUrl = 'tosUrl',
   Utm = 'utm',
   VehicleMakes = 'vehicleMakes',
   Vehicles = 'vehicles',

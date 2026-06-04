@@ -17,6 +17,7 @@ export interface BaseAuthParams {
   apiKey?: string;
   altTitle?: boolean;
   brandName?: string;
+  tosUrl?: string;
 }
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}

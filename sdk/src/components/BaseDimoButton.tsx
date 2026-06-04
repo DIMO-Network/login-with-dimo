@@ -98,6 +98,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     apiKey,
     brandName: brand?.name ?? undefined,
     forceEmail: options?.forceEmail ?? false,
+    tosUrl: options?.tosUrl,
   };
 
   const handleButtonClick = () => {
