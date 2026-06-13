@@ -6,6 +6,7 @@ export interface AuthData {
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
+  accountGranted?: boolean;
   signature?: `0x${string}`;
   signer?: `0x${string}`;
 }

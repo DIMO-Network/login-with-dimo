@@ -11,6 +11,7 @@ export interface MessageData {
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
+  accountGranted?: boolean;
   message?: string;
   signature?: `0x${string}`;
   signer?: `0x${string}`;
