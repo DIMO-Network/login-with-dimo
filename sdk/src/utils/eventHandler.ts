@@ -74,7 +74,7 @@ const handleAuthResponse = (
 };
 
 const handleTransactionResponse = (
-  { token, transactionHash, transactionReceipt }: MessageData,
+  { token, transactionHash, transactionReceipt, accountGranted }: MessageData,
   handlers: EventHandlers
 ): void => {
   if (!token) {
@@ -82,11 +82,12 @@ const handleTransactionResponse = (
     return;
   }
 
-  if (transactionHash || transactionReceipt) {
+  if (transactionHash || transactionReceipt || accountGranted) {
     const responseData: AuthData = {
       token: token,
       ...(transactionHash && { transactionHash }),
       ...(transactionReceipt && { transactionReceipt }),
+      ...(accountGranted !== undefined && { accountGranted }),
     };
     handlers.onSuccess(responseData);
   } else {
@@ -191,7 +192,10 @@ export const createMessageHandler = (
       messageData,
       { onSuccess, onError, setAuthenticated },
       mode === DimoSDKModes.POPUP
-        ? { sharedVehicles: messageData.sharedVehicles }
+        ? {
+            sharedVehicles: messageData.sharedVehicles,
+            accountGranted: messageData.accountGranted,
+          }
         : {}
     );
   };

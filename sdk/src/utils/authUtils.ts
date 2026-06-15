@@ -6,9 +6,13 @@ import {
 } from '@storage/storageManager';
 
 export const processAuthResponse = (
-  { token, walletAddress, email, sharedVehicles }: any,
+  { token, walletAddress, email, sharedVehicles, accountGranted }: any,
   setAuthenticated: (status: boolean) => void,
-  onSuccess: (data: { token: string; sharedVehicles: string[] }) => void
+  onSuccess: (data: {
+    token: string;
+    sharedVehicles: string[];
+    accountGranted?: boolean;
+  }) => void
 ) => {
   // This auth response may be triggered for a coupled or decoupled flow
   // If decoupled, it will only return token
@@ -18,7 +22,11 @@ export const processAuthResponse = (
   if (token) {
     storeJWTInCookies(token);
     setAuthenticated(true);
-    onSuccess({ token, sharedVehicles });
+    onSuccess({
+      token,
+      sharedVehicles,
+      ...(accountGranted !== undefined && { accountGranted }),
+    });
   }
 };
 
