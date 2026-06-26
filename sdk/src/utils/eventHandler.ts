@@ -127,14 +127,14 @@ const handleDimoError = (
 };
 
 const handleProvisionResponse = (
-  { clientId, tokenId }: MessageData,
+  { clientId, tokenId, privateKey }: MessageData,
   handlers: EventHandlers,
 ): void => {
   if (!clientId || tokenId == null) {
     handlers.onError(new Error('Incomplete provision response'));
     return;
   }
-  handlers.onSuccess({ clientId, tokenId } as unknown as AuthData);
+  handlers.onSuccess({ clientId, tokenId, privateKey } as unknown as AuthData);
 };
 
 const eventHandlers: Record<string, EventHandler> = {

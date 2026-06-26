@@ -31,5 +31,6 @@ export enum AuthParam {
   Utm = 'utm',
   VehicleMakes = 'vehicleMakes',
   Vehicles = 'vehicles',
-  ProvisionData = 'provisionData',
+  ExistingTokenId = 'existingTokenId',
+  ExistingClientId = 'existingClientId',
 }

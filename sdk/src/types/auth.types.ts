@@ -23,17 +23,10 @@ export interface BaseAuthParams {
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}
 
-export interface ProvisionDataPayload {
-  alias: string;
-  domain: string;
-  signerAddress: string;
-  existingTokenId?: number;
-  existingClientId?: string;
-}
-
 export interface DimoActionPayload extends InternalDimoActionParams {
   eventType: EventTypes;
   transactionData?: TransactionData | string;
   messageData?: SignMessageData | string;
-  provisionData?: ProvisionDataPayload;
+  existingTokenId?: number;
+  existingClientId?: string;
 }
