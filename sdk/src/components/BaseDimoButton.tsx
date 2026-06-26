@@ -99,6 +99,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     brandName: brand?.name ?? undefined,
     forceEmail: options?.forceEmail ?? false,
     tosUrl: options?.tosUrl,
+    privacyPolicyUrl: options?.privacyPolicyUrl,
   };
 
   const handleButtonClick = () => {

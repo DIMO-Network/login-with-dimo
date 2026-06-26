@@ -5,6 +5,7 @@ export { default as ShareAccountWithDimo } from './components/ShareAccountWithDi
 export { default as ExecuteAdvancedTransactionWithDimo } from './components/ExecuteAdvancedTransactionWithDimo';
 export { default as SignMessageWithDimo } from './components/SignMessageWithDimo';
 export { default as LogoutWithDimo } from './components/LogoutWithDimo';
+export { default as ProvisionDeveloperLicenseWithDimo } from './components/ProvisionDeveloperLicenseWithDimo';
 
 // Export config initialization
 export { initializeDimoSDK, getDimoConfig, getBrand } from './config/sdkConfig';
@@ -21,3 +22,6 @@ export type { BrandOverride } from './types/ui.types';
 
 // Export enums
 export { EntryState, DimoSDKModes, Permissions } from '@enums/index';
+
+// Export provision types
+export type { ProvisionResult, ProvisionDeveloperLicenseProps } from './types/provision.types';

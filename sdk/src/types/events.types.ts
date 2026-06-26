@@ -15,6 +15,8 @@ export interface MessageData {
   message?: string;
   signature?: `0x${string}`;
   signer?: `0x${string}`;
+  clientId?: string;
+  tokenId?: number;
 }
 
 export interface MessageHandlerConfig {

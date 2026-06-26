@@ -9,6 +9,7 @@ export enum EntryState {
   ERROR = 'ERROR',
   LOADING = 'LOADING',
   LOGOUT = 'LOGOUT',
+  PROVISION_DEVELOPER_LICENSE = 'PROVISION_DEVELOPER_LICENSE',
 }
 
 export enum AuthParam {
@@ -25,8 +26,10 @@ export enum AuthParam {
   PowertrainTypes = 'powertrainTypes',
   RedirectUri = 'redirectUri',
   TransactionData = 'transactionData',
+  PrivacyPolicyUrl = 'privacyPolicyUrl',
   TosUrl = 'tosUrl',
   Utm = 'utm',
   VehicleMakes = 'vehicleMakes',
   Vehicles = 'vehicles',
+  ProvisionData = 'provisionData',
 }

@@ -9,6 +9,7 @@ let sdkConfig: {
   options?: {
     forceEmail?: boolean;
     tosUrl?: string;
+    privacyPolicyUrl?: string;
   };
 } = {
   clientId: '',
@@ -105,6 +106,7 @@ export const initializeDimoSDK = ({
   options?: {
     forceEmail?: boolean;
     tosUrl?: string;
+    privacyPolicyUrl?: string;
   };
 }) => {
   sdkConfig = { clientId, redirectUri, apiKey, environment, options };

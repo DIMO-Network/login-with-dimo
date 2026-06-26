@@ -3,3 +3,4 @@ export * from './events.types';
 export * from './auth.types';
 export * from './transaction.types';
 export * from './ui.types';
+export * from './provision.types';

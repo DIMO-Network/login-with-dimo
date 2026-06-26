@@ -4,6 +4,7 @@ export enum MessageEventType {
   AUTH_RESPONSE = 'authResponse',
   TRANSACTION_RESPONSE = 'transactionResponse',
   MESSAGE_RESPONSE = 'messageResponse',
+  PROVISION_RESPONSE = 'provisionResponse',
   LOGOUT = 'logout',
   DIMO_ERROR = 'DIMO_ERROR',
 }
@@ -14,4 +15,5 @@ export enum EventTypes {
   SHARE_ACCOUNT_DATA = 'SHARE_ACCOUNT_DATA',
   SIGN_MESSAGE = 'SIGN_MESSAGE',
   LOGOUT = 'LOGOUT',
+  PROVISION_DEVELOPER_LICENSE = 'PROVISION_DEVELOPER_LICENSE',
 }

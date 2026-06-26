@@ -126,10 +126,22 @@ const handleDimoError = (
   handlers.onError(new Error(message || 'An unknown error occurred'));
 };
 
+const handleProvisionResponse = (
+  { clientId, tokenId }: MessageData,
+  handlers: EventHandlers,
+): void => {
+  if (!clientId || tokenId == null) {
+    handlers.onError(new Error('Incomplete provision response'));
+    return;
+  }
+  handlers.onSuccess({ clientId, tokenId } as unknown as AuthData);
+};
+
 const eventHandlers: Record<string, EventHandler> = {
   [MessageEventType.AUTH_RESPONSE]: handleAuthResponse,
   [MessageEventType.TRANSACTION_RESPONSE]: handleTransactionResponse,
   [MessageEventType.MESSAGE_RESPONSE]: handleMessageResponse,
+  [MessageEventType.PROVISION_RESPONSE]: handleProvisionResponse,
   [MessageEventType.LOGOUT]: handleLogout,
   [MessageEventType.DIMO_ERROR]: handleDimoError,
 };
@@ -151,6 +163,7 @@ export const createMessageHandler = (
     altTitle,
     brandName,
     tosUrl,
+    privacyPolicyUrl,
   } = basePayload;
 
   const { target, origin, mode } = config;
@@ -172,6 +185,7 @@ export const createMessageHandler = (
         forceEmail,
         brandName,
         tosUrl,
+        privacyPolicyUrl,
         eventType: MessageEventType.AUTH_INIT,
         ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };

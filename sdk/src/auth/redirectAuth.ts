@@ -96,6 +96,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.Permissions,
     AuthParam.PowertrainTypes,
     AuthParam.RedirectUri,
+    AuthParam.PrivacyPolicyUrl,
     AuthParam.TosUrl,
     AuthParam.TransactionData,
     AuthParam.Utm,
