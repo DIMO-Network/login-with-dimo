@@ -148,6 +148,135 @@ All SDK components (e.g., <LoginWithDimo />, <ShareVehiclesWithDimo />) follow t
 
 4. Both payloads, are then sent to the respective handlers based on the mode specified in the top-level components (LoginWithDimo, Share etc)
 
+## 🔑 Developer License Provisioning
+
+`ProvisionDeveloperLicenseWithDimo` lets your app request a new DIMO developer license — or reconnect an existing one — without the user leaving your UI. It opens a popup (or redirect) to `login.dimo.org`, which handles wallet creation, on-chain registration, and key generation, then posts the result back to your app.
+
+### When to use it
+
+Use this component in the onboarding flow for any app that requires a DIMO developer license to operate — typically shown when a freshly logged-in user doesn't have credentials stored yet.
+
+### Props
+
+```tsx
+<ProvisionDeveloperLicenseWithDimo
+  mode={DimoSDKModes.POPUP}   // POPUP or REDIRECT
+  domain="https://yourapp.com"  // your app's origin — recorded on-chain against the license
+  onSuccess={(result) => { /* store credentials */ }}
+  onError={(error) => { /* handle error */ }}
+
+  // Optional — pass both to reconnect an existing license instead of minting a new one
+  existingTokenId={123}
+  existingClientId="0xabc…"
+/>
+```
+
+| Prop | Type | Required | Description |
+|---|---|---|---|
+| `mode` | `DimoSDKModes` | yes | `POPUP` or `REDIRECT` |
+| `domain` | `string` | yes | Your app's origin URL — recorded on the developer license NFT |
+| `onSuccess` | `(result: ProvisionResult) => void` | yes | Called with credentials when provisioning completes |
+| `onError` | `(error: Error) => void` | yes | Called on any failure |
+| `existingTokenId` | `number` | no | Token ID of a license to reconnect (skip mint) |
+| `existingClientId` | `string` | no | Client ID of a license to reconnect (skip mint) |
+
+### Response shape
+
+```ts
+interface ProvisionResult {
+  clientId: string;  // DIMO client ID (0x-prefixed address)
+  privateKey: string; // raw hex private key — no 0x prefix
+  domain: string;    // the domain prop echoed back
+  tokenId: number;   // on-chain token ID of the developer license NFT
+}
+```
+
+### Complete example
+
+```tsx
+import {
+  initializeDimoSDK,
+  DimoSDKModes,
+  ProvisionDeveloperLicenseWithDimo,
+} from '@dimo-network/login-with-dimo';
+import type { ProvisionResult } from '@dimo-network/login-with-dimo';
+
+// Initialize once at app startup — clientId + redirectUri must already be
+// registered in the DIMO Developer Console before provisioning works.
+initializeDimoSDK({
+  clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
+  redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
+  environment: 'production',
+});
+
+function OnboardingPage() {
+  const handleSuccess = async (result: ProvisionResult) => {
+    // Persist the credentials — warn the user to save the key; it cannot
+    // be retrieved again after this point
+    await myApi.saveTenantCredentials({
+      clientId: result.clientId,
+      apiKey: result.privateKey, // raw hex, ready to use
+    });
+
+    navigate('/dashboard');
+  };
+
+  return (
+    <ProvisionDeveloperLicenseWithDimo
+      mode={DimoSDKModes.POPUP}
+      domain="https://yourapp.com"
+      onSuccess={handleSuccess}
+      onError={(err) => console.error('Provision failed', err)}
+    />
+  );
+}
+```
+
+### Reconnecting an existing license
+
+If the user already has a developer license (e.g., they're switching devices or re-authorizing), pass the existing token ID and client ID to skip the mint step:
+
+```tsx
+<ProvisionDeveloperLicenseWithDimo
+  mode={DimoSDKModes.POPUP}
+  domain="https://yourapp.com"
+  onSuccess={handleSuccess}
+  onError={handleError}
+  existingTokenId={user.licenseTokenId}
+  existingClientId={user.clientId}
+/>
+```
+
+### How the flow works
+
+```
+[ Your App ]
+   └── renders <ProvisionDeveloperLicenseWithDimo>
+         └── user clicks button
+               ↓
+      SDK opens popup → login.dimo.org
+      (entryState=PROVISION_DEVELOPER_LICENSE)
+               ↓
+      [ DIMO Login popup ]
+         └── authenticates user
+         └── creates or reconnects developer license NFT
+         └── generates private key for the license
+               ↓
+      popup posts { eventType: "provisionResponse", clientId, tokenId, privateKey }
+               ↓
+      SDK message handler validates origin, calls onSuccess(ProvisionResult)
+               ↓
+[ Your App ]
+   └── onSuccess receives { clientId, privateKey, tokenId, domain }
+   └── store credentials, close onboarding
+```
+
+### Security notes
+
+- The private key is generated inside the DIMO popup and transmitted only via `postMessage` with strict origin validation — it never touches your server during provisioning.
+- Store the private key encrypted at rest. Once the popup closes it cannot be retrieved from DIMO again.
+- The `domain` prop is recorded on-chain against the license NFT — use your app's canonical origin, not `localhost`.
+
 ## 🧪 Local Testing Tips
 
 1. Since the redirect flow relies entirely on url Params, it can easily be tested without actually implementing new logic, by simply appending a query param.

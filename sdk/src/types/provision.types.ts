@@ -2,7 +2,7 @@ import { DimoSDKModes } from '@enums/index';
 
 export interface ProvisionResult {
   clientId: string;
-  privateKey: `0x${string}`;
+  privateKey: string; // raw hex, no 0x prefix
   domain: string;
   tokenId: number;
 }
