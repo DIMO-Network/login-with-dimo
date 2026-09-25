@@ -74,13 +74,17 @@ const transformMessageData = (
   return serializedMessageData;
 };
 
-const transformCloudEvent = (
-  cloudEvent: CloudEventAgreement[] | string | undefined
-) => {
-  if (!cloudEvent || typeof cloudEvent === 'string') return cloudEvent;
+const transformCloudEvent = (cloudEvent: CloudEventAgreement[] | undefined) => {
+  if (!cloudEvent) return undefined;
+  const serializedCloudEvent = encodeURIComponent(JSON.stringify(cloudEvent));
   // Unlike transactionData this is never dropped: sharing without the requested
   // documents would silently grant less than the app asked for.
-  return encodeURIComponent(JSON.stringify(cloudEvent));
+  if (serializedCloudEvent.length > 2000) {
+    console.warn(
+      'Serialized cloudEvent is large for a URL parameter; long `ids` lists may exceed server URL limits.'
+    );
+  }
+  return serializedCloudEvent;
 };
 
 export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {

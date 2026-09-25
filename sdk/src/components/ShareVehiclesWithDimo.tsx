@@ -4,6 +4,7 @@ import { EntryState, EventTypes } from '@enums/index';
 import {
   BaseButtonProps,
   ButtonLabels,
+  DocumentShareParams,
   InternalDimoActionParams,
   LoginButtonProps,
 } from '@dimo-types/index';
@@ -13,6 +14,7 @@ import { BaseDimoButton } from './BaseDimoButton';
 
 type ShareVehiclesWithDimoProps = BaseButtonProps &
   LoginButtonProps &
+  DocumentShareParams &
   ButtonLabels;
 
 const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
@@ -53,7 +55,11 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
     utm,
     powertrainTypes,
     ...getPermissionsBinary(permissions, permissionTemplateId),
-    ...getCloudEventAgreements(documents, cloudEvents),
+    ...getCloudEventAgreements(
+      documents,
+      cloudEvents,
+      !!(permissions?.length || permissionTemplateId)
+    ),
   };
 
   return (

@@ -32,6 +32,14 @@ export interface DimoActionParams {
   utm?: string | null;
   powertrainTypes?: string[];
   permissions?: Permissions[];
+}
+
+/**
+ * Document access for the vehicle-sharing buttons (ShareVehiclesWithDimo, and
+ * LoginWithDimo with permissions). Needs `permissions` or `permissionTemplateId`
+ * alongside it.
+ */
+export interface DocumentShareParams {
   /** Documents the app can read for each shared vehicle. */
   documents?: DocumentAccess[];
   /** Custom cloudevent agreements, for access `documents` doesn't cover. */
@@ -39,8 +47,7 @@ export interface DimoActionParams {
 }
 
 export interface InternalDimoActionParams
-  extends Omit<DimoActionParams, 'permissions' | 'documents' | 'cloudEvents'> {
+  extends Omit<DimoActionParams, 'permissions'> {
   permissions?: string;
-  // JSON-encoded for redirect mode, like transactionData.
-  cloudEvent?: CloudEventAgreement[] | string;
+  cloudEvent?: CloudEventAgreement[];
 }

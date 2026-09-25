@@ -280,9 +280,11 @@ If the user already has a developer license (e.g., they're switching devices or 
 ## 📄 Sharing Vehicle Documents
 
 Permissions control what vehicle data an app can read. Documents (registration,
-insurance, service records, a driver's license, …) are granted separately: pass
-`documents` to `ShareVehiclesWithDimo` (or `LoginWithDimo` with permissions), and
-DIMO signs access to them into each shared vehicle's grant.
+insurance, service records, a driver's license, …) are requested alongside them:
+pass `documents` together with `permissions` (or `permissionTemplateId`) to
+`ShareVehiclesWithDimo` or `LoginWithDimo`, and DIMO signs access to them into
+each shared vehicle's grant. Without permissions, `documents` is ignored with a
+console warning.
 
 ```tsx
 import {
