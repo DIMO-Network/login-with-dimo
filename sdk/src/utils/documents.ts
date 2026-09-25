@@ -1,8 +1,15 @@
 import { DocumentAccess } from '../enums/documents.enum';
 import { CloudEventAgreement } from '../types/common.types';
 
-const agreementKey = ({ eventType, source }: CloudEventAgreement) =>
-  `${eventType ?? ''}|${source ?? ''}`;
+// Agreements that grant the same thing: same event type (the signer defaults a
+// missing one to 'dimo.attestation'), source and ids. Differing ids are kept
+// apart so a narrower request never replaces a broader one.
+const agreementKey = ({ eventType, source, ids }: CloudEventAgreement) =>
+  JSON.stringify([
+    eventType || 'dimo.attestation',
+    source?.toLowerCase() ?? '',
+    [...(ids ?? [])].sort(),
+  ]);
 
 /**
  * Builds the `cloudEvent` agreements DIMO login signs into each vehicle's grant.
@@ -34,7 +41,7 @@ export const getCloudEventAgreements = (
     return {};
   }
 
-  // One agreement per event type and source, however it was requested.
+  // Drop exact duplicates, however they were requested.
   const unique = new Map(agreements.map((a) => [agreementKey(a), a]));
   return { cloudEvent: Array.from(unique.values()) };
 };

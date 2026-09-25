@@ -79,7 +79,11 @@ const transformCloudEvent = (cloudEvent: CloudEventAgreement[] | undefined) => {
   const serializedCloudEvent = encodeURIComponent(JSON.stringify(cloudEvent));
   // Unlike transactionData this is never dropped: sharing without the requested
   // documents would silently grant less than the app asked for.
-  if (serializedCloudEvent.length > 2000) {
+  // URLSearchParams escapes the encoded string again; measure what's sent.
+  const sentLength = new URLSearchParams({
+    cloudEvent: serializedCloudEvent,
+  }).toString().length;
+  if (sentLength > 2000) {
     console.warn(
       'Serialized cloudEvent is large for a URL parameter; long `ids` lists may exceed server URL limits.'
     );
