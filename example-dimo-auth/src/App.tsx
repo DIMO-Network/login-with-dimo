@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import {
   DimoSDKModes,
-  DocumentAccess,
   ExecuteAdvancedTransactionWithDimo,
   initializeDimoSDK,
   LoginWithDimo,
@@ -119,22 +118,6 @@ const Examples = (props: Props) => {
               Permissions.GetLiveData,
             ]}
             expirationDate={sampleExpirationDate.toISOString()}
-          />
-          <ShareVehiclesWithDimo
-            mode={loginType}
-            onSuccess={onSuccess}
-            onError={onError}
-            authenticatedLabel={'Share vehicles and documents'}
-            permissions={[
-              Permissions.GetNonLocationHistory,
-              Permissions.GetCurrentLocation,
-              Permissions.GetVINCredential,
-              Permissions.GetRawData,
-            ]}
-            documents={[
-              DocumentAccess.VehicleDocuments,
-              DocumentAccess.RawVehicleDocuments,
-            ]}
           />
           <ShareVehiclesWithDimo
             mode={loginType}
