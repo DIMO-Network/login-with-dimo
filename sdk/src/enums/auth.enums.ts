@@ -16,6 +16,7 @@ export enum AuthParam {
   AltTitle = 'altTitle',
   BrandName = 'brandName',
   ClientId = 'clientId',
+  CloudEvent = 'cloudEvent',
   EntryState = 'entryState',
   ExpirationDate = 'expirationDate',
   ForceEmail = 'forceEmail',

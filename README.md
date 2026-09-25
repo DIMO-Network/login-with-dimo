@@ -277,6 +277,49 @@ If the user already has a developer license (e.g., they're switching devices or 
 - Store the private key encrypted at rest. Once the popup closes it cannot be retrieved from DIMO again.
 - The `domain` prop is recorded on-chain against the license NFT — use your app's canonical origin, not `localhost`.
 
+## 📄 Sharing Vehicle Documents
+
+Permissions control what vehicle data an app can read. Documents (registration,
+insurance, service records, a driver's license, …) are requested alongside them:
+pass `documents` together with `permissions` (or `permissionTemplateId`) to
+`ShareVehiclesWithDimo` or `LoginWithDimo`, and DIMO signs access to them into
+each shared vehicle's grant. Without permissions, `documents` is ignored with a
+console warning.
+
+```tsx
+import {
+  DocumentAccess,
+  Permissions,
+  ShareVehiclesWithDimo,
+} from '@dimo-network/login-with-dimo';
+
+<ShareVehiclesWithDimo
+  mode="popup"
+  onSuccess={onSuccess}
+  onError={onError}
+  permissions={[Permissions.GetNonLocationHistory, Permissions.GetRawData]}
+  documents={[DocumentAccess.VehicleDocuments, DocumentAccess.RawVehicleDocuments]}
+/>;
+```
+
+| `DocumentAccess`       | Grants                                                     |
+| ---------------------- | ---------------------------------------------------------- |
+| `VehicleDocuments`     | Parsed vehicle documents (registration, insurance, …)      |
+| `DriverDocuments`      | Parsed driver documents (license, …)                       |
+| `RawVehicleDocuments`  | The original uploaded files behind vehicle documents      |
+| `RawDriverDocuments`   | The original uploaded files behind driver documents       |
+
+Reading the files through the Fetch API also needs `Permissions.GetRawData`.
+
+- Users see the requested documents on the consent screen before they share.
+- Vehicles already shared with your app without the requested documents are
+  offered as an update; users don't need to stop sharing first.
+- For access `documents` doesn't cover, pass raw agreements with `cloudEvents`
+  (`{ eventType, ids?, tags?, source? }`). `source` defaults to the signed-in
+  user's address.
+- Without the SDK, add the same request to a login.dimo.org link as a
+  URL-encoded JSON array: `cloudEvent=[{"eventType":"dimo.document.vehicle.*","tags":["documents"]}]`.
+
 ## 🧪 Local Testing Tips
 
 1. Since the redirect flow relies entirely on url Params, it can easily be tested without actually implementing new logic, by simply appending a query param.
