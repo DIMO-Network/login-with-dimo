@@ -43,7 +43,11 @@ export interface DimoActionParams {
 export interface DocumentShareParams {
   /** Documents the app can read for each shared vehicle. */
   documents?: DocumentAccess[];
-  /** Custom cloudevent agreements, for access `documents` doesn't cover. */
+  /**
+   * Raw cloudevent agreements, e.g. to limit a request to specific document
+   * `ids`. DIMO login signs only the `DocumentAccess` event types and drops
+   * anything else.
+   */
   cloudEvents?: CloudEventAgreement[];
 }
 
