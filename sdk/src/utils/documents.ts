@@ -1,14 +1,14 @@
 import { DocumentAccess } from '../enums/documents.enum';
 import { CloudEventAgreement } from '../types/common.types';
 
-// Agreements that grant the same thing: same event type (the signer defaults a
-// missing one to 'dimo.attestation'), source and ids. Differing ids are kept
-// apart so a narrower request never replaces a broader one.
-const agreementKey = ({ eventType, source, ids }: CloudEventAgreement) =>
+// Only exact duplicates share a key, so dedupe never lets one request
+// replace a different one.
+const agreementKey = ({ eventType, source, ids, tags }: CloudEventAgreement) =>
   JSON.stringify([
-    eventType || 'dimo.attestation',
+    eventType,
     source?.toLowerCase() ?? '',
     [...(ids ?? [])].sort(),
+    [...(tags ?? [])].sort(),
   ]);
 
 /**
@@ -28,7 +28,15 @@ export const getCloudEventAgreements = (
       ids: [],
       tags: ['documents'],
     })),
-    ...(cloudEvents ?? []),
+    // DIMO login drops agreements without an eventType (they'd be signed as
+    // every attestation), so say so here instead of losing them quietly.
+    ...(cloudEvents ?? []).filter((agreement) => {
+      if (agreement?.eventType) return true;
+      console.warn(
+        'login-with-dimo: ignoring a cloudEvents entry without an eventType.'
+      );
+      return false;
+    }),
   ];
   if (!agreements.length) return {};
 

@@ -4,10 +4,11 @@ import { DocumentAccess } from '../enums/documents.enum';
 
 /**
  * A cloudevent agreement signed into a vehicle grant. Mirrors the SACD
- * document's agreement shape; `source` defaults to the signed-in user.
+ * document's agreement shape; `source` defaults to the signed-in user, and
+ * empty or missing `ids` means every event of the type.
  */
 export interface CloudEventAgreement {
-  eventType?: string;
+  eventType: string;
   source?: `0x${string}`;
   ids?: string[];
   tags?: string[];
