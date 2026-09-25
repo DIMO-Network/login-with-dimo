@@ -8,7 +8,7 @@ import {
   LoginButtonProps,
   InternalDimoActionParams,
 } from '@dimo-types/index';
-import { getPermissionsBinary } from '@utils/index';
+import { getCloudEventAgreements, getPermissionsBinary } from '@utils/index';
 import { useResolvedBrand, formatBrandedLabel } from '@utils/brand';
 
 type LoginWithDimoProps = BaseButtonProps & LoginButtonProps & ButtonLabels;
@@ -19,6 +19,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   onError,
   permissionTemplateId,
   permissions,
+  documents,
+  cloudEvents,
   vehicles,
   vehicleMakes,
   onboarding,
@@ -40,6 +42,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
 
   const payload: InternalDimoActionParams & { eventType: EventTypes } = {
     ...getPermissionsBinary(permissions, permissionTemplateId),
+    ...getCloudEventAgreements(documents, cloudEvents),
     vehicles,
     vehicleMakes,
     onboarding,

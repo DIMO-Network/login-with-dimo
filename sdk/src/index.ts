@@ -21,7 +21,8 @@ export type { OemBrand } from './utils/devConsoleApi';
 export type { BrandOverride } from './types/ui.types';
 
 // Export enums
-export { EntryState, DimoSDKModes, Permissions } from '@enums/index';
+export { EntryState, DimoSDKModes, Permissions, DocumentAccess } from '@enums/index';
+export type { CloudEventAgreement } from './types/common.types';
 
 // Export provision types
 export type { ProvisionResult, ProvisionDeveloperLicenseProps } from './types/provision.types';

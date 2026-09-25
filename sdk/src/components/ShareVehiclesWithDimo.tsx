@@ -7,7 +7,7 @@ import {
   InternalDimoActionParams,
   LoginButtonProps,
 } from '@dimo-types/index';
-import { getPermissionsBinary } from '@utils/index';
+import { getCloudEventAgreements, getPermissionsBinary } from '@utils/index';
 import { useResolvedBrand, formatBrandedLabel } from '@utils/brand';
 import { BaseDimoButton } from './BaseDimoButton';
 
@@ -21,6 +21,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   onError,
   permissionTemplateId,
   permissions,
+  documents,
+  cloudEvents,
   vehicles,
   vehicleMakes,
   onboarding,
@@ -51,6 +53,7 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
     utm,
     powertrainTypes,
     ...getPermissionsBinary(permissions, permissionTemplateId),
+    ...getCloudEventAgreements(documents, cloudEvents),
   };
 
   return (

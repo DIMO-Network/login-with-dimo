@@ -1,5 +1,17 @@
 import { TransactionReceipt } from './transaction.types';
 import { Permissions } from '../enums/permission.enum';
+import { DocumentAccess } from '../enums/documents.enum';
+
+/**
+ * A cloudevent agreement signed into a vehicle grant. Mirrors the SACD
+ * document's agreement shape; `source` defaults to the signed-in user.
+ */
+export interface CloudEventAgreement {
+  eventType?: string;
+  source?: `0x${string}`;
+  ids?: string[];
+  tags?: string[];
+}
 
 export interface AuthData {
   token: string;
@@ -20,9 +32,15 @@ export interface DimoActionParams {
   utm?: string | null;
   powertrainTypes?: string[];
   permissions?: Permissions[];
+  /** Documents the app can read for each shared vehicle. */
+  documents?: DocumentAccess[];
+  /** Custom cloudevent agreements, for access `documents` doesn't cover. */
+  cloudEvents?: CloudEventAgreement[];
 }
 
 export interface InternalDimoActionParams
-  extends Omit<DimoActionParams, 'permissions'> {
+  extends Omit<DimoActionParams, 'permissions' | 'documents' | 'cloudEvents'> {
   permissions?: string;
+  // JSON-encoded for redirect mode, like transactionData.
+  cloudEvent?: CloudEventAgreement[] | string;
 }

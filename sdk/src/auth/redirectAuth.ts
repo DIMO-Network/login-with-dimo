@@ -1,13 +1,16 @@
 import { AuthParam } from '@enums/index';
 import {
   AuthPayload,
+  CloudEventAgreement,
   BaseAuthParams,
   DimoActionPayload,
   SignMessageData,
   TransactionData,
 } from '@dimo-types/index';
 
-type RedirectAuthData = BaseAuthParams & DimoActionPayload;
+// Every value here goes into the query string, so cloudEvent is pre-encoded.
+type RedirectAuthData = BaseAuthParams &
+  Omit<DimoActionPayload, 'cloudEvent'> & { cloudEvent?: string };
 
 const appendParams = (
   params: URLSearchParams,
@@ -71,6 +74,15 @@ const transformMessageData = (
   return serializedMessageData;
 };
 
+const transformCloudEvent = (
+  cloudEvent: CloudEventAgreement[] | string | undefined
+) => {
+  if (!cloudEvent || typeof cloudEvent === 'string') return cloudEvent;
+  // Unlike transactionData this is never dropped: sharing without the requested
+  // documents would silently grant less than the app asked for.
+  return encodeURIComponent(JSON.stringify(cloudEvent));
+};
+
 export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
@@ -79,6 +91,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     ...data,
     transactionData: transformTransactionData(data.transactionData),
     messageData: transformMessageData(data.messageData),
+    cloudEvent: transformCloudEvent(data.cloudEvent),
   };
 
   const params = new URLSearchParams();
@@ -87,6 +100,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.AltTitle,
     AuthParam.BrandName,
     AuthParam.ClientId,
+    AuthParam.CloudEvent,
     AuthParam.EntryState,
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,
