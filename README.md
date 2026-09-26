@@ -317,8 +317,8 @@ Reading the files through the Fetch API also needs `Permissions.GetRawData`.
   offered as an update; users don't need to stop sharing first.
 - To narrow a request to specific documents, pass raw agreements with
   `cloudEvents` (`{ eventType, ids?, tags? }`). DIMO only signs the four
-  `DocumentAccess` event types; other entries are dropped with a console
-  warning, because the consent screen can't describe them.
+  `DocumentAccess` event types; the SDK drops other entries, with a warning in
+  your app's console, because the consent screen can't describe them.
 - Without the SDK, add the same request to a login.dimo.org link as a
   URL-encoded JSON array: `cloudEvent=[{"eventType":"dimo.document.vehicle.*","tags":["documents"]}]`.
 

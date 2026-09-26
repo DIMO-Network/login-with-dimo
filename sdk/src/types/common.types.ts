@@ -9,7 +9,8 @@ import { DocumentAccess } from '../enums/documents.enum';
  * of the type.
  */
 export interface CloudEventAgreement {
-  eventType: string;
+  /** A `DocumentAccess` event type; DIMO login signs no others. */
+  eventType: `${DocumentAccess}`;
   ids?: string[];
   tags?: string[];
 }
