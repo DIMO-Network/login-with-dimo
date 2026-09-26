@@ -288,13 +288,14 @@ console warning.
 
 ```tsx
 import {
+  DimoSDKModes,
   DocumentAccess,
   Permissions,
   ShareVehiclesWithDimo,
 } from '@dimo-network/login-with-dimo';
 
 <ShareVehiclesWithDimo
-  mode="popup"
+  mode={DimoSDKModes.POPUP}
   onSuccess={onSuccess}
   onError={onError}
   permissions={[Permissions.GetNonLocationHistory, Permissions.GetRawData]}
@@ -314,9 +315,10 @@ Reading the files through the Fetch API also needs `Permissions.GetRawData`.
 - Users see the requested documents on the consent screen before they share.
 - Vehicles already shared with your app without the requested documents are
   offered as an update; users don't need to stop sharing first.
-- For access `documents` doesn't cover, pass raw agreements with `cloudEvents`
-  (`{ eventType, ids?, tags?, source? }`). `source` defaults to the signed-in
-  user's address.
+- To narrow a request to specific documents, pass raw agreements with
+  `cloudEvents` (`{ eventType, ids?, tags? }`). DIMO only signs the four
+  `DocumentAccess` event types; other entries are dropped with a console
+  warning, because the consent screen can't describe them.
 - Without the SDK, add the same request to a login.dimo.org link as a
   URL-encoded JSON array: `cloudEvent=[{"eventType":"dimo.document.vehicle.*","tags":["documents"]}]`.
 

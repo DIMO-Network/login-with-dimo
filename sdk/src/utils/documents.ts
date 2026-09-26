@@ -3,10 +3,9 @@ import { CloudEventAgreement } from '../types/common.types';
 
 // Only exact duplicates share a key, so dedupe never lets one request
 // replace a different one.
-const agreementKey = ({ eventType, source, ids, tags }: CloudEventAgreement) =>
+const agreementKey = ({ eventType, ids, tags }: CloudEventAgreement) =>
   JSON.stringify([
     eventType,
-    source?.toLowerCase() ?? '',
     [...(ids ?? [])].sort(),
     [...(tags ?? [])].sort(),
   ]);
@@ -14,8 +13,8 @@ const agreementKey = ({ eventType, source, ids, tags }: CloudEventAgreement) =>
 /**
  * Builds the `cloudEvent` agreements DIMO login signs into each vehicle's grant.
  * `documents` covers the common case; `cloudEvents` passes custom agreements
- * through as-is. `source` is left unset: DIMO login fills in the signed-in
- * user's address, which an app can't know before login.
+ * through. Access is always to the signed-in user's own files: DIMO login sets
+ * the source, and drops entries that name one.
  */
 export const getCloudEventAgreements = (
   documents: DocumentAccess[] | undefined,
@@ -31,11 +30,20 @@ export const getCloudEventAgreements = (
     // DIMO login drops agreements without an eventType (they'd be signed as
     // every attestation), so say so here instead of losing them quietly.
     ...(cloudEvents ?? []).filter((agreement) => {
-      if (agreement?.eventType) return true;
-      console.warn(
-        'login-with-dimo: ignoring a cloudEvents entry without an eventType.'
-      );
-      return false;
+      if (!agreement?.eventType) {
+        console.warn(
+          'login-with-dimo: ignoring a cloudEvents entry without an eventType.'
+        );
+        return false;
+      }
+      // JS callers can still pass a source; DIMO login would drop the entry.
+      if ('source' in agreement) {
+        console.warn(
+          "login-with-dimo: ignoring a cloudEvents entry with a source; access is always to the user's own files."
+        );
+        return false;
+      }
+      return true;
     }),
   ];
   if (!agreements.length) return {};
