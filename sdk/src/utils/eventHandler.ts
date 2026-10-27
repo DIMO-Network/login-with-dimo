@@ -172,8 +172,17 @@ export const createMessageHandler = (
 
   const { target, origin, mode } = config;
 
+  // Each click opens its own popup and listener; a listener answers only its
+  // popup and stops at that popup's answer, so an earlier click's callbacks
+  // never receive a later popup's token, signature or key.
+  const stop = () => {
+    window.removeEventListener('message', messageListener);
+    clearInterval(closedPoll);
+  };
+
   const messageListener = (event: MessageEvent) => {
     if (!validateOrigin(event.origin, origin)) return;
+    if (target && event.source !== target) return;
 
     const messageData: MessageData = event.data;
     if (messageData.mode !== mode) return;
@@ -192,39 +201,36 @@ export const createMessageHandler = (
         tosUrl,
         privacyPolicyUrl,
         language,
+        altTitle,
         eventType: MessageEventType.AUTH_INIT,
-        ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };
       sendMessageToTarget(target, initialMessage, origin, onError);
+      return;
     }
 
-    if (eventType === data?.eventType) {
-      sendMessageToTarget(
-        target,
-        { ...data, eventType: data.eventType },
-        origin,
-        onError
-      );
+    // The login asks for the button's action payload by its event type.
+    if (data && eventType === data.eventType) {
+      sendMessageToTarget(target, data, origin, onError);
+      return;
     }
 
+    if (!(eventType in eventHandlers)) return;
+    stop();
     handleCommonEvents(
       eventType,
       messageData,
       { onSuccess, onError, setAuthenticated },
-      {
-        ...(mode === DimoSDKModes.POPUP && {
-          sharedVehicles: messageData.sharedVehicles,
-          revokedVehicles: messageData.revokedVehicles,
-          extendedVehicles: messageData.extendedVehicles,
-          accountGranted: messageData.accountGranted,
-        }),
-        emailRequest,
-      }
+      { emailRequest }
     );
   };
 
+  // A popup closed without answering leaves nothing to listen for.
+  const closedPoll = setInterval(() => {
+    if (target?.closed) stop();
+  }, 1000);
+
   window.addEventListener('message', messageListener);
-  return () => window.removeEventListener('message', messageListener);
+  return stop;
 };
 
 export const handleMessageForPopup = (

@@ -19,7 +19,13 @@ export function useResolvedBrand(override?: BrandOverride): ResolvedBrand {
   const { clientId, environment } = getDimoConfig();
   // Both hooks run every render (Rules of Hooks); we pick based on `name`.
   const defaultBrand = useDimoAuthBrand();
-  const namedBrand = useOemBrand({ clientId, environment, brandName: override?.name });
+  // Without a name the init-time default brand is used, so don't fetch it
+  // again for every button (an empty clientId makes useOemBrand skip).
+  const namedBrand = useOemBrand({
+    clientId: override?.name ? clientId : '',
+    environment,
+    brandName: override?.name,
+  });
   const brand = override?.name ? namedBrand : defaultBrand;
   return {
     name:         brand?.name         ?? null,

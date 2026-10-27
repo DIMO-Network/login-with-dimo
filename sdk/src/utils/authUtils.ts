@@ -6,7 +6,7 @@ import {
   storeJWTInCookies,
   storeWalletAddressInLocalStorage,
 } from '@storage/storageManager';
-import { AuthData, EmailRequest } from '@dimo-types/index';
+import { AuthData, EmailRequest, MessageData } from '@dimo-types/index';
 
 export const processAuthResponse = (
   {
@@ -17,15 +17,14 @@ export const processAuthResponse = (
     revokedVehicles,
     extendedVehicles,
     accountGranted,
-  }: any,
+  }: MessageData,
   setAuthenticated: (status: boolean) => void,
   onSuccess: (data: AuthData) => void,
   /** What the button asked for; `none` leaves the stored email alone. */
   emailRequest?: EmailRequest
 ) => {
-  // This auth response may be triggered for a coupled or decoupled flow
-  // If decoupled, it will only return token
-  // If coupled, it will return token + updatedVehicles
+  // A plain login returns the token (and email, if shared); a share also
+  // returns what changed (shared, extended or revoked vehicles, accountGranted).
   storeWalletAddressInLocalStorage(walletAddress);
   // A request that didn't ask for the email says nothing about it: never hand
   // one over (older login builds may still send it), and keep the one an

@@ -344,7 +344,7 @@ import { LogoutWithDimo } from "@dimo-network/login-with-dimo";
 
 <LogoutWithDimo
   mode="popup" // or "redirect"
-  onSuccess={() => console.log('Logged out successfully')}
+  onSuccess={() => {}} // not called on logout; watch isAuthenticated
   onError={(error) => console.error('Logout error:', error)}
 />
 ```
@@ -354,7 +354,7 @@ import { LogoutWithDimo } from "@dimo-network/login-with-dimo";
 | Parameter   | Type       | Description                                      |
 |-------------|------------|--------------------------------------------------|
 | `mode`      | `string`   | The mode of the button (`popup` or `redirect`). |
-| `onSuccess` | `function` | Callback function triggered on successful logout.|
+| `onSuccess` | `function` | Required by the button type, but not called on logout yet; watch `isAuthenticated` from `useDimoAuthState()` instead.|
 | `onError`   | `function` | Callback function triggered on logout error.     |
 | `label`     | `string`   | Button text. Defaults to `"Logout"`.             |
 | `language`  | `'en' \| 'ja'` | Language of the login screens it opens.     |

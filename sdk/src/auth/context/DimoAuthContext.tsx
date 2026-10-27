@@ -16,7 +16,8 @@ type DimoAuthContextType = {
   walletAddress: string | null;
   email: string | null;
   getValidJWT: () => string | null;
-  getEmail: () => string | null;
+  /** The shared email; throws `No permission to access email` when there's none. */
+  getEmail: () => string;
 };
 
 const DimoAuthContext = createContext<DimoAuthContextType | undefined>(

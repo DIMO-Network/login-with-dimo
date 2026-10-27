@@ -1,6 +1,8 @@
 /**
  * @file storageManager.ts
- * @description This module is responsible for managing JWT tokens.
+ * @description The signed-in user as the SDK keeps it: the JWT cookie, the
+ * wallet address and shared email in localStorage, and a redirect's email
+ * request in sessionStorage.
  */
 
 import { jwtDecode } from 'jwt-decode';
@@ -53,7 +55,7 @@ const notifyStoredUser = (): void => {
 };
 
 export const storeWalletAddressInLocalStorage = (
-  walletAddress: string
+  walletAddress: string | null | undefined
 ): void => {
   if (!isValidCookieStringValue(walletAddress)) return;
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
@@ -99,7 +101,8 @@ export const getEmailFromLocalStorage = (): string | null => {
 };
 
 export const clearSessionData = (): void => {
-  document.cookie = `dimo_auth_token=; Max-Age=0`;
+  // Same path as when it was set, or a page under a subpath keeps the token.
+  document.cookie = `dimo_auth_token=; Max-Age=0; path=/`;
   localStorage.removeItem(`dimo_wallet_address`);
   localStorage.removeItem(`dimo_user_email`);
   notifyStoredUser();

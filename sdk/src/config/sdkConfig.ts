@@ -118,8 +118,11 @@ export const initializeDimoSDK = ({
   environment?: Environment;
   options?: DimoSDKOptions;
 }) => {
+  const sameLicense =
+    sdkConfig.clientId === clientId && sdkConfig.environment === environment;
   sdkConfig = { clientId, redirectUri, apiKey, environment, options };
-  loadBrand(clientId, environment);
+  // Apps often call this during render; fetch the brand once per license.
+  if (!sameLicense) loadBrand(clientId, environment);
 };
 
 export const getDimoConfig = () => {
