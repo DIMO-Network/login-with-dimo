@@ -71,9 +71,14 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   payload,
   brand,
   language,
+  emailRequest,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
     getDimoConfig();
+  const resolvedEmailRequest =
+    emailRequest ??
+    options?.emailRequest ??
+    (options?.forceEmail ? 'required' : undefined);
 
   const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
@@ -98,7 +103,9 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     redirectUri,
     apiKey,
     brandName: brand?.name ?? undefined,
-    forceEmail: options?.forceEmail ?? false,
+    // The button's choice, else the SDK option; `forceEmail` means required.
+    emailRequest: resolvedEmailRequest,
+    forceEmail: resolvedEmailRequest === 'required',
     tosUrl: options?.tosUrl,
     privacyPolicyUrl: options?.privacyPolicyUrl,
     language: language ?? options?.language,

@@ -22,7 +22,12 @@ export type { BrandOverride } from './types/ui.types';
 
 // Export enums
 export { EntryState, DimoSDKModes, Permissions, DocumentAccess } from '@enums/index';
-export type { AuthData, CloudEventAgreement, DimoLanguage } from './types/common.types';
+export type {
+  AuthData,
+  CloudEventAgreement,
+  DimoLanguage,
+  EmailRequest,
+} from './types/common.types';
 export type { DimoSDKOptions } from './config/sdkConfig';
 
 // Export provision types

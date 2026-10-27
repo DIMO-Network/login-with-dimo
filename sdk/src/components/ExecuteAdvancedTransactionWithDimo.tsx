@@ -29,6 +29,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   unAuthenticatedLabel,
   altTitle,
   language,
+  emailRequest,
   brandOverride,
 }) => {
   if (!address || !abi || !functionName || !args) {
@@ -67,6 +68,7 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       }}
       brand={brand}
       language={language}
+      emailRequest={emailRequest}
     />
   );
 };

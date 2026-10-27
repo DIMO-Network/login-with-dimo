@@ -39,7 +39,8 @@ In addition to setting the dev credentials/environments, you can also set global
 
 | Option             | Description                                                                                                       | Default      |
 |--------------------|-------------------------------------------------------------------------------------------------------------------|--------------|
-| `forceEmail`       | Users must agree to share their email with your app before signing in.                                            | `false`      |
+| `emailRequest`     | Whether to ask for the user's email: `'none'`, `'optional'` or `'required'`.                                      | `'optional'` |
+| `forceEmail`       | Deprecated: same as `emailRequest: 'required'`. Still honoured.                                                   | `false`      |
 | `language`         | Language of the login screens: `'en'` or `'ja'` (`'ja-JP'` and similar also work).                                | browser      |
 | `tosUrl`           | Your Terms of Service, linked from the login screens instead of DIMO's.                                          | DIMO's       |
 | `privacyPolicyUrl` | Your Privacy Policy, linked from the login screens instead of DIMO's.                                            | DIMO's       |
@@ -48,13 +49,15 @@ In addition to setting the dev credentials/environments, you can also set global
   initializeDimoSDK({
     ...
     options: {
-      forceEmail: true, //BY DEFAULT, this is False - users won't have to share email
+      emailRequest: 'required', // 'optional' by default; 'none' never asks
       language: 'ja',
     },
   });
 ```
 
 When `language` isn't set, the login shows Japanese to users whose browser language is Japanese or whose time zone is in Japan, and English otherwise. Users can switch language on the login screens, and their choice is remembered for your app. Every button also takes a `language` prop that overrides the option for the screens it opens.
+
+The email is asked for after sign-in, with the rest of your request: on the vehicle or document sharing screen, or, for a plain login, on a short "Continue to {app}" step. It's asked once per app and account and the answer is remembered. With `required`, the user shares it to continue (Cancel calls `onError`). Every button also takes an `emailRequest` prop that overrides the option.
 
 When the user shares their email, it arrives with the login: `onSuccess` receives it as `authData.email`, and `getEmail()` / `email` from `useDimoAuthState()` return it right away, including inside `onSuccess`. When a login doesn't share it, `authData.email` is absent, `email` is `null`, and `getEmail()` throws `No permission to access email`; an email stored by an earlier login is cleared.
 

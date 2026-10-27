@@ -48,6 +48,7 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
   unAuthenticatedLabel,
   altTitle,
   language,
+  emailRequest,
   brandOverride,
 }) => {
   const messageData = normalizeMessage(message);
@@ -76,6 +77,7 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
       }}
       brand={brand}
       language={language}
+      emailRequest={emailRequest}
     />
   );
 };

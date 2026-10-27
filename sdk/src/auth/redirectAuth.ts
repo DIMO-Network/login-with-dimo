@@ -109,6 +109,7 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.BrandName,
     AuthParam.ClientId,
     AuthParam.CloudEvent,
+    AuthParam.EmailRequest,
     AuthParam.EntryState,
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,

@@ -1,9 +1,11 @@
 import { Environment } from '@enums/index';
 import { fetchOemBrand, OemBrand } from '@utils/devConsoleApi';
-import type { DimoLanguage } from '../types/common.types';
+import type { DimoLanguage, EmailRequest } from '../types/common.types';
 
 export interface DimoSDKOptions {
-  /** Require users to share their email with the app before signing in. */
+  /** Whether to ask for the user's email: `none`, `optional` (default) or `required`. */
+  emailRequest?: EmailRequest;
+  /** @deprecated Use `emailRequest: 'required'`. Still honoured. */
   forceEmail?: boolean;
   /** Your Terms of Service, linked from the login screens. */
   tosUrl?: string;

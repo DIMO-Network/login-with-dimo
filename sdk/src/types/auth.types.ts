@@ -1,6 +1,11 @@
 import { EntryState, EventTypes } from '@enums/index';
 import { SignMessageData, TransactionData } from './transaction.types';
-import { AuthData, DimoLanguage, InternalDimoActionParams } from './common.types';
+import {
+  AuthData,
+  DimoLanguage,
+  EmailRequest,
+  InternalDimoActionParams,
+} from './common.types';
 
 export interface EventHandlers {
   onSuccess: (data: AuthData) => void;
@@ -11,7 +16,9 @@ export interface EventHandlers {
 export interface BaseAuthParams {
   entryState: EntryState;
   dimoLogin: string;
+  /** Kept for login builds that predate `emailRequest`. */
   forceEmail: boolean;
+  emailRequest?: EmailRequest;
   clientId?: string;
   redirectUri?: string;
   apiKey?: string;

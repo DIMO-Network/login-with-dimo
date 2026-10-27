@@ -18,6 +18,7 @@ export enum AuthParam {
   ClientId = 'clientId',
   CloudEvent = 'cloudEvent',
   EntryState = 'entryState',
+  EmailRequest = 'emailRequest',
   ExpirationDate = 'expirationDate',
   ForceEmail = 'forceEmail',
   Language = 'language',

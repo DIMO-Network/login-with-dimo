@@ -34,6 +34,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   utm = null,
   altTitle,
   language,
+  emailRequest,
   brandOverride,
 }) => {
   const brand = useResolvedBrand(brandOverride);
@@ -78,6 +79,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       payload={payload}
       brand={brand}
       language={language}
+      emailRequest={emailRequest}
     />
   );
 };
