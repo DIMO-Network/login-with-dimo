@@ -7,7 +7,7 @@ import {
   storeEmailInLocalStorage,
   storeJWTInCookies,
   storeWalletAddressInLocalStorage,
-  takeEmailRequest,
+  getRememberedEmailRequest,
 } from '@storage/storageManager';
 
 export const useAuthParamsFromURL = () => {
@@ -29,7 +29,7 @@ export const useAuthParamsFromURL = () => {
     }
 
     // A button that asked for no email leaves the stored one as it was.
-    if (token && takeEmailRequest() === 'none') return;
+    if (token && getRememberedEmailRequest() === 'none') return;
 
     if (isValidCookieStringValue(email)) {
       storeEmailInLocalStorage(email);

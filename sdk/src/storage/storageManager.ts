@@ -119,11 +119,14 @@ export const rememberEmailRequest = (emailRequest?: EmailRequest): void => {
   }
 };
 
-/** The request the last redirect was made with, read once. */
-export const takeEmailRequest = (): EmailRequest | undefined => {
+/**
+ * The request the last redirect was made with. Not removed on read: every
+ * DimoAuthProvider (the app's and each button's) handles the same return, and
+ * the next redirect overwrites it.
+ */
+export const getRememberedEmailRequest = (): EmailRequest | undefined => {
   try {
     const value = sessionStorage.getItem(EMAIL_REQUEST_KEY);
-    sessionStorage.removeItem(EMAIL_REQUEST_KEY);
     return value === 'none' || value === 'optional' || value === 'required'
       ? value
       : undefined;

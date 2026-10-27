@@ -40,10 +40,11 @@ export const DimoAuthProvider = ({
   const { hasLogoutParam } = useLogoutFromURL();
   const { email, walletAddress } = useLocalStorageData();
 
-  // Reads storage, not render state: onSuccess runs in the same tick the
-  // response is stored, before React has re-rendered with the new email.
+  // Reads storage only, not render state: onSuccess runs in the same tick the
+  // response is stored or cleared, before React re-renders, so render state
+  // can still hold the previous user's email.
   const getEmail = () => {
-    const current = getEmailFromLocalStorage() ?? email;
+    const current = getEmailFromLocalStorage();
     if (current) {
       return current;
     }
