@@ -3,6 +3,7 @@ import {
   AuthData,
   AuthPayload,
   DimoActionPayload,
+  EmailRequest,
   EventHandler,
   EventHandlers,
   MessageData,
@@ -69,7 +70,8 @@ const handleAuthResponse = (
   processAuthResponse(
     { ...data, ...extraData },
     handlers.setAuthenticated,
-    handlers.onSuccess
+    handlers.onSuccess,
+    extraData.emailRequest as EmailRequest | undefined
   );
 };
 
@@ -209,14 +211,15 @@ export const createMessageHandler = (
       eventType,
       messageData,
       { onSuccess, onError, setAuthenticated },
-      mode === DimoSDKModes.POPUP
-        ? {
-            sharedVehicles: messageData.sharedVehicles,
-            revokedVehicles: messageData.revokedVehicles,
-            extendedVehicles: messageData.extendedVehicles,
-            accountGranted: messageData.accountGranted,
-          }
-        : {}
+      {
+        ...(mode === DimoSDKModes.POPUP && {
+          sharedVehicles: messageData.sharedVehicles,
+          revokedVehicles: messageData.revokedVehicles,
+          extendedVehicles: messageData.extendedVehicles,
+          accountGranted: messageData.accountGranted,
+        }),
+        emailRequest,
+      }
     );
   };
 

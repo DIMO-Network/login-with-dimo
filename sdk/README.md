@@ -57,9 +57,9 @@ In addition to setting the dev credentials/environments, you can also set global
 
 When `language` isn't set, the login shows Japanese to users whose browser language is Japanese or whose time zone is in Japan, and English otherwise. Users can switch language on the login screens, and their choice is remembered for your app. Every button also takes a `language` prop that overrides the option for the screens it opens.
 
-The email is asked for after sign-in, with the rest of your request: on the vehicle or document sharing screen, or, for a plain login, on a short "Continue to {app}" step. It's asked once per app and account and the answer is remembered. With `required`, the user shares it to continue (Cancel calls `onError`). Every button also takes an `emailRequest` prop that overrides the option.
+The email is asked for after sign-in, with the rest of your request: on the vehicle or document sharing screen, or, for a plain login, on a short "Continue to {app}" step. It's asked once per app and account and the answer is remembered. With `required`, the user shares it to continue; cancelling before it's shared ends the login with `User declined to share their email` (`onError` in popup mode; in redirect mode your redirect URI gets `error=…`, which the SDK doesn't pass to `onError` yet, so read it from the query). Every button also takes an `emailRequest` prop that overrides the option.
 
-When the user shares their email, it arrives with the login: `onSuccess` receives it as `authData.email`, and `getEmail()` / `email` from `useDimoAuthState()` return it right away, including inside `onSuccess`. When a login doesn't share it, `authData.email` is absent, `email` is `null`, and `getEmail()` throws `No permission to access email`; an email stored by an earlier login is cleared.
+When the user shares their email, it arrives with the login: `onSuccess` receives it as `authData.email`, and `getEmail()` / `email` from `useDimoAuthState()` return it right away, including inside `onSuccess`. When a login doesn't share it, `authData.email` is absent, `email` is `null`, and `getEmail()` throws `No permission to access email`; an email stored by an earlier login is cleared. A button with `emailRequest: 'none'` never includes an email and leaves a stored one as it was.
 
 ### The Dimo Auth Provider
 
@@ -233,6 +233,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `utm`                  | UTM parameters for tracking (a query string) | `null`                       | `string`                       | No        |
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 | `language`             | Language of the login screens it opens       | the `language` option | `'en' \| 'ja'` | No |
+| `emailRequest`         | Whether to ask for the user's email          | the `emailRequest` option | `'none' \| 'optional' \| 'required'` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -255,6 +256,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `utm`                | UTM parameters for tracking (a query string)                                | `null`                                  | `string`                       | No        |
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 | `language`           | Language of the login screens it opens                                      | the `language` option                   | `'en' \| 'ja'`                 | No        |
+| `emailRequest`       | Whether to ask for the user's email                                         | the `emailRequest` option               | `'none' \| 'optional' \| 'required'` | No        |
 
 `onSuccess` receives:
 

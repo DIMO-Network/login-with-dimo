@@ -35,6 +35,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   altTitle,
   language,
   emailRequest,
+  powertrainTypes,
   brandOverride,
 }) => {
   const brand = useResolvedBrand(brandOverride);
@@ -59,6 +60,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
     expirationDate,
     eventType: EventTypes.SHARE_VEHICLES_DATA,
     utm,
+    powertrainTypes,
   };
 
   return (

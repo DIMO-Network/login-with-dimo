@@ -7,6 +7,7 @@ import {
   SignMessageData,
   TransactionData,
 } from '@dimo-types/index';
+import { rememberEmailRequest } from '@storage/storageManager';
 
 // Every value here goes into the query string, so cloudEvent is pre-encoded.
 type RedirectAuthData = BaseAuthParams &
@@ -127,6 +128,10 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.VehicleMakes,
     AuthParam.Vehicles,
   ]);
+
+  // The login's answer comes back on a fresh page load; remember what this
+  // button asked for so `none` can be honoured then (useAuthParamsFromURL).
+  rememberEmailRequest(payload.emailRequest);
 
   // Construct the full URL
   window.location.href = `${dimoLogin}?${params.toString()}`;

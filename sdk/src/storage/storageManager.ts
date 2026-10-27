@@ -4,6 +4,7 @@
  */
 
 import { jwtDecode } from 'jwt-decode';
+import type { EmailRequest } from '../types/common.types';
 
 const DEFAULT_COOKIE_EXPIRATION_DAYS = 14; // Default expiration for cookies is 2 weeks
 
@@ -102,4 +103,31 @@ export const clearSessionData = (): void => {
   localStorage.removeItem(`dimo_wallet_address`);
   localStorage.removeItem(`dimo_user_email`);
   notifyStoredUser();
+};
+
+// A redirect login returns on a fresh page load, so the button's email request
+// is kept in sessionStorage for the return trip. Blocked storage just means
+// the return is handled as an email-asking request.
+const EMAIL_REQUEST_KEY = 'dimo_email_request';
+
+export const rememberEmailRequest = (emailRequest?: EmailRequest): void => {
+  try {
+    if (emailRequest) sessionStorage.setItem(EMAIL_REQUEST_KEY, emailRequest);
+    else sessionStorage.removeItem(EMAIL_REQUEST_KEY);
+  } catch {
+    // storage unavailable
+  }
+};
+
+/** The request the last redirect was made with, read once. */
+export const takeEmailRequest = (): EmailRequest | undefined => {
+  try {
+    const value = sessionStorage.getItem(EMAIL_REQUEST_KEY);
+    sessionStorage.removeItem(EMAIL_REQUEST_KEY);
+    return value === 'none' || value === 'optional' || value === 'required'
+      ? value
+      : undefined;
+  } catch {
+    return undefined;
+  }
 };
