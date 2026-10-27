@@ -14,6 +14,14 @@ export interface CloudEventAgreement {
   tags?: string[];
 }
 
+/**
+ * Language for the DIMO login screens. `en` and `ja` are supported; other
+ * BCP 47 tags such as `ja-JP` are accepted and matched, and unsupported ones
+ * fall back to the user's browser language.
+ */
+// `string & {}` keeps editor suggestions for the known codes.
+export type DimoLanguage = 'en' | 'ja' | (string & {});
+
 export interface AuthData {
   token: string;
   /**
@@ -24,6 +32,10 @@ export interface AuthData {
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];
+  /** Vehicles the user stopped sharing with this app (Manage → Stop sharing). */
+  revokedVehicles?: string[];
+  /** Vehicles whose sharing the user extended by a year. */
+  extendedVehicles?: string[];
   accountGranted?: boolean;
   signature?: `0x${string}`;
   signer?: `0x${string}`;

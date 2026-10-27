@@ -21,6 +21,7 @@ const sampleExpirationDate = new Date(Date.UTC(2025, 11, 11, 18, 51)); // Note: 
 function App() {
   const [permissionsEnabled, setPermissionsEnabled] = useState(false);
   const [forceEmail, setForceEmail] = useState(false);
+  const [language, setLanguage] = useState<'' | 'en' | 'ja'>('');
   initializeDimoSDK({
     clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
     redirectUri: process.env.REACT_APP_DIMO_REDIRECT_URI!,
@@ -30,6 +31,8 @@ function App() {
     apiKey: process.env.REACT_APP_DIMO_API_KEY!,
     options: {
       forceEmail,
+      // Empty lets the login pick from the user's browser language and time zone.
+      language: language || undefined,
     },
   });
 
@@ -59,6 +62,20 @@ function App() {
               onChange={() => setForceEmail(!forceEmail)}
             />
             Force Email
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Login language{' '}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as '' | 'en' | 'ja')}
+            >
+              <option value="">Detect from browser</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
           </label>
         </div>
         <UserData />

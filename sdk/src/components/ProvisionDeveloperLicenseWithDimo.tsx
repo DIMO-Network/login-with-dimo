@@ -12,6 +12,8 @@ const ProvisionDeveloperLicenseWithDimo: FC<ProvisionDeveloperLicenseProps> = ({
   onError,
   existingTokenId,
   existingClientId,
+  label = 'Set up developer access',
+  language,
 }) => {
   const handleSuccess = (data: AuthData) => {
     const response = data as unknown as { clientId: string; tokenId: number; privateKey: `0x${string}` };
@@ -34,7 +36,8 @@ const ProvisionDeveloperLicenseWithDimo: FC<ProvisionDeveloperLicenseProps> = ({
       entryState={EntryState.PROVISION_DEVELOPER_LICENSE}
       onSuccess={handleSuccess}
       onError={onError}
-      buttonLabel={() => 'Set up developer access'}
+      buttonLabel={() => label}
+      language={language}
       payload={{
         eventType: EventTypes.PROVISION_DEVELOPER_LICENSE,
         ...(existingTokenId != null && { existingTokenId }),

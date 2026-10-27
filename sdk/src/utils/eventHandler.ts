@@ -164,6 +164,7 @@ export const createMessageHandler = (
     brandName,
     tosUrl,
     privacyPolicyUrl,
+    language,
   } = basePayload;
 
   const { target, origin, mode } = config;
@@ -186,6 +187,7 @@ export const createMessageHandler = (
         brandName,
         tosUrl,
         privacyPolicyUrl,
+        language,
         eventType: MessageEventType.AUTH_INIT,
         ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };
@@ -208,6 +210,8 @@ export const createMessageHandler = (
       mode === DimoSDKModes.POPUP
         ? {
             sharedVehicles: messageData.sharedVehicles,
+            revokedVehicles: messageData.revokedVehicles,
+            extendedVehicles: messageData.extendedVehicles,
             accountGranted: messageData.accountGranted,
           }
         : {}

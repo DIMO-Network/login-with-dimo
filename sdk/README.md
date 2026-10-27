@@ -37,16 +37,24 @@ import {
 
 In addition to setting the dev credentials/environments, you can also set global options.
 
-We currently support the `forceEmail` option, which means - anytime a user will be on a register/login page, they will be forced to check the email box before registering
+| Option             | Description                                                                                                       | Default      |
+|--------------------|-------------------------------------------------------------------------------------------------------------------|--------------|
+| `forceEmail`       | Users must agree to share their email with your app before signing in.                                            | `false`      |
+| `language`         | Language of the login screens: `'en'` or `'ja'` (`'ja-JP'` and similar also work).                                | browser      |
+| `tosUrl`           | Your Terms of Service, linked from the login screens instead of DIMO's.                                          | DIMO's       |
+| `privacyPolicyUrl` | Your Privacy Policy, linked from the login screens instead of DIMO's.                                            | DIMO's       |
 
 ```
   initializeDimoSDK({
     ...
     options: {
       forceEmail: true, //BY DEFAULT, this is False - users won't have to share email
+      language: 'ja',
     },
   });
 ```
+
+When `language` isn't set, the login shows Japanese to users whose browser language is Japanese or whose time zone is in Japan, and English otherwise. Users can switch language on the login screens, and their choice is remembered for your app. Every button also takes a `language` prop that overrides the option for the screens it opens.
 
 When the user shares their email, it arrives with the login: `onSuccess` receives it as `authData.email`, and `getEmail()` / `email` from `useDimoAuthState()` return it right away, including inside `onSuccess`. When a login doesn't share it, `authData.email` is absent, `email` is `null`, and `getEmail()` throws `No permission to access email`; an email stored by an earlier login is cleared.
 
@@ -221,6 +229,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `unAuthenticatedLabel` | Label when the user is not authenticated     | `"Continue with DIMO"`       | `string`                       | No        |
 | `utm`                  | UTM parameters for tracking (a query string) | `null`                       | `string`                       | No        |
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
+| `language`             | Language of the login screens it opens       | the `language` option | `'en' \| 'ja'` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -242,6 +251,19 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Share Vehicles with DIMO"` | `string`                       | No        |
 | `utm`                | UTM parameters for tracking (a query string)                                | `null`                                  | `string`                       | No        |
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
+| `language`           | Language of the login screens it opens                                      | the `language` option                   | `'en' \| 'ja'`                 | No        |
+
+`onSuccess` receives:
+
+| Field              | When                                                                                         |
+|--------------------|----------------------------------------------------------------------------------------------|
+| `token`            | Always.                                                                                      |
+| `email`            | Only when the user shares their email with your app.                                        |
+| `sharedVehicles`   | Token IDs of the vehicles the user shared or updated.                                       |
+| `extendedVehicles` | Token IDs of vehicles whose sharing the user extended by a year (from the vehicle's Manage screen). |
+| `revokedVehicles`  | Token IDs of vehicles the user stopped sharing with your app (from the vehicle's Manage screen). |
+
+In redirect mode the same fields arrive as query parameters on your redirect URI. Repeated values are joined with commas.
 
 ### Available Permissions
 
@@ -329,5 +351,7 @@ import { LogoutWithDimo } from "@dimo-network/login-with-dimo";
 | `mode`      | `string`   | The mode of the button (`popup` or `redirect`). |
 | `onSuccess` | `function` | Callback function triggered on successful logout.|
 | `onError`   | `function` | Callback function triggered on logout error.     |
+| `label`     | `string`   | Button text. Defaults to `"Logout"`.             |
+| `language`  | `'en' \| 'ja'` | Language of the login screens it opens.     |
 
 This component is fully configurable and integrates seamlessly with the SDK.

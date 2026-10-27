@@ -70,6 +70,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   altTitle = false,
   payload,
   brand,
+  language,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
     getDimoConfig();
@@ -100,6 +101,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     forceEmail: options?.forceEmail ?? false,
     tosUrl: options?.tosUrl,
     privacyPolicyUrl: options?.privacyPolicyUrl,
+    language: language ?? options?.language,
   };
 
   const handleButtonClick = () => {

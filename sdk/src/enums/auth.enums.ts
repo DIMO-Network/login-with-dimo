@@ -20,6 +20,7 @@ export enum AuthParam {
   EntryState = 'entryState',
   ExpirationDate = 'expirationDate',
   ForceEmail = 'forceEmail',
+  Language = 'language',
   MessageData = 'messageData',
   Onboarding = 'onboarding',
   PermissionTemplateId = 'permissionTemplateId',

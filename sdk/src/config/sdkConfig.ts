@@ -1,16 +1,27 @@
 import { Environment } from '@enums/index';
 import { fetchOemBrand, OemBrand } from '@utils/devConsoleApi';
+import type { DimoLanguage } from '../types/common.types';
+
+export interface DimoSDKOptions {
+  /** Require users to share their email with the app before signing in. */
+  forceEmail?: boolean;
+  /** Your Terms of Service, linked from the login screens. */
+  tosUrl?: string;
+  /** Your Privacy Policy, linked from the login screens. */
+  privacyPolicyUrl?: string;
+  /**
+   * Language for the login screens (`en` or `ja`). When unset, the login uses
+   * the user's browser language and time zone. The user can still switch.
+   */
+  language?: DimoLanguage;
+}
 
 let sdkConfig: {
   clientId: string;
   redirectUri: string;
   apiKey?: string;
   environment?: Environment;
-  options?: {
-    forceEmail?: boolean;
-    tosUrl?: string;
-    privacyPolicyUrl?: string;
-  };
+  options?: DimoSDKOptions;
 } = {
   clientId: '',
   redirectUri: '',
@@ -103,11 +114,7 @@ export const initializeDimoSDK = ({
   redirectUri: string;
   apiKey?: string;
   environment?: Environment;
-  options?: {
-    forceEmail?: boolean;
-    tosUrl?: string;
-    privacyPolicyUrl?: string;
-  };
+  options?: DimoSDKOptions;
 }) => {
   sdkConfig = { clientId, redirectUri, apiKey, environment, options };
   loadBrand(clientId, environment);

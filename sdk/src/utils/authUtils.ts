@@ -9,7 +9,15 @@ import {
 import { AuthData } from '@dimo-types/index';
 
 export const processAuthResponse = (
-  { token, walletAddress, email, sharedVehicles, accountGranted }: any,
+  {
+    token,
+    walletAddress,
+    email,
+    sharedVehicles,
+    revokedVehicles,
+    extendedVehicles,
+    accountGranted,
+  }: any,
   setAuthenticated: (status: boolean) => void,
   onSuccess: (data: AuthData) => void
 ) => {
@@ -32,6 +40,8 @@ export const processAuthResponse = (
       token,
       sharedVehicles,
       ...(sharedEmail && { email: sharedEmail }),
+      ...(revokedVehicles?.length && { revokedVehicles }),
+      ...(extendedVehicles?.length && { extendedVehicles }),
       ...(accountGranted !== undefined && { accountGranted }),
     });
   }

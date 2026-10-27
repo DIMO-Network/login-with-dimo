@@ -1,6 +1,6 @@
 import { EntryState, EventTypes } from '@enums/index';
 import { SignMessageData, TransactionData } from './transaction.types';
-import { AuthData, InternalDimoActionParams } from './common.types';
+import { AuthData, DimoLanguage, InternalDimoActionParams } from './common.types';
 
 export interface EventHandlers {
   onSuccess: (data: AuthData) => void;
@@ -19,6 +19,7 @@ export interface BaseAuthParams {
   brandName?: string;
   tosUrl?: string;
   privacyPolicyUrl?: string;
+  language?: DimoLanguage;
 }
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}

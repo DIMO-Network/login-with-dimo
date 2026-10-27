@@ -33,6 +33,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   unAuthenticatedLabel,
   utm = null,
   altTitle,
+  language,
   brandOverride,
 }) => {
   const brand = useResolvedBrand(brandOverride);
@@ -76,6 +77,7 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       altTitle={altTitle}
       payload={payload}
       brand={brand}
+      language={language}
     />
   );
 };
