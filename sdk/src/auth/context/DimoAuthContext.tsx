@@ -1,10 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import {
-  useAuthParamsFromURL,
-  useLocalStorageData,
-  useLogoutFromURL,
-} from '@hooks/index';
+import { useLocalStorageData, useRedirectReturn } from '@hooks/index';
 import {
   getEmailFromLocalStorage,
   getJWTFromCookies,
@@ -37,8 +33,7 @@ export const DimoAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const { isTokenStored } = useAuthParamsFromURL();
-  const { hasLogoutParam } = useLogoutFromURL();
+  const { isTokenStored, hasLogoutParam } = useRedirectReturn();
   const { email, walletAddress } = useLocalStorageData();
 
   // Reads storage only, not render state: onSuccess runs in the same tick the

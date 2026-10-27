@@ -11,18 +11,18 @@ import {
 } from '@dimo-types/index';
 import { logout, processAuthResponse } from './authUtils';
 
-const getDomain = (url: string): string => {
+const originOf = (url: string): string => {
   try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.hostname;
+    return new URL(url).origin;
   } catch (e) {
     console.warn('Invalid URL:', url);
     return '';
   }
 };
 
-const validateOrigin = (origin: string, expectedDomain: string): boolean => {
-  const isValid = getDomain(origin) === getDomain(expectedDomain);
+// Scheme, host and port: an http page or another port on the same host isn't the login.
+const validateOrigin = (origin: string, expectedUrl: string): boolean => {
+  const isValid = origin === originOf(expectedUrl);
   if (!isValid) {
     console.error('Received message from an unknown origin:', origin);
   }

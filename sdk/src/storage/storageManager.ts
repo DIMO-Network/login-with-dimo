@@ -30,7 +30,12 @@ export const createCookieString = (name: string, jwt: string): string => {
   return cookieString;
 };
 
+// Three base64url segments: anything else (a `;` above all) could add cookie
+// attributes when written into the cookie string.
+const JWT_SHAPE = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*$/;
+
 export const storeJWTInCookies = (jwt: string): void => {
+  if (!JWT_SHAPE.test(jwt)) return;
   document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
@@ -108,6 +113,35 @@ export const clearSessionData = (): void => {
   notifyStoredUser();
 };
 
+// Redirect mode: the nonce sent with the redirect, which the login returns as
+// `dimoState`. Only a return carrying it is this tab's own (useRedirectReturn).
+const REDIRECT_STATE_KEY = 'dimo_redirect_state';
+
+/** A fresh nonce for the redirect about to start, or undefined without storage. */
+export const startRedirectState = (): string | undefined => {
+  try {
+    const bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    const state = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+    sessionStorage.setItem(REDIRECT_STATE_KEY, state);
+    return state;
+  } catch {
+    return undefined;
+  }
+};
+
+/** True for the return this tab started; the nonce is then used up. */
+export const takeRedirectState = (returned: string | null): boolean => {
+  try {
+    const expected = sessionStorage.getItem(REDIRECT_STATE_KEY);
+    if (!expected || returned !== expected) return false;
+    sessionStorage.removeItem(REDIRECT_STATE_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // A redirect login returns on a fresh page load, so the button's email request
 // is kept in sessionStorage for the return trip. Blocked storage just means
 // the return is handled as an email-asking request.
@@ -122,11 +156,7 @@ export const rememberEmailRequest = (emailRequest?: EmailRequest): void => {
   }
 };
 
-/**
- * The request the last redirect was made with. Not removed on read: every
- * DimoAuthProvider (the app's and each button's) handles the same return, and
- * the next redirect overwrites it.
- */
+/** The request the last redirect was made with; the next redirect overwrites it. */
 export const getRememberedEmailRequest = (): EmailRequest | undefined => {
   try {
     const value = sessionStorage.getItem(EMAIL_REQUEST_KEY);

@@ -93,6 +93,12 @@ We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
 
+**Redirect mode returns only to the page that started it.** Each redirect carries a one-time `dimoState`, and the login sends it back. The SDK accepts the returned `token`, `walletAddress`, `email` or `logout` only when `dimoState` matches what this browser tab sent. Anyone can link to your redirect URI with values of their choosing, so a link without the right `dimoState` changes nothing. That includes a console `?configurationId=` link: read its query yourself if you use one. So:
+
+- Put your redirect URI on the same origin as the button, and open it in the same tab (the default).
+- The SDK removes those values from the address bar once it has read them. Other values (`error`, `transactionHash`, `signature`, …) stay for you to read.
+- This needs a Login with DIMO build that returns `dimoState`; release the login before this SDK version.
+
 ### Using the Button Components
 
 The following example shows all buttons being rendered, with no auth state checking
@@ -169,6 +175,11 @@ useEffect(()=>{
     console.log(walletAddress);
   }
 },[isAuthenticated])
+
+// isAuthenticated and getValidJWT() only say a token is stored and not
+// expired: the SDK can't check its signature. Verify the JWT on your server
+// (signature against DIMO's signing keys, issuer, audience = your client ID,
+// expiry) before trusting it for anything.
 
 initializeDimoSDK({
   clientId: process.env.REACT_APP_DIMO_CLIENT_ID!,
@@ -268,7 +279,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `extendedVehicles` | Token IDs of vehicles whose sharing the user extended by a year (from the vehicle's Manage screen). |
 | `revokedVehicles`  | Token IDs of vehicles the user stopped sharing with your app (from the vehicle's Manage screen). |
 
-In redirect mode the same fields arrive as query parameters on your redirect URI. Repeated values are joined with commas.
+In redirect mode the same fields arrive as query parameters on your redirect URI. Repeated values are joined with commas. The SDK stores the session from a return it started (see redirect mode above) and removes `token`, `walletAddress`, `email`, `logout` and `dimoState` from the address bar; the other fields stay.
 
 ### Available Permissions
 

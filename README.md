@@ -80,27 +80,7 @@ REACT_APP_DIMO_API_KEY=your-api-key (not directly used, so can put any value her
 
 ### Localhost Support
 
-By default, the SDK opens hosted login environments (dev/prod). If you're running a local version of the Login with DIMO app, you’ll need to modify the SDK source to point to your local server:
-
-1. Open sdk/components/BaseDimoButton.tsx
-
-2. Replace this block:
-
-```const dimoLogin =
-    environment === 'development'
-      ? 'https://login.dev.dimo.org'
-      : 'https://login.dimo.org';
-```
-
-3. With your local override
-
-```const dimoLogin =
-    environment === 'development'
-      ? 'http://localhost:{PORT_WITH_APP_RUNNING}'
-      : 'https://login.dimo.org';
-```
-
-4. Rebuild/package the SDK
+By default, the SDK opens hosted login environments (dev/prod). To use a local Login with DIMO app, pass `environment: 'local'` to `initializeDimoSDK`; the SDK then opens `http://localhost:3000` (see `sdk/src/utils/url.ts`). Use it only in development.
 
 
 ## 🚀 Publishing and Releasing
@@ -259,6 +239,7 @@ If the user already has a developer license (e.g., they're switching devices or 
                ↓
       [ DIMO Login popup ]
          └── authenticates user
+         └── shows which site gets a key; the user confirms
          └── creates or reconnects developer license NFT
          └── generates private key for the license
                ↓
@@ -273,7 +254,8 @@ If the user already has a developer license (e.g., they're switching devices or 
 
 ### Security notes
 
-- The private key is generated inside the DIMO popup and transmitted only via `postMessage` with strict origin validation — it never touches your server during provisioning.
+- The private key is generated inside the DIMO popup and transmitted only via `postMessage`, addressed to your redirect URI's origin; the SDK accepts it only from the login's exact origin and from the popup it opened. It never touches your server during provisioning.
+- The user sees which site gets the key, and the redirect address that will be added, and must confirm before anything is signed. Your page must be on the redirect URI's origin.
 - Store the private key encrypted at rest. Once the popup closes it cannot be retrieved from DIMO again.
 - The `domain` prop is recorded on-chain against the license NFT — use your app's canonical origin, not `localhost`.
 

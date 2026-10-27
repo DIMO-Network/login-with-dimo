@@ -1,3 +1,2 @@
-export * from './useAuthParamsFromURL';
 export * from './useLocalStorageData';
-export * from './useLogoutFromURL';
+export * from './useRedirectReturn';
