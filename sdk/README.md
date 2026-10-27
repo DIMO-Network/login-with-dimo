@@ -48,6 +48,8 @@ We currently support the `forceEmail` option, which means - anytime a user will 
   });
 ```
 
+When the user shares their email, it arrives with the login: `onSuccess` receives it as `authData.email`, and `getEmail()` / `email` from `useDimoAuthState()` return it right away, including inside `onSuccess`. When a login doesn't share it, `authData.email` is absent, `email` is `null`, and `getEmail()` throws `No permission to access email`; an email stored by an earlier login is cleared.
+
 ### The Dimo Auth Provider
 
 The Dimo Auth Provider is used to get values of an authenticated state from the SDK. This includes, a boolean "authenticated" property, a method to get the currently valid JWT, an email property, a method to get email, and the wallet address

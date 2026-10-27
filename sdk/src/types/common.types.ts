@@ -16,6 +16,11 @@ export interface CloudEventAgreement {
 
 export interface AuthData {
   token: string;
+  /**
+   * The user's email, present only when they chose to share it with this app
+   * (required when the SDK is initialized with `forceEmail`).
+   */
+  email?: string;
   transactionHash?: string;
   transactionReceipt?: TransactionReceipt;
   sharedVehicles?: string[];

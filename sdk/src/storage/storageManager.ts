@@ -31,8 +31,24 @@ export const storeJWTInCookies = (jwt: string): void => {
   document.cookie = createCookieString('dimo_auth_token', jwt);
 };
 
-const isValidCookieStringValue = (str: string): boolean => {
-  return !!str && str !== 'undefined';
+export const isValidCookieStringValue = (str: string | null | undefined): str is string => {
+  return !!str && str !== 'undefined' && str !== 'null';
+};
+
+// The auth provider reads the stored user through useSyncExternalStore, so
+// every write notifies it. Without this the email reached React a render after
+// the login response, and getEmail() in onSuccess threw.
+const storedUserListeners = new Set<() => void>();
+
+export const subscribeToStoredUser = (listener: () => void): (() => void) => {
+  storedUserListeners.add(listener);
+  return () => {
+    storedUserListeners.delete(listener);
+  };
+};
+
+const notifyStoredUser = (): void => {
+  storedUserListeners.forEach((listener) => listener());
 };
 
 export const storeWalletAddressInLocalStorage = (
@@ -40,11 +56,19 @@ export const storeWalletAddressInLocalStorage = (
 ): void => {
   if (!isValidCookieStringValue(walletAddress)) return;
   localStorage.setItem(`dimo_wallet_address`, walletAddress);
+  notifyStoredUser();
 };
 
 export const storeEmailInLocalStorage = (email: string): void => {
   if (!isValidCookieStringValue(email)) return;
   localStorage.setItem(`dimo_user_email`, email);
+  notifyStoredUser();
+};
+
+/** Drops the stored email, e.g. when the latest login didn't share it. */
+export const clearEmailFromLocalStorage = (): void => {
+  localStorage.removeItem(`dimo_user_email`);
+  notifyStoredUser();
 };
 
 export const getJWTFromCookies = (): string | null => {
@@ -54,16 +78,28 @@ export const getJWTFromCookies = (): string | null => {
   return cookie ? cookie.split('=')[1] : null;
 };
 
+// Reads run during render now, so a blocked localStorage (private mode, site
+// data disabled) must not throw.
+const readLocalStorage = (key: string): string | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
 export const getWalletAddressFromLocalStorage = (): string | null => {
-  return localStorage.getItem('dimo_wallet_address');
+  return readLocalStorage('dimo_wallet_address');
 };
 
 export const getEmailFromLocalStorage = (): string | null => {
-  return localStorage.getItem('dimo_user_email');
+  return readLocalStorage('dimo_user_email');
 };
 
 export const clearSessionData = (): void => {
   document.cookie = `dimo_auth_token=; Max-Age=0`;
   localStorage.removeItem(`dimo_wallet_address`);
   localStorage.removeItem(`dimo_user_email`);
+  notifyStoredUser();
 };

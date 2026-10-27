@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { isTokenExpired } from '@token/tokenManager';
 import {
+  clearEmailFromLocalStorage,
+  isValidCookieStringValue,
   storeEmailInLocalStorage,
   storeJWTInCookies,
   storeWalletAddressInLocalStorage,
@@ -25,8 +27,14 @@ export const useAuthParamsFromURL = () => {
       storeWalletAddressInLocalStorage(walletAddress);
     }
 
-    if (email) {
+    if (isValidCookieStringValue(email)) {
       storeEmailInLocalStorage(email);
+    } else if (token && walletAddress) {
+      // A login redirect (token + walletAddress) without an email means this
+      // user doesn't share it, so drop any email an earlier login left.
+      // Transaction and signature redirects carry no walletAddress and leave
+      // the stored email alone.
+      clearEmailFromLocalStorage();
     }
   }, []);
 

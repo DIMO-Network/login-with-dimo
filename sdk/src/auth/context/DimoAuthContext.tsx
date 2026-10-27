@@ -5,7 +5,10 @@ import {
   useLocalStorageData,
   useLogoutFromURL,
 } from '@hooks/index';
-import { getJWTFromCookies } from '@storage/storageManager';
+import {
+  getEmailFromLocalStorage,
+  getJWTFromCookies,
+} from '@storage/storageManager';
 import { isTokenExpired } from '@token/tokenManager';
 
 type DimoAuthContextType = {
@@ -35,14 +38,16 @@ export const DimoAuthProvider = ({
   const [isAuthenticated, setAuthenticated] = useState(false);
   const { isTokenStored } = useAuthParamsFromURL();
   const { hasLogoutParam } = useLogoutFromURL();
-  const { email, walletAddress } = useLocalStorageData(isAuthenticated);
+  const { email, walletAddress } = useLocalStorageData();
 
+  // Reads storage, not render state: onSuccess runs in the same tick the
+  // response is stored, before React has re-rendered with the new email.
   const getEmail = () => {
-    if (email) {
-      return email;
-    } else {
-      throw new Error('No permission to access email');
+    const current = getEmailFromLocalStorage() ?? email;
+    if (current) {
+      return current;
     }
+    throw new Error('No permission to access email');
   };
 
   const getValidJWT = () => {
