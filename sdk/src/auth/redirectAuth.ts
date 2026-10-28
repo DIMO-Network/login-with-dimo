@@ -7,6 +7,7 @@ import {
   SignMessageData,
   TransactionData,
 } from '@dimo-types/index';
+import { rememberEmailRequest, startRedirectState } from '@storage/storageManager';
 
 // Every value here goes into the query string, so cloudEvent is pre-encoded.
 type RedirectAuthData = BaseAuthParams &
@@ -94,6 +95,14 @@ const transformCloudEvent = (cloudEvent: CloudEventAgreement[] | undefined) => {
 export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
   const { dimoLogin } = payload;
 
+  // The login returns it as `dimoState`; without it the return can't be told
+  // from a forged link, so it wouldn't be accepted.
+  const dimoState = startRedirectState();
+  if (!dimoState) {
+    payload.onError(new Error('Redirect mode needs sessionStorage, which this browser blocks'));
+    return;
+  }
+
   const baseData: RedirectAuthData = {
     ...payload,
     ...data,
@@ -109,9 +118,11 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.BrandName,
     AuthParam.ClientId,
     AuthParam.CloudEvent,
+    AuthParam.EmailRequest,
     AuthParam.EntryState,
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,
+    AuthParam.Language,
     AuthParam.MessageData,
     AuthParam.Onboarding,
     AuthParam.PermissionTemplateId,
@@ -125,6 +136,12 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.VehicleMakes,
     AuthParam.Vehicles,
   ]);
+
+  params.append('dimoState', dimoState);
+
+  // The login's answer comes back on a fresh page load; remember what this
+  // button asked for so `none` can be honoured then (useRedirectReturn).
+  rememberEmailRequest(payload.emailRequest);
 
   // Construct the full URL
   window.location.href = `${dimoLogin}?${params.toString()}`;

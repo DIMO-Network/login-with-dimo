@@ -3,6 +3,7 @@ import {
   AuthData,
   AuthPayload,
   DimoActionPayload,
+  EmailRequest,
   EventHandler,
   EventHandlers,
   MessageData,
@@ -10,18 +11,18 @@ import {
 } from '@dimo-types/index';
 import { logout, processAuthResponse } from './authUtils';
 
-const getDomain = (url: string): string => {
+const originOf = (url: string): string => {
   try {
-    const parsedUrl = new URL(url);
-    return parsedUrl.hostname;
+    return new URL(url).origin;
   } catch (e) {
     console.warn('Invalid URL:', url);
     return '';
   }
 };
 
-const validateOrigin = (origin: string, expectedDomain: string): boolean => {
-  const isValid = getDomain(origin) === getDomain(expectedDomain);
+// Scheme, host and port: an http page or another port on the same host isn't the login.
+const validateOrigin = (origin: string, expectedUrl: string): boolean => {
+  const isValid = origin === originOf(expectedUrl);
   if (!isValid) {
     console.error('Received message from an unknown origin:', origin);
   }
@@ -69,7 +70,8 @@ const handleAuthResponse = (
   processAuthResponse(
     { ...data, ...extraData },
     handlers.setAuthenticated,
-    handlers.onSuccess
+    handlers.onSuccess,
+    extraData.emailRequest as EmailRequest | undefined
   );
 };
 
@@ -160,16 +162,27 @@ export const createMessageHandler = (
     apiKey,
     entryState,
     forceEmail,
+    emailRequest,
     altTitle,
     brandName,
     tosUrl,
     privacyPolicyUrl,
+    language,
   } = basePayload;
 
   const { target, origin, mode } = config;
 
+  // Each click opens its own popup and listener; a listener answers only its
+  // popup and stops at that popup's answer, so an earlier click's callbacks
+  // never receive a later popup's token, signature or key.
+  const stop = () => {
+    window.removeEventListener('message', messageListener);
+    clearInterval(closedPoll);
+  };
+
   const messageListener = (event: MessageEvent) => {
     if (!validateOrigin(event.origin, origin)) return;
+    if (target && event.source !== target) return;
 
     const messageData: MessageData = event.data;
     if (messageData.mode !== mode) return;
@@ -183,39 +196,41 @@ export const createMessageHandler = (
         apiKey,
         entryState,
         forceEmail,
+        emailRequest,
         brandName,
         tosUrl,
         privacyPolicyUrl,
+        language,
+        altTitle,
         eventType: MessageEventType.AUTH_INIT,
-        ...(mode === DimoSDKModes.POPUP && { altTitle }),
       };
       sendMessageToTarget(target, initialMessage, origin, onError);
+      return;
     }
 
-    if (eventType === data?.eventType) {
-      sendMessageToTarget(
-        target,
-        { ...data, eventType: data.eventType },
-        origin,
-        onError
-      );
+    // The login asks for the button's action payload by its event type.
+    if (data && eventType === data.eventType) {
+      sendMessageToTarget(target, data, origin, onError);
+      return;
     }
 
+    if (!(eventType in eventHandlers)) return;
+    stop();
     handleCommonEvents(
       eventType,
       messageData,
       { onSuccess, onError, setAuthenticated },
-      mode === DimoSDKModes.POPUP
-        ? {
-            sharedVehicles: messageData.sharedVehicles,
-            accountGranted: messageData.accountGranted,
-          }
-        : {}
+      { emailRequest }
     );
   };
 
+  // A popup closed without answering leaves nothing to listen for.
+  const closedPoll = setInterval(() => {
+    if (target?.closed) stop();
+  }, 1000);
+
   window.addEventListener('message', messageListener);
-  return () => window.removeEventListener('message', messageListener);
+  return stop;
 };
 
 export const handleMessageForPopup = (

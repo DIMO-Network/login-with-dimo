@@ -1,16 +1,29 @@
 import { Environment } from '@enums/index';
 import { fetchOemBrand, OemBrand } from '@utils/devConsoleApi';
+import type { DimoLanguage, EmailRequest } from '../types/common.types';
+
+export interface DimoSDKOptions {
+  /** Whether to ask for the user's email: `none`, `optional` (default) or `required`. */
+  emailRequest?: EmailRequest;
+  /** @deprecated Use `emailRequest: 'required'`. Still honoured. */
+  forceEmail?: boolean;
+  /** Your Terms of Service, linked from the login screens. */
+  tosUrl?: string;
+  /** Your Privacy Policy, linked from the login screens. */
+  privacyPolicyUrl?: string;
+  /**
+   * Language for the login screens (`en` or `ja`). When unset, the login uses
+   * the user's browser language and time zone. The user can still switch.
+   */
+  language?: DimoLanguage;
+}
 
 let sdkConfig: {
   clientId: string;
   redirectUri: string;
   apiKey?: string;
   environment?: Environment;
-  options?: {
-    forceEmail?: boolean;
-    tosUrl?: string;
-    privacyPolicyUrl?: string;
-  };
+  options?: DimoSDKOptions;
 } = {
   clientId: '',
   redirectUri: '',
@@ -103,14 +116,13 @@ export const initializeDimoSDK = ({
   redirectUri: string;
   apiKey?: string;
   environment?: Environment;
-  options?: {
-    forceEmail?: boolean;
-    tosUrl?: string;
-    privacyPolicyUrl?: string;
-  };
+  options?: DimoSDKOptions;
 }) => {
+  const sameLicense =
+    sdkConfig.clientId === clientId && sdkConfig.environment === environment;
   sdkConfig = { clientId, redirectUri, apiKey, environment, options };
-  loadBrand(clientId, environment);
+  // Apps often call this during render; fetch the brand once per license.
+  if (!sameLicense) loadBrand(clientId, environment);
 };
 
 export const getDimoConfig = () => {

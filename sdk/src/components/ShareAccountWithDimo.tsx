@@ -26,6 +26,8 @@ const ShareAccountWithDimo: React.FC<ShareAccountWithDimoProps> = ({
   unAuthenticatedLabel,
   utm = null,
   altTitle,
+  language,
+  emailRequest,
   brandOverride,
 }) => {
   const brand = useResolvedBrand(brandOverride);
@@ -65,6 +67,8 @@ const ShareAccountWithDimo: React.FC<ShareAccountWithDimoProps> = ({
       altTitle={altTitle}
       payload={payload}
       brand={brand}
+      language={language}
+      emailRequest={emailRequest}
     />
   );
 };

@@ -1,5 +1,5 @@
 import { DimoSDKModes } from '@enums/index';
-import { AuthData, DimoActionParams } from './common.types';
+import { AuthData, DimoActionParams, DimoLanguage, EmailRequest } from './common.types';
 
 export interface ButtonLabels {
   authenticatedLabel?: string;
@@ -24,6 +24,13 @@ export interface BaseButtonProps extends DimoActionParams {
   onError: (error: Error) => void;
   labels?: ButtonLabels;
   brandOverride?: BrandOverride;
+  /**
+   * Language for the login screens this button opens, overriding the
+   * `language` option of initializeDimoSDK.
+   */
+  language?: DimoLanguage;
+  /** Overrides the `emailRequest` option of initializeDimoSDK for this button. */
+  emailRequest?: EmailRequest;
 }
 
 export type LoginButtonProps = DimoActionParams;

@@ -1,11 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+import { useLocalStorageData, useRedirectReturn } from '@hooks/index';
 import {
-  useAuthParamsFromURL,
-  useLocalStorageData,
-  useLogoutFromURL,
-} from '@hooks/index';
-import { getJWTFromCookies } from '@storage/storageManager';
+  getEmailFromLocalStorage,
+  getJWTFromCookies,
+} from '@storage/storageManager';
 import { isTokenExpired } from '@token/tokenManager';
 
 type DimoAuthContextType = {
@@ -13,7 +12,8 @@ type DimoAuthContextType = {
   walletAddress: string | null;
   email: string | null;
   getValidJWT: () => string | null;
-  getEmail: () => string | null;
+  /** The shared email; throws `No permission to access email` when there's none. */
+  getEmail: () => string;
 };
 
 const DimoAuthContext = createContext<DimoAuthContextType | undefined>(
@@ -33,16 +33,18 @@ export const DimoAuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [isAuthenticated, setAuthenticated] = useState(false);
-  const { isTokenStored } = useAuthParamsFromURL();
-  const { hasLogoutParam } = useLogoutFromURL();
-  const { email, walletAddress } = useLocalStorageData(isAuthenticated);
+  const { isTokenStored, hasLogoutParam } = useRedirectReturn();
+  const { email, walletAddress } = useLocalStorageData();
 
+  // Reads storage only, not render state: onSuccess runs in the same tick the
+  // response is stored or cleared, before React re-renders, so render state
+  // can still hold the previous user's email.
   const getEmail = () => {
-    if (email) {
-      return email;
-    } else {
-      throw new Error('No permission to access email');
+    const current = getEmailFromLocalStorage();
+    if (current) {
+      return current;
     }
+    throw new Error('No permission to access email');
   };
 
   const getValidJWT = () => {

@@ -33,6 +33,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   unAuthenticatedLabel,
   utm = null,
   altTitle,
+  language,
+  emailRequest,
   powertrainTypes,
   brandOverride,
 }) => {
@@ -74,6 +76,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       altTitle={altTitle}
       payload={payload}
       brand={brand}
+      language={language}
+      emailRequest={emailRequest}
     />
   );
 };

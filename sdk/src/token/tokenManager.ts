@@ -24,7 +24,8 @@ export const isTokenExpired = (token: string) => {
   try {
     const decoded = decodeJWT(token);
     const currentTime = Date.now() / ONE_SECOND;
-    return decoded.exp < currentTime;
+    // A token that never expires isn't one the login issues.
+    return typeof decoded.exp !== 'number' || decoded.exp < currentTime;
   } catch (error) {
     console.error('Failed to decode JWT:', error);
     return true;

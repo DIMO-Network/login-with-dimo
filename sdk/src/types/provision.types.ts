@@ -1,4 +1,5 @@
 import { DimoSDKModes } from '@enums/index';
+import { DimoLanguage } from './common.types';
 
 export interface ProvisionResult {
   clientId: string;
@@ -15,4 +16,7 @@ export interface ProvisionDeveloperLicenseProps {
   onError: (error: Error) => void;
   existingTokenId?: number;
   existingClientId?: string;
+  /** Button text. Defaults to "Set up developer access". */
+  label?: string;
+  language?: DimoLanguage;
 }

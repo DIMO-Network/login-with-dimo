@@ -5,11 +5,7 @@ import { redirectAuth } from '@auth/redirectAuth';
 import { getDimoConfig } from '../config/sdkConfig';
 import { EntryState, DimoSDKModes } from '@enums/index';
 import '../styles/BaseDimoButton.css';
-import {
-  DimoAuthProvider,
-  useDimoAuthState,
-  useDimoAuthUpdater,
-} from '@auth/context/DimoAuthContext';
+import { useDimoAuthState, useDimoAuthUpdater } from '@auth/context/DimoAuthContext';
 import {
   BaseButtonProps,
   LoginButtonProps,
@@ -70,9 +66,15 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   altTitle = false,
   payload,
   brand,
+  language,
+  emailRequest,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
     getDimoConfig();
+  const resolvedEmailRequest =
+    emailRequest ??
+    options?.emailRequest ??
+    (options?.forceEmail ? 'required' : undefined);
 
   const { isAuthenticated } = useDimoAuthState();
   const { setAuthenticated } = useDimoAuthUpdater();
@@ -97,9 +99,12 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     redirectUri,
     apiKey,
     brandName: brand?.name ?? undefined,
-    forceEmail: options?.forceEmail ?? false,
+    // The button's choice, else the SDK option; `forceEmail` means required.
+    emailRequest: resolvedEmailRequest,
+    forceEmail: resolvedEmailRequest === 'required',
     tosUrl: options?.tosUrl,
     privacyPolicyUrl: options?.privacyPolicyUrl,
+    language: language ?? options?.language,
   };
 
   const handleButtonClick = () => {
@@ -121,40 +126,40 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   // unchanged; they're assumed pre-styled by the OEM.
   const svgFill = brand?.primaryColor ? readableTextOn(brand.primaryColor) : 'black';
 
+  // Rendered inside the app's DimoAuthProvider (the hooks above need it); a
+  // provider of its own here would handle every login return a second time.
   return (
-    <DimoAuthProvider>
-      <div>
-        <button
-          className="custom-button"
-          style={brandButtonStyle(brand?.primaryColor)}
-          disabled={isAuthenticated && disableIfAuthenticated}
-          onClick={handleButtonClick}
-        >
-          {brand?.logoURI ? (
-            <img
-              className="button-icon"
-              src={brand.logoURI}
-              alt={brand.name ? `${brand.name} logo` : 'OEM logo'}
-              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+    <div>
+      <button
+        className="custom-button"
+        style={brandButtonStyle(brand?.primaryColor)}
+        disabled={isAuthenticated && disableIfAuthenticated}
+        onClick={handleButtonClick}
+      >
+        {brand?.logoURI ? (
+          <img
+            className="button-icon"
+            src={brand.logoURI}
+            alt={brand.name ? `${brand.name} logo` : 'OEM logo'}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+          />
+        ) : (
+          <svg
+            width="20"
+            height="18"
+            viewBox="0 0 20 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
+              fill={svgFill}
             />
-          ) : (
-            <svg
-              width="20"
-              height="18"
-              viewBox="0 0 20 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0 13.0041H11.077C13.4042 13.0041 15.2272 11.2785 15.2272 9.07558C15.2272 6.87266 13.3665 4.99755 11.0787 4.99755H5.4982C4.97342 4.99755 4.54296 5.42387 4.54296 5.9436V11.8169H0V5.75847C0 2.85918 2.3821 0.5 5.30955 0.5H11.3102C16.1019 0.5 20 4.34704 20 9.07388C20 13.8007 16.1825 17.5 11.3102 17.5H0V13.0024V13.0041Z"
-                fill={svgFill}
-              />
-            </svg>
-          )}
-          <span className="button-label">{buttonLabel(isAuthenticated)}</span>
-        </button>
-      </div>
-    </DimoAuthProvider>
+          </svg>
+        )}
+        <span className="button-label">{buttonLabel(isAuthenticated)}</span>
+      </button>
+    </div>
   );
 };
 
