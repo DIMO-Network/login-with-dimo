@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { handleMessageForPopup } from '../eventHandler';
+import { isLoggedOut, markLoggedOut } from '@storage/storageManager';
 import { MessageEventType } from '@enums/index';
 import type { AuthPayload } from '@dimo-types/index';
 
@@ -46,6 +47,7 @@ describe('popup lifecycle', () => {
     onSuccess.mockReset();
     onError.mockReset();
     setAuthenticated.mockReset();
+    localStorage.clear();
   });
 
   afterEach(() => {
@@ -107,5 +109,29 @@ describe('popup lifecycle', () => {
       }),
       LOGIN_ORIGIN
     );
+  });
+
+  it('clears the logged-out marker when a login stores a token', () => {
+    markLoggedOut();
+    start();
+    answer({ eventType: MessageEventType.AUTH_RESPONSE, token: JWT, mode: 'popup' });
+    expect(isLoggedOut()).toBe(false);
+  });
+
+  it('keeps the marker when the login answers with an error', () => {
+    markLoggedOut();
+    start();
+    answer({ eventType: MessageEventType.DIMO_ERROR, message: 'nope', mode: 'popup' });
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(isLoggedOut()).toBe(true);
+  });
+
+  it('keeps the marker when the popup is closed without answering', () => {
+    markLoggedOut();
+    start();
+    popup.closed = true;
+    vi.advanceTimersByTime(1000 + 500);
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect(isLoggedOut()).toBe(true);
   });
 });

@@ -87,7 +87,7 @@ Based on this authenticated state, you can render the necessary Dimo components
 
 #### Logging out
 
-`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. The next login button click then asks DIMO login for the account chooser (`prompt: 'select_account'`), so the user can switch accounts instead of being signed straight back in. Set `prompt` on a button to choose this yourself.
+`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. Every login button click then asks DIMO login for the account chooser (`prompt: 'select_account'`) until a login completes, so the user can switch accounts instead of being signed straight back in. A closed popup or abandoned redirect doesn't end this. Set `prompt` on a button to choose this yourself.
 
 ```
 const { logout } = useDimoAuthState();
@@ -360,6 +360,15 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
 | `altTitle` | Alternative title for the button | `false` | `boolean` | No |
 | `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
+
+### ShareAccountWithDimo, SignMessageWithDimo and ProvisionDeveloperLicenseWithDimo
+
+These buttons have no props table of their own here; like the buttons above they also take:
+
+| Parameter | Description | Default Value | Type | Mandatory |
+|-----------|-------------|---------------|------|-----------|
+| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (after `logout()`, the chooser) | `'select_account' \| 'login'` | No |
 | `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
 
 ### LogoutWithDimo

@@ -12,8 +12,9 @@ import {
   AuthPayload,
   DimoActionPayload,
 } from '@dimo-types/index';
-import { takeLoggedOut } from '@storage/storageManager';
+import { isLoggedOut } from '@storage/storageManager';
 import { getDimoLoginUrl } from '../utils/url';
+import { resolvePrompt } from '@utils/prompt';
 import { readableTextOn } from '@utils/colorContrast';
 
 /**
@@ -112,11 +113,12 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   };
 
   const handleButtonClick = () => {
-    // Resolved at click time: the marker is used up by the first login that
-    // sees it. The logout button itself leaves it for the next login.
-    const loggedOut = entryState !== EntryState.LOGOUT && takeLoggedOut();
-    const resolvedPrompt = prompt ?? (loggedOut ? 'select_account' : undefined);
-    const clickPayload: AuthPayload = { ...basePayload, prompt: resolvedPrompt };
+    // Resolved at click time; the logged-out marker is cleared only when a
+    // login stores a token, not here.
+    const clickPayload: AuthPayload = {
+      ...basePayload,
+      prompt: resolvePrompt(prompt, entryState, isLoggedOut()),
+    };
     switch (mode) {
       case DimoSDKModes.POPUP:
         popupAuth(clickPayload, payload);
