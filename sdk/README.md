@@ -232,7 +232,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 |------------------------|----------------------------------------------|------------------------------|--------------------------------|-----------|
 | `mode`                 | Mode of the button (`popup`, `redirect`)     | N/A                          | `"popup" \| "redirect"`        | Yes       |
 | `onSuccess`            | Callback function to handle success          | N/A                          | `(authData: AuthData) => void` | Yes       |
-| `onError`              | Callback function to handle errors           | N/A                          | `(error: Error) => void`       | Yes       |
+| `onError`              | Callback to handle errors, incl. `User closed the login window` if the popup is closed           | N/A                          | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId` | Permissions template ID                      | `undefined`                  | `string`                       | No        |
 | `vehicles`             | List of vehicles                             | `undefined`                  | `string[]`                     | No        |
 | `vehicleMakes`         | List of vehicle makes                        | `undefined`                  | `string[]`                     | No        |
@@ -254,7 +254,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------|--------------------------------|-----------|
 | `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                     | `"popup" \| "redirect"`        | Yes       |
 | `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
-| `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
+| `onError`             | Callback to handle errors, incl. `User closed the login window` if the popup is closed                                          | N/A                                     | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
 | `permissions`         | Array of permission strings to request specific access (see below)          | `undefined`                             | `string[]`                     | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
@@ -334,7 +334,7 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 |-----------------------|-----------------------------------------------------------------------------|----------------------------------------------|----------------------------------|-----------|
 | `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                          | `"popup" \| "redirect"`          | Yes       |
 | `onSuccess`           | Callback function to handle success                                         | N/A                                          | `(transactionData: any) => void` | Yes       |
-| `onError`             | Callback function to handle errors                                          | N/A                                          | `(error: Error) => void`         | Yes       |
+| `onError`             | Callback to handle errors, incl. `User closed the login window` if the popup is closed                                          | N/A                                          | `(error: Error) => void`         | Yes       |
 | `address`             | Address for the transaction                                                 | N/A                                          | `string`                         | Yes       |
 | `value`               | Value for the transaction                                                   | `""`                                         | `string`                         | No        |
 | `abi`                 | ABI for the transaction                                                     | N/A                                          | `any`                            | Yes       |

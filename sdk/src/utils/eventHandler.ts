@@ -148,6 +148,10 @@ const eventHandlers: Record<string, EventHandler> = {
   [MessageEventType.DIMO_ERROR]: handleDimoError,
 };
 
+export const POPUP_CLOSED_MESSAGE = 'User closed the login window';
+// An answer posted just before the window closes can still be in flight.
+export const POPUP_CLOSE_GRACE_MS = 500;
+
 export const createMessageHandler = (
   basePayload: AuthPayload,
   data: DimoActionPayload | undefined,
@@ -178,6 +182,7 @@ export const createMessageHandler = (
   const stop = () => {
     window.removeEventListener('message', messageListener);
     clearInterval(closedPoll);
+    clearTimeout(closeGrace);
   };
 
   const messageListener = (event: MessageEvent) => {
@@ -224,9 +229,17 @@ export const createMessageHandler = (
     );
   };
 
-  // A popup closed without answering leaves nothing to listen for.
+  // A popup closed without answering is reported to the app, after a short
+  // grace for an answer already on its way. A terminal event calls stop(),
+  // which cancels the pending report, so onError fires at most once.
+  let closeGrace: ReturnType<typeof setTimeout> | undefined;
   const closedPoll = setInterval(() => {
-    if (target?.closed) stop();
+    if (!target?.closed) return;
+    clearInterval(closedPoll);
+    closeGrace = setTimeout(() => {
+      stop();
+      onError(new Error(POPUP_CLOSED_MESSAGE));
+    }, POPUP_CLOSE_GRACE_MS);
   }, 1000);
 
   window.addEventListener('message', messageListener);
