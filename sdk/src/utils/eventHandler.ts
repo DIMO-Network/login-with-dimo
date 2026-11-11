@@ -176,15 +176,17 @@ export const createMessageHandler = (
     loginHint,
   } = basePayload;
 
-  const { target, origin, mode } = config;
+  const { target, origin, mode, onStop } = config;
 
-  // Each click opens its own popup and listener; a listener answers only its
-  // popup and stops at that popup's answer, so an earlier click's callbacks
-  // never receive a later popup's token, signature or key.
+  // Each popup has its own listener; a listener answers only its popup and
+  // stops at that popup's answer, so an earlier popup's callbacks never
+  // receive a later popup's token, signature or key.
+  let closeGrace: ReturnType<typeof setTimeout> | undefined;
   const stop = () => {
     window.removeEventListener('message', messageListener);
     clearInterval(closedPoll);
     clearTimeout(closeGrace);
+    onStop?.();
   };
 
   const messageListener = (event: MessageEvent) => {
@@ -236,7 +238,6 @@ export const createMessageHandler = (
   // A popup closed without answering is reported to the app, after a short
   // grace for an answer already on its way. A terminal event calls stop(),
   // which cancels the pending report, so onError fires at most once.
-  let closeGrace: ReturnType<typeof setTimeout> | undefined;
   const closedPoll = setInterval(() => {
     if (!target?.closed) return;
     clearInterval(closedPoll);
@@ -254,11 +255,13 @@ export const handleMessageForPopup = (
   basePayload: AuthPayload,
   data: DimoActionPayload | undefined,
   expectedOrigin: string,
-  popup: Window | null
+  popup: Window | null,
+  onStop?: () => void
 ) => {
   return createMessageHandler(basePayload, data, {
     target: popup,
     origin: expectedOrigin,
     mode: DimoSDKModes.POPUP,
+    onStop,
   });
 };

@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { handleMessageForPopup } from '../eventHandler';
 import { isLoggedOut, markLoggedOut } from '@storage/storageManager';
 import { MessageEventType } from '@enums/index';
-import type { AuthPayload } from '@dimo-types/index';
+import type { AuthPayload, DimoActionPayload } from '@dimo-types/index';
 
 const LOGIN_ORIGIN = 'https://login.dimo.org';
 const JWT = 'x.eyJleHAiOjk5OTk5OTk5OTl9.y';
@@ -15,7 +15,7 @@ describe('popup lifecycle', () => {
   let stops: Array<() => void>;
 
   // Opens a popup listener; overrides are merged into the base payload.
-  const start = (overrides: Partial<AuthPayload> = {}, data?: Parameters<typeof handleMessageForPopup>[1]) => {
+  const start = (overrides: Partial<AuthPayload> = {}, data?: DimoActionPayload) => {
     const basePayload = {
       clientId: 'client',
       redirectUri: 'https://app.example',
@@ -133,5 +133,14 @@ describe('popup lifecycle', () => {
     vi.advanceTimersByTime(1000 + 500);
     expect(onError).toHaveBeenCalledTimes(1);
     expect(isLoggedOut()).toBe(true);
+  });
+
+  it('ignores an answer that arrives after the close was reported', () => {
+    start();
+    popup.closed = true;
+    vi.advanceTimersByTime(1000 + 500);
+    expect(onError).toHaveBeenCalledTimes(1);
+    answer({ eventType: MessageEventType.AUTH_RESPONSE, token: JWT, mode: 'popup' });
+    expect(onSuccess).not.toHaveBeenCalled();
   });
 });

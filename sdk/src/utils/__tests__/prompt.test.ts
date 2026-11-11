@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolvePrompt } from '../prompt';
+import { cleanLoginHint, resolvePrompt } from '../prompt';
 import { EntryState } from '@enums/index';
 
 describe('resolvePrompt', () => {
@@ -17,5 +17,22 @@ describe('resolvePrompt', () => {
 
   it('never prompts the logout button', () => {
     expect(resolvePrompt(undefined, EntryState.LOGOUT, true)).toBeUndefined();
+  });
+});
+
+describe('cleanLoginHint', () => {
+  it('passes a valid email through, trimmed', () => {
+    expect(cleanLoginHint('  a@x.co ')).toBe('a@x.co');
+  });
+
+  it('drops anything else', () => {
+    expect(cleanLoginHint(undefined)).toBeUndefined();
+    expect(cleanLoginHint(42)).toBeUndefined();
+    expect(cleanLoginHint('   ')).toBeUndefined();
+    expect(cleanLoginHint('a'.repeat(255))).toBeUndefined();
+  });
+
+  it('allows 254 characters', () => {
+    expect(cleanLoginHint('a'.repeat(254))).toBe('a'.repeat(254));
   });
 });

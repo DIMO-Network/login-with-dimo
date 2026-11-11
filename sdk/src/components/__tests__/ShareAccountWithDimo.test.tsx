@@ -1,10 +1,9 @@
 /**
- * Smoke test for ShareAccountWithDimo.
+ * Type-level smoke test for ShareAccountWithDimo.
  *
- * The SDK ships no test runner (jest is an intentional no-op stub and there are
- * no testing-library deps — see CLAUDE.md "No tests exist for the SDK itself").
- * To stay aligned with the existing toolchain (tsc + webpack path aliases) this
- * smoke test is type-checked via `npm test` (`tsc --noEmit`). It asserts that:
+ * The SDK uses Vitest (`npm test` runs `tsc --noEmit`, then `vitest run`), but
+ * Vitest runs only `*.test.ts`; `.tsx` files in `__tests__` are compiled by
+ * `tsc` alone. It asserts that:
  *   1. the component is exported from the package root,
  *   2. it can be instantiated as a React element with its public props,
  *   3. the SHARE_ACCOUNT_DATA event type / ACCOUNT_MANAGER entry state exist.

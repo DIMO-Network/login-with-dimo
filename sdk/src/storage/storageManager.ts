@@ -110,8 +110,12 @@ export const getEmailFromLocalStorage = (): string | null => {
 export const clearSessionData = (): void => {
   // Same path as when it was set, or a page under a subpath keeps the token.
   document.cookie = `dimo_auth_token=; Max-Age=0; path=/`;
-  localStorage.removeItem(`dimo_wallet_address`);
-  localStorage.removeItem(`dimo_user_email`);
+  try {
+    localStorage.removeItem(`dimo_wallet_address`);
+    localStorage.removeItem(`dimo_user_email`);
+  } catch {
+    // storage unavailable
+  }
   notifyStoredUser();
 };
 

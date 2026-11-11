@@ -33,7 +33,8 @@ export interface BaseButtonProps extends DimoActionParams {
   emailRequest?: EmailRequest;
   /**
    * `'select_account'` shows the account chooser; `'login'` requires a fresh
-   * sign-in. Without it, the first login after `logout()` shows the chooser.
+   * sign-in. Without it, the chooser is requested after `logout()`, until a
+   * login completes.
    */
   prompt?: LoginPrompt;
   /** Pre-fills the email on the login's sign-in step. */

@@ -87,7 +87,7 @@ Based on this authenticated state, you can render the necessary Dimo components
 
 #### Logging out
 
-`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. Every login button click then asks DIMO login for the account chooser (`prompt: 'select_account'`) until a login completes, so the user can switch accounts instead of being signed straight back in. A closed popup or abandoned redirect doesn't end this. Set `prompt` on a button to choose this yourself.
+`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. Every login or share button (not `LogoutWithDimo`) then asks DIMO login for the account chooser (`prompt: 'select_account'`) until a login completes, so the user can switch accounts instead of being signed straight back in. A closed popup or abandoned redirect doesn't end this. Set `prompt` on a button to choose this yourself.
 
 ```
 const { logout } = useDimoAuthState();
@@ -95,7 +95,7 @@ const { logout } = useDimoAuthState();
 <button onClick={logout}>Log out</button>
 ```
 
-`logout()` doesn't end the session inside DIMO login itself; use `LogoutWithDimo` (below) for that.
+`logout()` doesn't end the session inside DIMO login itself. On a shared device anyone at the browser can still pick "Continue as …", so use `LogoutWithDimo` (below) there.
 
 ### The Separate DIMO Modes
 
@@ -104,6 +104,8 @@ With the DIMO SDK, developers have the ability to control how their users intera
 We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
+
+In popup mode, every button calls `onError` with `User closed the login window` when the user closes the popup without finishing. The message is exported as `POPUP_CLOSED_MESSAGE` if you want to filter it out. A second click while a popup is open focuses it instead of opening another.
 
 **Redirect mode returns only to the page that started it.** Each redirect carries a one-time `dimoState`, and the login sends it back. The SDK accepts the returned `token`, `walletAddress`, `email` or `logout` only when `dimoState` matches what this browser tab sent. Anyone can link to your redirect URI with values of their choosing, so a link without the right `dimoState` changes nothing. That includes a console `?configurationId=` link: read its query yourself if you use one. So:
 
@@ -244,7 +246,7 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 |------------------------|----------------------------------------------|------------------------------|--------------------------------|-----------|
 | `mode`                 | Mode of the button (`popup`, `redirect`)     | N/A                          | `"popup" \| "redirect"`        | Yes       |
 | `onSuccess`            | Callback function to handle success          | N/A                          | `(authData: AuthData) => void` | Yes       |
-| `onError`              | Callback to handle errors, incl. `User closed the login window` if the popup is closed           | N/A                          | `(error: Error) => void`       | Yes       |
+| `onError`              | Callback function to handle errors           | N/A                          | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId` | Permissions template ID                      | `undefined`                  | `string`                       | No        |
 | `vehicles`             | List of vehicles                             | `undefined`                  | `string[]`                     | No        |
 | `vehicleMakes`         | List of vehicle makes                        | `undefined`                  | `string[]`                     | No        |
@@ -257,8 +259,8 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 | `language`             | Language of the login screens it opens       | the `language` option | `'en' \| 'ja'` | No |
 | `emailRequest`         | Whether to ask for the user's email          | the `emailRequest` option | `'none' \| 'optional' \| 'required'` | No |
-| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
-| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
+| `prompt`               | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`            | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -268,7 +270,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 |-----------------------|-----------------------------------------------------------------------------|-----------------------------------------|--------------------------------|-----------|
 | `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                     | `"popup" \| "redirect"`        | Yes       |
 | `onSuccess`           | Callback function to handle success                                         | N/A                                     | `(authData: AuthData) => void` | Yes       |
-| `onError`             | Callback to handle errors, incl. `User closed the login window` if the popup is closed                                          | N/A                                     | `(error: Error) => void`       | Yes       |
+| `onError`             | Callback function to handle errors                                          | N/A                                     | `(error: Error) => void`       | Yes       |
 | `permissionTemplateId`| Permissions template ID                                                     | N/A                                     | `string`                       | Yes       |
 | `permissions`         | Array of permission strings to request specific access (see below)          | `undefined`                             | `string[]`                     | No        |
 | `vehicles`            | List of vehicles                                                            | `undefined`                             | `string[]`                     | No        |
@@ -282,8 +284,8 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 | `language`           | Language of the login screens it opens                                      | the `language` option                   | `'en' \| 'ja'`                 | No        |
 | `emailRequest`       | Whether to ask for the user's email                                         | the `emailRequest` option               | `'none' \| 'optional' \| 'required'` | No        |
-| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
-| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
+| `prompt`             | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`          | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 `onSuccess` receives:
 
@@ -350,7 +352,7 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 |-----------------------|-----------------------------------------------------------------------------|----------------------------------------------|----------------------------------|-----------|
 | `mode`                | Mode of the button (`popup`, `redirect`)                                    | N/A                                          | `"popup" \| "redirect"`          | Yes       |
 | `onSuccess`           | Callback function to handle success                                         | N/A                                          | `(transactionData: any) => void` | Yes       |
-| `onError`             | Callback to handle errors, incl. `User closed the login window` if the popup is closed                                          | N/A                                          | `(error: Error) => void`         | Yes       |
+| `onError`             | Callback function to handle errors                                          | N/A                                          | `(error: Error) => void`         | Yes       |
 | `address`             | Address for the transaction                                                 | N/A                                          | `string`                         | Yes       |
 | `value`               | Value for the transaction                                                   | `""`                                         | `string`                         | No        |
 | `abi`                 | ABI for the transaction                                                     | N/A                                          | `any`                            | Yes       |
@@ -359,8 +361,8 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
 | `altTitle` | Alternative title for the button | `false` | `boolean` | No |
-| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
-| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
+| `prompt`               | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`            | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 ### ShareAccountWithDimo, SignMessageWithDimo and ProvisionDeveloperLicenseWithDimo
 
@@ -368,8 +370,8 @@ These buttons have no props table of their own here; like the buttons above they
 
 | Parameter | Description | Default Value | Type | Mandatory |
 |-----------|-------------|---------------|------|-----------|
-| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (after `logout()`, the chooser) | `'select_account' \| 'login'` | No |
-| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
+| `prompt`    | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 ### LogoutWithDimo
 

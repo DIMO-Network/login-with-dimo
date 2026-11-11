@@ -14,7 +14,7 @@ import {
 } from '@dimo-types/index';
 import { isLoggedOut } from '@storage/storageManager';
 import { getDimoLoginUrl } from '../utils/url';
-import { resolvePrompt } from '@utils/prompt';
+import { cleanLoginHint, resolvePrompt } from '@utils/prompt';
 import { readableTextOn } from '@utils/colorContrast';
 
 /**
@@ -109,7 +109,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     tosUrl: options?.tosUrl,
     privacyPolicyUrl: options?.privacyPolicyUrl,
     language: language ?? options?.language,
-    loginHint,
+    loginHint: cleanLoginHint(loginHint),
   };
 
   const handleButtonClick = () => {

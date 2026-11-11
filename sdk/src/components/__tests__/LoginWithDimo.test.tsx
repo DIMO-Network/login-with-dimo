@@ -1,7 +1,7 @@
 /**
  * Type-level check for the `prompt` and `loginHint` props of LoginWithDimo.
- * Like ShareAccountWithDimo.test.tsx, this file is only type-checked by
- * `npm test` (`tsc --noEmit`).
+ * Vitest runs only `*.test.ts`; like ShareAccountWithDimo.test.tsx, this file
+ * is compiled by the `tsc --noEmit` step of `npm test` and nothing else.
  */
 import React from 'react';
 import { DimoSDKModes } from '@enums/index';

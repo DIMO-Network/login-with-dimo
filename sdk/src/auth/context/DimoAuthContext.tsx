@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 import { useLocalStorageData, useRedirectReturn } from '@hooks/index';
 import {
@@ -67,11 +67,14 @@ export const DimoAuthProvider = ({
     return null;
   };
 
-  const logout = () => {
-    clearSessionData();
-    markLoggedOut();
-    setAuthenticated(false);
-  };
+  const logout = useCallback(() => {
+    try {
+      clearSessionData();
+    } finally {
+      markLoggedOut();
+      setAuthenticated(false);
+    }
+  }, []);
 
   useEffect(() => {
     const jwt = getValidJWT();
