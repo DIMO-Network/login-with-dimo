@@ -1,5 +1,5 @@
 import { DimoSDKModes } from '@enums/index';
-import { DimoLanguage } from './common.types';
+import { DimoLanguage, LoginPrompt } from './common.types';
 
 export interface ProvisionResult {
   clientId: string;
@@ -19,4 +19,6 @@ export interface ProvisionDeveloperLicenseProps {
   /** Button text. Defaults to "Set up developer access". */
   label?: string;
   language?: DimoLanguage;
+  prompt?: LoginPrompt;
+  loginHint?: string;
 }

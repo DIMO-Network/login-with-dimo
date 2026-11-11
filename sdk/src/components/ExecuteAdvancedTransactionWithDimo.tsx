@@ -30,6 +30,8 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
   altTitle,
   language,
   emailRequest,
+  prompt,
+  loginHint,
   brandOverride,
 }) => {
   if (!address || !abi || !functionName || !args) {
@@ -69,6 +71,8 @@ const ExecuteAdvancedTransactionWithDimo: React.FC<
       brand={brand}
       language={language}
       emailRequest={emailRequest}
+      prompt={prompt}
+      loginHint={loginHint}
     />
   );
 };

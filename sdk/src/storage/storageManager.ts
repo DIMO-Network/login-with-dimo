@@ -113,6 +113,29 @@ export const clearSessionData = (): void => {
   notifyStoredUser();
 };
 
+// Set by logout(), taken by the next login button click so that login shows the
+// account chooser. localStorage, so a logout in one tab reaches the others.
+const LOGGED_OUT_KEY = 'dimo_logged_out';
+
+export const markLoggedOut = (): void => {
+  try {
+    localStorage.setItem(LOGGED_OUT_KEY, '1');
+  } catch {
+    // storage unavailable
+  }
+};
+
+/** True once after markLoggedOut(); the marker is then used up. */
+export const takeLoggedOut = (): boolean => {
+  try {
+    if (localStorage.getItem(LOGGED_OUT_KEY) === null) return false;
+    localStorage.removeItem(LOGGED_OUT_KEY);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 // Redirect mode: the nonce sent with the redirect, which the login returns as
 // `dimoState`. Only a return carrying it is this tab's own (useRedirectReturn).
 const REDIRECT_STATE_KEY = 'dimo_redirect_state';

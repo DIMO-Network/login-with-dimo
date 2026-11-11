@@ -172,6 +172,8 @@ export const createMessageHandler = (
     tosUrl,
     privacyPolicyUrl,
     language,
+    prompt,
+    loginHint,
   } = basePayload;
 
   const { target, origin, mode } = config;
@@ -207,6 +209,8 @@ export const createMessageHandler = (
         privacyPolicyUrl,
         language,
         altTitle,
+        prompt,
+        loginHint,
         eventType: MessageEventType.AUTH_INIT,
       };
       sendMessageToTarget(target, initialMessage, origin, onError);

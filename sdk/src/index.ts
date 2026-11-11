@@ -27,6 +27,7 @@ export type {
   CloudEventAgreement,
   DimoLanguage,
   EmailRequest,
+  LoginPrompt,
 } from './types/common.types';
 export type { DimoSDKOptions } from './config/sdkConfig';
 

@@ -1,5 +1,5 @@
 import { DimoSDKModes } from '@enums/index';
-import { AuthData, DimoActionParams, DimoLanguage, EmailRequest } from './common.types';
+import { AuthData, DimoActionParams, DimoLanguage, EmailRequest, LoginPrompt } from './common.types';
 
 export interface ButtonLabels {
   authenticatedLabel?: string;
@@ -31,6 +31,13 @@ export interface BaseButtonProps extends DimoActionParams {
   language?: DimoLanguage;
   /** Overrides the `emailRequest` option of initializeDimoSDK for this button. */
   emailRequest?: EmailRequest;
+  /**
+   * `'select_account'` shows the account chooser; `'login'` requires a fresh
+   * sign-in. Without it, the first login after `logout()` shows the chooser.
+   */
+  prompt?: LoginPrompt;
+  /** Pre-fills the email on the login's sign-in step. */
+  loginHint?: string;
 }
 
 export type LoginButtonProps = DimoActionParams;

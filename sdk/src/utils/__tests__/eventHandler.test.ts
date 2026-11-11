@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { handleMessageForPopup } from '../eventHandler';
+import { MessageEventType } from '@enums/index';
 import type { AuthPayload } from '@dimo-types/index';
 
 const LOGIN_ORIGIN = 'https://login.dimo.org';
@@ -93,5 +94,18 @@ describe('popup lifecycle', () => {
     stop();
     vi.advanceTimersByTime(10_000);
     expect(onError).not.toHaveBeenCalled();
+  });
+
+  it('sends prompt and loginHint with AUTH_INIT', () => {
+    start({ prompt: 'select_account', loginHint: 'a@x.co' });
+    answer({ eventType: MessageEventType.READY, mode: 'popup' });
+    expect(popup.postMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventType: MessageEventType.AUTH_INIT,
+        prompt: 'select_account',
+        loginHint: 'a@x.co',
+      }),
+      LOGIN_ORIGIN
+    );
   });
 });

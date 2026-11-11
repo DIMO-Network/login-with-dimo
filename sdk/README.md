@@ -85,6 +85,18 @@ const { isAuthenticated, getValidJWT, getEmail, email, walletAddress } = useDimo
 
 Based on this authenticated state, you can render the necessary Dimo components
 
+#### Logging out
+
+`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. The next login button click then asks DIMO login for the account chooser (`prompt: 'select_account'`), so the user can switch accounts instead of being signed straight back in. Set `prompt` on a button to choose this yourself.
+
+```
+const { logout } = useDimoAuthState();
+
+<button onClick={logout}>Log out</button>
+```
+
+`logout()` doesn't end the session inside DIMO login itself; use `LogoutWithDimo` (below) for that.
+
 ### The Separate DIMO Modes
 
 With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
@@ -245,6 +257,8 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 | `language`             | Language of the login screens it opens       | the `language` option | `'en' \| 'ja'` | No |
 | `emailRequest`         | Whether to ask for the user's email          | the `emailRequest` option | `'none' \| 'optional' \| 'required'` | No |
+| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -268,6 +282,8 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 | `language`           | Language of the login screens it opens                                      | the `language` option                   | `'en' \| 'ja'`                 | No        |
 | `emailRequest`       | Whether to ask for the user's email                                         | the `emailRequest` option               | `'none' \| 'optional' \| 'required'` | No        |
+| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
 
 `onSuccess` receives:
 
@@ -343,10 +359,14 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
 | `altTitle` | Alternative title for the button | `false` | `boolean` | No |
+| `prompt` | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the first login after `logout()` shows the chooser) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step | `undefined` | `string` | No |
 
 ### LogoutWithDimo
 
 The `LogoutWithDimo` component allows users to log out of their DIMO session. It clears the session data, including cookies and local storage, and updates the authentication state.
+
+It remains the way to also end the session inside the login (login.dimo.org). If you only need to sign the user out of your app, call `logout()` from `useDimoAuthState()` instead; it opens no popup.
 
 #### Example Usage
 

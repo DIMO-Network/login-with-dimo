@@ -2,8 +2,10 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { useLocalStorageData, useRedirectReturn } from '@hooks/index';
 import {
+  clearSessionData,
   getEmailFromLocalStorage,
   getJWTFromCookies,
+  markLoggedOut,
 } from '@storage/storageManager';
 import { isTokenExpired } from '@token/tokenManager';
 
@@ -14,6 +16,13 @@ type DimoAuthContextType = {
   getValidJWT: () => string | null;
   /** The shared email; throws `No permission to access email` when there's none. */
   getEmail: () => string;
+  /**
+   * Ends this app's session without opening the login: clears the stored
+   * token, wallet and email. The next login button click then shows the
+   * account chooser. To also end the session inside the login, use
+   * `LogoutWithDimo`.
+   */
+  logout: () => void;
 };
 
 const DimoAuthContext = createContext<DimoAuthContextType | undefined>(
@@ -58,6 +67,12 @@ export const DimoAuthProvider = ({
     return null;
   };
 
+  const logout = () => {
+    clearSessionData();
+    markLoggedOut();
+    setAuthenticated(false);
+  };
+
   useEffect(() => {
     const jwt = getValidJWT();
     if (jwt) {
@@ -72,6 +87,7 @@ export const DimoAuthProvider = ({
         getValidJWT,
         email,
         getEmail,
+        logout,
         walletAddress,
       }}
     >

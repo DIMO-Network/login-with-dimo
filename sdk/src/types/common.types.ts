@@ -32,6 +32,15 @@ export type DimoLanguage = 'en' | 'ja' | (string & {});
  */
 export type EmailRequest = 'none' | 'optional' | 'required';
 
+/**
+ * What to ask the DIMO login for, whatever session it already has.
+ * - `select_account`: show the account chooser instead of continuing as the
+ *   signed-in account.
+ * - `login`: require a fresh sign-in.
+ * Older login builds ignore it.
+ */
+export type LoginPrompt = 'select_account' | 'login';
+
 export interface AuthData {
   token: string;
   /**
