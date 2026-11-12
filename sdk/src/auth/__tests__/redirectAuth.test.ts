@@ -52,4 +52,26 @@ describe('redirectAuth', () => {
     expect(url.searchParams.has('prompt')).toBe(false);
     expect(url.searchParams.has('loginHint')).toBe(false);
   });
+
+  it('asks for the fragment only when the app opted in', () => {
+    const assign = stubLocation();
+    redirectAuth(
+      { ...BASE, responseMode: 'fragment' },
+      { eventType: EventTypes.SHARE_VEHICLES_DATA }
+    );
+    const url = new URL(assign.mock.calls[0][0]);
+    expect(url.searchParams.get('responseMode')).toBe('fragment');
+  });
+
+  it('sends no responseMode by default or for query', () => {
+    const assign = stubLocation();
+    redirectAuth(BASE, { eventType: EventTypes.SHARE_VEHICLES_DATA });
+    redirectAuth(
+      { ...BASE, responseMode: 'query' },
+      { eventType: EventTypes.SHARE_VEHICLES_DATA }
+    );
+    assign.mock.calls.forEach(([href]) =>
+      expect(new URL(href).searchParams.has('responseMode')).toBe(false)
+    );
+  });
 });

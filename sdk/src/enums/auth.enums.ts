@@ -30,6 +30,7 @@ export enum AuthParam {
   PowertrainTypes = 'powertrainTypes',
   Prompt = 'prompt',
   RedirectUri = 'redirectUri',
+  ResponseMode = 'responseMode',
   TransactionData = 'transactionData',
   PrivacyPolicyUrl = 'privacyPolicyUrl',
   TosUrl = 'tosUrl',

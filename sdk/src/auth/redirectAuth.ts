@@ -139,6 +139,11 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.Vehicles,
   ]);
 
+  // Opt-in only: a login that doesn't know the parameter answers in the query.
+  if (payload.responseMode === 'fragment') {
+    params.append(AuthParam.ResponseMode, 'fragment');
+  }
+
   params.append('dimoState', dimoState);
 
   // The login's answer comes back on a fresh page load; remember what this

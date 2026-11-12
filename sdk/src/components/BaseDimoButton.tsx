@@ -110,6 +110,7 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     privacyPolicyUrl: options?.privacyPolicyUrl,
     language: language ?? options?.language,
     loginHint: cleanLoginHint(loginHint),
+    responseMode: options?.redirectResponseMode,
   };
 
   const handleButtonClick = () => {
