@@ -1,9 +1,10 @@
 /**
- * Type-level check for the `prompt` and `loginHint` props of LoginWithDimo.
- * Vitest runs only `*.test.ts`; like ShareAccountWithDimo.test.tsx, this file
- * is compiled by the `tsc --noEmit` step of `npm test` and nothing else.
+ * The `prompt` and `loginHint` props of LoginWithDimo: `tsc --noEmit` (the
+ * first step of `npm test`) checks the types, including the
+ * `@ts-expect-error`; vitest checks that the elements build.
  */
 import React from 'react';
+import { describe, expect, it } from 'vitest';
 import { DimoSDKModes } from '@enums/index';
 import LoginWithDimo from '../LoginWithDimo';
 
@@ -36,6 +37,16 @@ const withBadPrompt = (
   />
 );
 
-void [withPromptAndHint, withLoginPrompt, withBadPrompt];
+describe('LoginWithDimo props', () => {
+  it('builds elements for the prompt and loginHint props', () => {
+    [withPromptAndHint, withLoginPrompt, withBadPrompt].forEach((el) =>
+      expect(React.isValidElement(el)).toBe(true)
+    );
+    expect(withPromptAndHint.props).toMatchObject({
+      prompt: 'select_account',
+      loginHint: 'a@x.co',
+    });
+  });
+});
 
 export {};
