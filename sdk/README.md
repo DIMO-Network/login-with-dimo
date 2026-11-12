@@ -99,6 +99,8 @@ const { logout } = useDimoAuthState();
 
 `logout()` doesn't end the session inside DIMO login itself. On a shared device anyone at the browser can still pick "Continue as …", so use `LogoutWithDimo` (below) there.
 
+**Logging out does not revoke the token.** It clears what the SDK and the login have stored, but a token that was already issued stays valid until it expires, up to 14 days. Anything that still holds a copy (your server, a log, another tab or device) can keep using it until then. If you need a hard cut-off, enforce your own session lifetime and don't treat a token that is still valid as a signed-in user.
+
 ### The Separate DIMO Modes
 
 With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
@@ -385,6 +387,8 @@ These buttons have no props table of their own here; like the buttons above they
 ### LogoutWithDimo
 
 The `LogoutWithDimo` component allows users to log out of their DIMO session. It clears the session data, including cookies and local storage, and updates the authentication state.
+
+**It does not revoke tokens.** It clears the session stored by the SDK and by the login, but a token that was already issued stays valid until it expires, up to 14 days. Apps that need a hard cut-off must enforce their own session lifetime.
 
 It remains the way to also end the session inside the login (login.dimo.org). If you only need to sign the user out of your app, call `logout()` from `useDimoAuthState()` instead; it opens no popup.
 
