@@ -74,4 +74,20 @@ describe('redirectAuth', () => {
       expect(new URL(href).searchParams.has('responseMode')).toBe(false)
     );
   });
+
+  it('warns when fragment mode meets a redirect URI that has a #', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    stubLocation();
+    redirectAuth(
+      { ...BASE, redirectUri: 'https://app.example/#/home', responseMode: 'fragment' },
+      { eventType: EventTypes.SHARE_VEHICLES_DATA }
+    );
+    expect(warn).toHaveBeenCalledTimes(1);
+    redirectAuth(
+      { ...BASE, responseMode: 'fragment' },
+      { eventType: EventTypes.SHARE_VEHICLES_DATA }
+    );
+    expect(warn).toHaveBeenCalledTimes(1);
+    warn.mockRestore();
+  });
 });

@@ -1,18 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { useRedirectReturn } from '../useRedirectReturn';
-import { getJWTFromCookies, startRedirectState } from '@storage/storageManager';
-
-// The hook is one effect plus two flags; run the effect inline and keep the
-// flags, so the test needs no renderer.
-const flags = vi.hoisted(() => ({ values: {} as Record<number, unknown>, n: 0 }));
-vi.mock('react', () => ({
-  useState: (initial: unknown) => {
-    const i = flags.n++;
-    flags.values[i] = initial;
-    return [initial, (v: unknown) => { flags.values[i] = v; }];
-  },
-  useEffect: (fn: () => void) => fn(),
-}));
+import { consumeRedirectReturn } from '../useRedirectReturn';
+import { clearSessionData, getJWTFromCookies, startRedirectState } from '@storage/storageManager';
 
 const b64 = (o: object) =>
   Buffer.from(JSON.stringify(o)).toString('base64url');
@@ -20,23 +8,17 @@ const jwt = (exp: number) => `${b64({ alg: 'none' })}.${b64({ exp })}.sig`;
 const TOKEN = jwt(Math.floor(Date.now() / 1000) + 3600);
 const OTHER_TOKEN = jwt(Math.floor(Date.now() / 1000) + 7200);
 
-let result: { isTokenStored: boolean; hasLogoutParam: boolean };
+let result: { tokenStored: boolean; logout: boolean };
 
 const landOn = (search: string, hash: string) => {
   window.history.replaceState(null, '', `/app${search}${hash}`);
 };
 
 const mount = () => {
-  flags.n = 0;
-  flags.values = {};
-  useRedirectReturn();
-  result = {
-    isTokenStored: flags.values[0] as boolean,
-    hasLogoutParam: flags.values[1] as boolean,
-  };
+  result = consumeRedirectReturn();
 };
 
-describe('useRedirectReturn', () => {
+describe('consumeRedirectReturn', () => {
   let state: string;
 
   beforeEach(() => {
@@ -57,7 +39,7 @@ describe('useRedirectReturn', () => {
   it('reads the session from the fragment', () => {
     landOn('?keep=1', `#token=${TOKEN}&walletAddress=0xabc&dimoState=${state}`);
     mount();
-    expect(result.isTokenStored).toBe(true);
+    expect(result.tokenStored).toBe(true);
     expect(getJWTFromCookies()).toBe(TOKEN);
     expect(localStorage.getItem('dimo_wallet_address')).toBe('0xabc');
     expect(window.location.hash).toBe('');
@@ -67,7 +49,7 @@ describe('useRedirectReturn', () => {
   it('reads the session from the query, as before', () => {
     landOn(`?token=${TOKEN}&dimoState=${state}&keep=1`, '');
     mount();
-    expect(result.isTokenStored).toBe(true);
+    expect(result.tokenStored).toBe(true);
     expect(getJWTFromCookies()).toBe(TOKEN);
     expect(window.location.search).toBe('?keep=1');
   });
@@ -86,7 +68,7 @@ describe('useRedirectReturn', () => {
   it('ignores a fragment whose dimoState does not match', () => {
     landOn('', `#token=${TOKEN}&dimoState=forged`);
     mount();
-    expect(result.isTokenStored).toBe(false);
+    expect(result.tokenStored).toBe(false);
     expect(getJWTFromCookies()).toBeNull();
     expect(window.location.hash).toBe(`#token=${TOKEN}&dimoState=forged`);
   });
@@ -114,7 +96,7 @@ describe('useRedirectReturn', () => {
   it('handles a logout in the fragment', () => {
     landOn('', `#logout=true&dimoState=${state}`);
     mount();
-    expect(result.hasLogoutParam).toBe(true);
+    expect(result.logout).toBe(true);
     expect(window.location.hash).toBe('');
   });
 
@@ -128,8 +110,65 @@ describe('useRedirectReturn', () => {
   it('leaves a plain hash route alone when there is nothing to read', () => {
     landOn('?q=1', '#/settings');
     mount();
-    expect(result.isTokenStored).toBe(false);
+    expect(result.tokenStored).toBe(false);
     expect(window.location.hash).toBe('#/settings');
     expect(window.location.search).toBe('?q=1');
+  });
+
+  it('removes the keys from both places when the token is expired', () => {
+    const expired = jwt(Math.floor(Date.now() / 1000) - 10);
+    landOn(
+      `?token=${expired}&dimoState=${state}&keep=1`,
+      `#token=${expired}&dimoState=${state}&tab=2`
+    );
+    mount();
+    expect(result.tokenStored).toBe(false);
+    expect(getJWTFromCookies()).toBeNull();
+    expect(window.location.search).toBe('?keep=1');
+    expect(window.location.hash).toBe('#tab=2');
+  });
+
+  it('removes the keys when no token came back, storing nothing', () => {
+    landOn(
+      `?email=a%40x.co&dimoState=${state}`,
+      `#walletAddress=0xabc&dimoState=${state}`
+    );
+    mount();
+    expect(result.tokenStored).toBe(false);
+    expect(localStorage.getItem('dimo_wallet_address')).toBeNull();
+    expect(window.location.search).toBe('');
+    expect(window.location.hash).toBe('');
+  });
+
+  it('ignores a replay of the same URL and leaves it alone', () => {
+    const hash = `#token=${TOKEN}&dimoState=${state}`;
+    landOn('', hash);
+    mount();
+    expect(result.tokenStored).toBe(true);
+    clearSessionData();
+    landOn('', hash);
+    mount();
+    expect(result.tokenStored).toBe(false);
+    expect(getJWTFromCookies()).toBeNull();
+    expect(window.location.hash).toBe(hash);
+  });
+
+  it('keeps history.state when it cleans the address bar', () => {
+    window.history.replaceState({ page: 7 }, '', `/app#token=${TOKEN}&dimoState=${state}`);
+    mount();
+    expect(window.history.state).toEqual({ page: 7 });
+    expect(window.location.hash).toBe('');
+  });
+
+  it('warns when session keys came back without a matching dimoState', () => {
+    landOn('', `#token=${TOKEN}&dimoState=forged`);
+    mount();
+    expect(console.warn).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not warn when there is nothing to read', () => {
+    landOn('?q=1', '#/settings');
+    mount();
+    expect(console.warn).not.toHaveBeenCalled();
   });
 });

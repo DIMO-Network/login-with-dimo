@@ -42,7 +42,7 @@ In addition to setting the dev credentials/environments, you can also set global
 | `emailRequest`     | Whether to ask for the user's email: `'none'`, `'optional'` or `'required'`.                                      | `'optional'` |
 | `forceEmail`       | Deprecated: same as `emailRequest: 'required'`. Still honoured.                                                   | `false`      |
 | `language`         | Language of the login screens: `'en'` or `'ja'` (`'ja-JP'` and similar also work).                                | browser      |
-| `redirectResponseMode` | Redirect mode only: where the login returns the session, `'query'` or `'fragment'`. See [redirect mode](#the-separate-dimo-modes). | `'query'` |
+| `redirectResponseMode` | Redirect mode only: where the login returns the session, `'query'` or `'fragment'`. See [redirect mode](#the-separate-dimo-modes). | `'query'`    |
 | `tosUrl`           | Your Terms of Service, linked from the login screens instead of DIMO's.                                          | DIMO's       |
 | `privacyPolicyUrl` | Your Privacy Policy, linked from the login screens instead of DIMO's.                                            | DIMO's       |
 
@@ -120,6 +120,7 @@ In popup mode, every button calls `onError` with `User closed the login window` 
 **Keeping the token out of your server's logs (optional).** By default the login puts the session in your redirect URI's query, so the token reaches your server, CDN and any logs in front of them. Set `redirectResponseMode: 'fragment'` in `options` and the login puts `token`, `walletAddress`, `email`, `logout` and `dimoState` in the URL fragment (`#…`) instead, which browsers don't send to servers or in `Referer` headers. Everything you read yourself (`error`, `transactionHash`, `signature`, …) stays in the query.
 
 - The SDK always reads both places. It uses the fragment only when it carries the matching `dimoState`, and prefers it when both do. A fragment that doesn't match is ignored.
+- `token`, `walletAddress`, `email`, `logout` and `dimoState` are reserved names in your redirect URI's query and fragment: the SDK removes them after a return, so don't use them for your own parameters.
 - If your app uses a hash router, the fragment is never touched unless it contains a `dimoState=` parameter of the login's own. Fragment mode can't be used with a redirect URI that already contains a `#`; the login then answers in the query.
 - Fragment mode doesn't hide the token from scripts running on your page, and the fragment stays in browser history until the SDK has read and removed it.
 - A Login with DIMO build that doesn't know the option answers in the query, so the SDK works either way. If your server reads `?token=` itself, switch to the fragment only knowingly.

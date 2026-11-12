@@ -41,7 +41,10 @@ export type EmailRequest = 'none' | 'optional' | 'required';
  */
 export type LoginPrompt = 'select_account' | 'login';
 
-/** Where the login returns the session in redirect mode. */
+/**
+ * Where the login returns the session in redirect mode. `'query'` is the
+ * same as leaving it unset.
+ */
 export type RedirectResponseMode = 'query' | 'fragment';
 
 export interface AuthData {

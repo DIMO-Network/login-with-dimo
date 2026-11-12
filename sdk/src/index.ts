@@ -30,6 +30,7 @@ export type {
   DimoLanguage,
   EmailRequest,
   LoginPrompt,
+  RedirectResponseMode,
 } from './types/common.types';
 export type { DimoSDKOptions } from './config/sdkConfig';
 

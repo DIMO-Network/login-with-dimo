@@ -1,5 +1,5 @@
 /**
- * Type-level smoke test for ShareAccountWithDimo.
+ * Smoke test for ShareAccountWithDimo.
  *
  * `npm test` runs `tsc --noEmit` (which checks the props below), then
  * `vitest run` (which runs the assertions). It asserts that:
