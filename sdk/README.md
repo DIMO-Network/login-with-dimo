@@ -109,7 +109,13 @@ We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
 
-In popup mode, every button calls `onError` with `User closed the login window` when the user closes the popup without finishing. The message is exported as `POPUP_CLOSED_MESSAGE` if you want to filter it out. A second click while a popup is open focuses it instead of opening another.
+In popup mode, every button calls `onError` with `User closed the login window` when the user closes the popup without finishing. The message is exported as `POPUP_CLOSED_MESSAGE` if you want to filter it out. A double click focuses the popup the first click opened; a later click closes a popup still open from an earlier one (without reporting an error for it) and opens a fresh login.
+
+**Upgrading from 0.0.35.** Nothing needs to change in your code, but three things behave differently:
+
+- `onError` now also fires when the user closes the popup, with `POPUP_CLOSED_MESSAGE`. The login's own Cancel button already reports `User cancelled sign-in` the same way. If your `onError` shows an error, reports to an error tracker or signs the user out, skip this message: `if (error.message === POPUP_CLOSED_MESSAGE) return;`.
+- `useDimoAuthState()` also returns `logout`. Code that reads the hook is unaffected; a test mock typed as the hook's return value needs a `logout` as well.
+- After a redirect back without a usable token, the SDK now removes `token`, `walletAddress`, `email`, `logout` and `dimoState` from the address bar, as it always did after a successful one.
 
 **Redirect mode returns only to the page that started it.** Each redirect carries a one-time `dimoState`, and the login sends it back. The SDK accepts the returned `token`, `walletAddress`, `email` or `logout` only when `dimoState` matches what this browser tab sent. Anyone can link to your redirect URI with values of their choosing, so a link without the right `dimoState` changes nothing. That includes a console `?configurationId=` link: read its query yourself if you use one. So:
 
