@@ -123,11 +123,13 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.ExpirationDate,
     AuthParam.ForceEmail,
     AuthParam.Language,
+    AuthParam.LoginHint,
     AuthParam.MessageData,
     AuthParam.Onboarding,
     AuthParam.PermissionTemplateId,
     AuthParam.Permissions,
     AuthParam.PowertrainTypes,
+    AuthParam.Prompt,
     AuthParam.RedirectUri,
     AuthParam.PrivacyPolicyUrl,
     AuthParam.TosUrl,
@@ -136,6 +138,16 @@ export const redirectAuth = (payload: AuthPayload, data: DimoActionPayload) => {
     AuthParam.VehicleMakes,
     AuthParam.Vehicles,
   ]);
+
+  // Opt-in only: a login that doesn't know the parameter answers in the query.
+  if (payload.responseMode === 'fragment') {
+    if (payload.redirectUri?.includes('#')) {
+      console.warn(
+        "redirectResponseMode 'fragment' can't be used with a redirect URI that contains '#'; the login will answer in the query."
+      );
+    }
+    params.append(AuthParam.ResponseMode, 'fragment');
+  }
 
   params.append('dimoState', dimoState);
 

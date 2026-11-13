@@ -12,7 +12,9 @@ import {
   AuthPayload,
   DimoActionPayload,
 } from '@dimo-types/index';
+import { isLoggedOut } from '@storage/storageManager';
 import { getDimoLoginUrl } from '../utils/url';
+import { cleanLoginHint, resolvePrompt } from '@utils/prompt';
 import { readableTextOn } from '@utils/colorContrast';
 
 /**
@@ -68,6 +70,8 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
   brand,
   language,
   emailRequest,
+  prompt,
+  loginHint,
 }) => {
   const { clientId, redirectUri, apiKey, environment, options } =
     getDimoConfig();
@@ -105,15 +109,23 @@ export const BaseDimoButton: FC<BaseDimoButtonProps> = ({
     tosUrl: options?.tosUrl,
     privacyPolicyUrl: options?.privacyPolicyUrl,
     language: language ?? options?.language,
+    loginHint: cleanLoginHint(loginHint),
+    responseMode: options?.redirectResponseMode,
   };
 
   const handleButtonClick = () => {
+    // Resolved at click time; the logged-out marker is cleared only when a
+    // login stores a token, not here.
+    const clickPayload: AuthPayload = {
+      ...basePayload,
+      prompt: resolvePrompt(prompt, entryState, isLoggedOut()),
+    };
     switch (mode) {
       case DimoSDKModes.POPUP:
-        popupAuth(basePayload, payload);
+        popupAuth(clickPayload, payload);
         break;
       case DimoSDKModes.REDIRECT:
-        redirectAuth(basePayload, payload);
+        redirectAuth(clickPayload, payload);
         break;
       default:
         console.error('Unsupported mode for button click');

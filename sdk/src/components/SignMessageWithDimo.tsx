@@ -49,6 +49,8 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
   altTitle,
   language,
   emailRequest,
+  prompt,
+  loginHint,
   brandOverride,
 }) => {
   const messageData = normalizeMessage(message);
@@ -78,6 +80,8 @@ const SignMessageWithDimo: React.FC<SignMessageProps> = ({
       brand={brand}
       language={language}
       emailRequest={emailRequest}
+      prompt={prompt}
+      loginHint={loginHint}
     />
   );
 };

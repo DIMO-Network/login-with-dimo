@@ -35,6 +35,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
   altTitle,
   language,
   emailRequest,
+  prompt,
+  loginHint,
   powertrainTypes,
   brandOverride,
 }) => {
@@ -78,6 +80,8 @@ const ShareVehiclesWithDimo: React.FC<ShareVehiclesWithDimoProps> = ({
       brand={brand}
       language={language}
       emailRequest={emailRequest}
+      prompt={prompt}
+      loginHint={loginHint}
     />
   );
 };

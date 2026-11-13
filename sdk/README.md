@@ -42,6 +42,7 @@ In addition to setting the dev credentials/environments, you can also set global
 | `emailRequest`     | Whether to ask for the user's email: `'none'`, `'optional'` or `'required'`.                                      | `'optional'` |
 | `forceEmail`       | Deprecated: same as `emailRequest: 'required'`. Still honoured.                                                   | `false`      |
 | `language`         | Language of the login screens: `'en'` or `'ja'` (`'ja-JP'` and similar also work).                                | browser      |
+| `redirectResponseMode` | Redirect mode only: where the login returns the session, `'query'` or `'fragment'`. See [redirect mode](#the-separate-dimo-modes). | `'query'`    |
 | `tosUrl`           | Your Terms of Service, linked from the login screens instead of DIMO's.                                          | DIMO's       |
 | `privacyPolicyUrl` | Your Privacy Policy, linked from the login screens instead of DIMO's.                                            | DIMO's       |
 
@@ -51,6 +52,7 @@ In addition to setting the dev credentials/environments, you can also set global
     options: {
       emailRequest: 'required', // 'optional' by default; 'none' never asks
       language: 'ja',
+      redirectResponseMode: 'fragment', // optional; 'query' by default
     },
   });
 ```
@@ -85,6 +87,20 @@ const { isAuthenticated, getValidJWT, getEmail, email, walletAddress } = useDimo
 
 Based on this authenticated state, you can render the necessary Dimo components
 
+#### Logging out
+
+`useDimoAuthState()` also returns `logout()`. It ends your app's session without opening a popup: it clears the stored token, wallet address and email, and sets `isAuthenticated` to `false`. Every login or share button (not `LogoutWithDimo`) then asks DIMO login for the account chooser (`prompt: 'select_account'`) until a login completes, so the user can switch accounts instead of being signed straight back in. A closed popup or abandoned redirect doesn't end this. Set `prompt` on a button to choose this yourself.
+
+```
+const { logout } = useDimoAuthState();
+
+<button onClick={logout}>Log out</button>
+```
+
+`logout()` doesn't end the session inside DIMO login itself. On a shared device anyone at the browser can still pick "Continue as …", so use `LogoutWithDimo` (below) there.
+
+**Logging out does not revoke the token.** It clears what the SDK and the login have stored, but a token that was already issued stays valid until it expires, up to 14 days. Anything that still holds a copy (your server, a log, another tab or device) can keep using it until then. If you need a hard cut-off, enforce your own session lifetime and don't treat a token that is still valid as a signed-in user.
+
 ### The Separate DIMO Modes
 
 With the DIMO SDK, developers have the ability to control how their users interact with DIMO.
@@ -93,11 +109,27 @@ We offer two options
 - Popup Mode (best for allowing users to see both the app, as well as DIMO)
 - Redirect Mode (best for developers that want to avoid popups)
 
+In popup mode, every button calls `onError` with `User closed the login window` when the user closes the popup without finishing. The message is exported as `POPUP_CLOSED_MESSAGE` if you want to filter it out. A double click focuses the popup the first click opened; a later click closes a popup still open from an earlier one (without reporting an error for it) and opens a fresh login.
+
+**Upgrading from 0.0.35.** Nothing needs to change in your code, but three things behave differently:
+
+- `onError` now also fires when the user closes the popup, with `POPUP_CLOSED_MESSAGE`. The login's own Cancel button already reports `User cancelled sign-in` the same way. If your `onError` shows an error, reports to an error tracker or signs the user out, skip this message: `if (error.message === POPUP_CLOSED_MESSAGE) return;`.
+- `useDimoAuthState()` also returns `logout`. Code that reads the hook is unaffected; a test mock typed as the hook's return value needs a `logout` as well.
+- After a redirect back without a usable token, the SDK now removes `token`, `walletAddress`, `email`, `logout` and `dimoState` from the address bar, as it always did after a successful one.
+
 **Redirect mode returns only to the page that started it.** Each redirect carries a one-time `dimoState`, and the login sends it back. The SDK accepts the returned `token`, `walletAddress`, `email` or `logout` only when `dimoState` matches what this browser tab sent. Anyone can link to your redirect URI with values of their choosing, so a link without the right `dimoState` changes nothing. That includes a console `?configurationId=` link: read its query yourself if you use one. So:
 
 - Put your redirect URI on the same origin as the button, and open it in the same tab (the default).
 - The SDK removes those values from the address bar once it has read them. Other values (`error`, `transactionHash`, `signature`, …) stay for you to read.
 - This needs a Login with DIMO build that returns `dimoState`; release the login before this SDK version.
+
+**Keeping the token out of your server's logs (optional).** By default the login puts the session in your redirect URI's query, so the token reaches your server, CDN and any logs in front of them. Set `redirectResponseMode: 'fragment'` in `options` and the login puts `token`, `walletAddress`, `email`, `logout` and `dimoState` in the URL fragment (`#…`) instead, which browsers don't send to servers or in `Referer` headers. Everything you read yourself (`error`, `transactionHash`, `signature`, …) stays in the query.
+
+- The SDK always reads both places. It uses the fragment only when it carries the matching `dimoState`, and prefers it when both do. A fragment that doesn't match is ignored.
+- `token`, `walletAddress`, `email`, `logout` and `dimoState` are reserved names in your redirect URI's query and fragment: the SDK removes them after a return, so don't use them for your own parameters.
+- If your app uses a hash router, the fragment is never touched unless it contains a `dimoState=` parameter of the login's own. Fragment mode can't be used with a redirect URI that already contains a `#`; the login then answers in the query.
+- Fragment mode doesn't hide the token from scripts running on your page, and the fragment stays in browser history until the SDK has read and removed it.
+- A Login with DIMO build that doesn't know the option answers in the query, so the SDK works either way. If your server reads `?token=` itself, switch to the fragment only knowingly.
 
 ### Using the Button Components
 
@@ -245,6 +277,8 @@ The `LoginWithDimo` component allows users to authenticate with DIMO.
 | `altTitle`             | Alternative title for the button             | `false` | `boolean` | No |
 | `language`             | Language of the login screens it opens       | the `language` option | `'en' \| 'ja'` | No |
 | `emailRequest`         | Whether to ask for the user's email          | the `emailRequest` option | `'none' \| 'optional' \| 'required'` | No |
+| `prompt`               | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`            | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 ### ShareVehiclesWithDimo
 
@@ -268,6 +302,8 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `altTitle`           | Alternative title for the button                                            | `false`                                 | `boolean`                      | No        |
 | `language`           | Language of the login screens it opens                                      | the `language` option                   | `'en' \| 'ja'`                 | No        |
 | `emailRequest`       | Whether to ask for the user's email                                         | the `emailRequest` option               | `'none' \| 'optional' \| 'required'` | No        |
+| `prompt`             | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`          | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 `onSuccess` receives:
 
@@ -279,7 +315,7 @@ The `ShareVehiclesWithDimo` component allows users to share their vehicles data 
 | `extendedVehicles` | Token IDs of vehicles whose sharing the user extended by a year (from the vehicle's Manage screen). |
 | `revokedVehicles`  | Token IDs of vehicles the user stopped sharing with your app (from the vehicle's Manage screen). |
 
-In redirect mode the same fields arrive as query parameters on your redirect URI. Repeated values are joined with commas. The SDK stores the session from a return it started (see redirect mode above) and removes `token`, `walletAddress`, `email`, `logout` and `dimoState` from the address bar; the other fields stay.
+In redirect mode the same fields arrive as query parameters on your redirect URI. Repeated values are joined with commas. The SDK stores the session from a return it started (see redirect mode above) and removes `token`, `walletAddress`, `email`, `logout` and `dimoState` from the address bar, from the query and from the fragment alike (other query parameters and other fragment content stay). With `redirectResponseMode: 'fragment'` those session fields arrive in the fragment instead; the other fields stay in the query.
 
 ### Available Permissions
 
@@ -343,10 +379,25 @@ The `ExecuteAdvancedTransactionWithDimo` component allows users to execute advan
 | `authenticatedLabel`  | Label when the user is authenticated                                        | `"Execute Advanced Transaction with Dimo"`   | `string`                         | No        |
 | `unAuthenticatedLabel`| Label when the user is not authenticated                                    | `"Sign in to Execute Transaction"`           | `string`                         | No        |
 | `altTitle` | Alternative title for the button | `false` | `boolean` | No |
+| `prompt`               | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint`            | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
+
+### ShareAccountWithDimo, SignMessageWithDimo and ProvisionDeveloperLicenseWithDimo
+
+These buttons have no props table of their own here; like the buttons above they also take:
+
+| Parameter | Description | Default Value | Type | Mandatory |
+|-----------|-------------|---------------|------|-----------|
+| `prompt`    | `'select_account'` shows the account chooser; `'login'` requires a fresh sign-in | none (the chooser after `logout()`, until a login completes) | `'select_account' \| 'login'` | No |
+| `loginHint` | Pre-fills the email on the sign-in step. In redirect mode it travels in the login URL. | `undefined` | `string` | No |
 
 ### LogoutWithDimo
 
 The `LogoutWithDimo` component allows users to log out of their DIMO session. It clears the session data, including cookies and local storage, and updates the authentication state.
+
+**It does not revoke tokens.** It clears the session stored by the SDK and by the login, but a token that was already issued stays valid until it expires, up to 14 days. Apps that need a hard cut-off must enforce their own session lifetime.
+
+It remains the way to also end the session inside the login (login.dimo.org). If you only need to sign the user out of your app, call `logout()` from `useDimoAuthState()` instead; it opens no popup.
 
 #### Example Usage
 

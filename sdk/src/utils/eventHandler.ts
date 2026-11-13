@@ -148,6 +148,10 @@ const eventHandlers: Record<string, EventHandler> = {
   [MessageEventType.DIMO_ERROR]: handleDimoError,
 };
 
+export const POPUP_CLOSED_MESSAGE = 'User closed the login window';
+// An answer posted just before the window closes can still be in flight.
+export const POPUP_CLOSE_GRACE_MS = 500;
+
 export const createMessageHandler = (
   basePayload: AuthPayload,
   data: DimoActionPayload | undefined,
@@ -168,16 +172,21 @@ export const createMessageHandler = (
     tosUrl,
     privacyPolicyUrl,
     language,
+    prompt,
+    loginHint,
   } = basePayload;
 
-  const { target, origin, mode } = config;
+  const { target, origin, mode, onStop } = config;
 
-  // Each click opens its own popup and listener; a listener answers only its
-  // popup and stops at that popup's answer, so an earlier click's callbacks
-  // never receive a later popup's token, signature or key.
+  // Each popup has its own listener; a listener answers only its popup and
+  // stops at that popup's answer, so an earlier popup's callbacks never
+  // receive a later popup's token, signature or key.
+  let closeGrace: ReturnType<typeof setTimeout> | undefined;
   const stop = () => {
     window.removeEventListener('message', messageListener);
     clearInterval(closedPoll);
+    clearTimeout(closeGrace);
+    onStop?.();
   };
 
   const messageListener = (event: MessageEvent) => {
@@ -202,6 +211,8 @@ export const createMessageHandler = (
         privacyPolicyUrl,
         language,
         altTitle,
+        prompt,
+        loginHint,
         eventType: MessageEventType.AUTH_INIT,
       };
       sendMessageToTarget(target, initialMessage, origin, onError);
@@ -224,9 +235,16 @@ export const createMessageHandler = (
     );
   };
 
-  // A popup closed without answering leaves nothing to listen for.
+  // A popup closed without answering is reported to the app, after a short
+  // grace for an answer already on its way. A terminal event calls stop(),
+  // which cancels the pending report, so onError fires at most once.
   const closedPoll = setInterval(() => {
-    if (target?.closed) stop();
+    if (!target?.closed) return;
+    clearInterval(closedPoll);
+    closeGrace = setTimeout(() => {
+      stop();
+      onError(new Error(POPUP_CLOSED_MESSAGE));
+    }, POPUP_CLOSE_GRACE_MS);
   }, 1000);
 
   window.addEventListener('message', messageListener);
@@ -237,11 +255,13 @@ export const handleMessageForPopup = (
   basePayload: AuthPayload,
   data: DimoActionPayload | undefined,
   expectedOrigin: string,
-  popup: Window | null
+  popup: Window | null,
+  onStop?: () => void
 ) => {
   return createMessageHandler(basePayload, data, {
     target: popup,
     origin: expectedOrigin,
     mode: DimoSDKModes.POPUP,
+    onStop,
   });
 };

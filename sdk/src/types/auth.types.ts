@@ -4,6 +4,8 @@ import {
   AuthData,
   DimoLanguage,
   EmailRequest,
+  LoginPrompt,
+  RedirectResponseMode,
   InternalDimoActionParams,
 } from './common.types';
 
@@ -27,6 +29,11 @@ export interface BaseAuthParams {
   tosUrl?: string;
   privacyPolicyUrl?: string;
   language?: DimoLanguage;
+  prompt?: LoginPrompt;
+  /** Redirect mode only: `fragment` asks the login to return the session in the URL fragment. */
+  responseMode?: RedirectResponseMode;
+  /** Pre-fills the email on the login's sign-in step. */
+  loginHint?: string;
 }
 
 export interface AuthPayload extends BaseAuthParams, EventHandlers {}

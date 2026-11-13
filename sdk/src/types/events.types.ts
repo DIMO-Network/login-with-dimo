@@ -26,6 +26,8 @@ export interface MessageHandlerConfig {
   target: Window | null | undefined;
   origin: string;
   mode: DimoSDKModes;
+  /** Called once when the listener stops, whatever the reason. */
+  onStop?: () => void;
 }
 
 export type EventHandler = (

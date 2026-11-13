@@ -16,6 +16,8 @@ export {
 } from './auth/context/DimoAuthContext';
 
 // Brand hook + types — auto-themes the button from dev-console-api at init.
+export { POPUP_CLOSED_MESSAGE } from './utils/eventHandler';
+
 export { useDimoAuthBrand } from './hooks/useDimoAuthBrand';
 export type { OemBrand } from './utils/devConsoleApi';
 export type { BrandOverride } from './types/ui.types';
@@ -27,6 +29,8 @@ export type {
   CloudEventAgreement,
   DimoLanguage,
   EmailRequest,
+  LoginPrompt,
+  RedirectResponseMode,
 } from './types/common.types';
 export type { DimoSDKOptions } from './config/sdkConfig';
 
