@@ -28,6 +28,8 @@ const ShareAccountWithDimo: React.FC<ShareAccountWithDimoProps> = ({
   altTitle,
   language,
   emailRequest,
+  prompt,
+  loginHint,
   brandOverride,
 }) => {
   const brand = useResolvedBrand(brandOverride);
@@ -69,6 +71,8 @@ const ShareAccountWithDimo: React.FC<ShareAccountWithDimoProps> = ({
       brand={brand}
       language={language}
       emailRequest={emailRequest}
+      prompt={prompt}
+      loginHint={loginHint}
     />
   );
 };

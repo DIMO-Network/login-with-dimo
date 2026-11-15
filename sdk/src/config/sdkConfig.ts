@@ -1,6 +1,6 @@
 import { Environment } from '@enums/index';
 import { fetchOemBrand, OemBrand } from '@utils/devConsoleApi';
-import type { DimoLanguage, EmailRequest } from '../types/common.types';
+import type { DimoLanguage, EmailRequest, RedirectResponseMode } from '../types/common.types';
 
 export interface DimoSDKOptions {
   /** Whether to ask for the user's email: `none`, `optional` (default) or `required`. */
@@ -16,6 +16,12 @@ export interface DimoSDKOptions {
    * the user's browser language and time zone. The user can still switch.
    */
   language?: DimoLanguage;
+  /**
+   * Redirect mode: where the login puts the session it returns. `query`
+   * (default) or `fragment`, which keeps the token out of server logs and
+   * Referer headers. Fragment mode needs a redirect URI without a `#`.
+   */
+  redirectResponseMode?: RedirectResponseMode;
 }
 
 let sdkConfig: {

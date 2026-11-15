@@ -35,6 +35,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
   altTitle,
   language,
   emailRequest,
+  prompt,
+  loginHint,
   powertrainTypes,
   brandOverride,
 }) => {
@@ -82,6 +84,8 @@ const LoginWithDimo: React.FC<LoginWithDimoProps> = ({
       brand={brand}
       language={language}
       emailRequest={emailRequest}
+      prompt={prompt}
+      loginHint={loginHint}
     />
   );
 };

@@ -37,6 +37,8 @@ const JWT_SHAPE = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*$/;
 export const storeJWTInCookies = (jwt: string): void => {
   if (!JWT_SHAPE.test(jwt)) return;
   document.cookie = createCookieString('dimo_auth_token', jwt);
+  // A stored token is a completed login (authResponse or redirect return).
+  clearLoggedOut();
 };
 
 export const isValidCookieStringValue = (str: string | null | undefined): str is string => {
@@ -108,9 +110,43 @@ export const getEmailFromLocalStorage = (): string | null => {
 export const clearSessionData = (): void => {
   // Same path as when it was set, or a page under a subpath keeps the token.
   document.cookie = `dimo_auth_token=; Max-Age=0; path=/`;
-  localStorage.removeItem(`dimo_wallet_address`);
-  localStorage.removeItem(`dimo_user_email`);
+  try {
+    localStorage.removeItem(`dimo_wallet_address`);
+    localStorage.removeItem(`dimo_user_email`);
+  } catch {
+    // storage unavailable
+  }
   notifyStoredUser();
+};
+
+// Set by logout(); login buttons ask for the account chooser while it is set.
+// It stays until a login stores a token, so a blocked popup, a closed chooser
+// or an abandoned redirect doesn't let the login's own session sign the
+// previous account straight back in. localStorage, so it reaches other tabs.
+const LOGGED_OUT_KEY = 'dimo_logged_out';
+
+export const markLoggedOut = (): void => {
+  try {
+    localStorage.setItem(LOGGED_OUT_KEY, '1');
+  } catch {
+    // storage unavailable
+  }
+};
+
+export const isLoggedOut = (): boolean => {
+  try {
+    return localStorage.getItem(LOGGED_OUT_KEY) !== null;
+  } catch {
+    return false;
+  }
+};
+
+export const clearLoggedOut = (): void => {
+  try {
+    localStorage.removeItem(LOGGED_OUT_KEY);
+  } catch {
+    // storage unavailable
+  }
 };
 
 // Redirect mode: the nonce sent with the redirect, which the login returns as
