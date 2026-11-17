@@ -15,12 +15,13 @@ export interface CloudEventAgreement {
 }
 
 /**
- * Language for the DIMO login screens. `en` and `ja` are supported; other
- * BCP 47 tags such as `ja-JP` are accepted and matched, and unsupported ones
+ * Language for the DIMO login screens: `en`, `es`, `ja`, `zh-Hans` (Simplified
+ * Chinese) or `zh-Hant` (Traditional Chinese). Other BCP 47 tags are matched to
+ * one of these, so `ja-JP`, `zh-CN` and `zh-TW` also work. Unsupported tags
  * fall back to the user's browser language.
  */
 // `string & {}` keeps editor suggestions for the known codes.
-export type DimoLanguage = 'en' | 'ja' | (string & {});
+export type DimoLanguage = 'en' | 'es' | 'ja' | 'zh-Hans' | 'zh-Hant' | (string & {});
 
 /**
  * Whether the app asks for the user's email. DIMO login asks once per app and
